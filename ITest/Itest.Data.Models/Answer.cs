@@ -1,10 +1,10 @@
 ﻿using System;
+using Itest.Data.Models.Abstracts;
 
 namespace Itest.Data.Models
 {
-    public class Answer
+    public class Answer : DataModel
     {
-        public Guid AnswerId { get; set; }
         public Question Question { get; set; }
         public Guid QuestionId { get; set; }
         public string Content { get; set; }

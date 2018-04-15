@@ -11,9 +11,10 @@ using System;
 namespace ITest.Data.Migrations
 {
     [DbContext(typeof(ITestDbContext))]
-    partial class ITestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180415100053_Changes on Models - now they implement abstract class and interfaces")]
+    partial class ChangesonModelsnowtheyimplementabstractclassandinterfaces
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

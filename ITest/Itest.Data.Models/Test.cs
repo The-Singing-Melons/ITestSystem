@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Itest.Data.Models.Abstracts;
 using ITest.Models;
 
 namespace Itest.Data.Models
 {
-    public class Test
+    public class Test : DataModel
     {
-        public Guid TestId { get; set; }
         public string Name { get; set; }
         public int Duration { get; set; }
         public bool IsPublished { get; set; }
-        public bool IsDeleted { get; set; }
 
         public string CreatedByUserId { get; set; }
         public ApplicationUser CreatedByUser { get; set; }
