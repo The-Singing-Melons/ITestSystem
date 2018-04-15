@@ -12,9 +12,4 @@
     <ProjectReference Include="..\Itest.Data.Models\Itest.Data.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repository\" />
-    <Folder Include="UnitOfWork\" />
-  </ItemGroup>
-
 </Project>
