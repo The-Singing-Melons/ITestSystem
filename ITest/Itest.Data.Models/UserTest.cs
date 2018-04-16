@@ -15,6 +15,7 @@ namespace Itest.Data.Models
         public Guid TestId { get; set; }
         public Test Test { get; set; }
         public bool IsPassed { get; set; }
+        public bool IsSubmited { get; set; }
         public float ExecutionTime { get; set; }
     }
 }

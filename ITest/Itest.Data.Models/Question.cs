@@ -7,6 +7,10 @@ namespace Itest.Data.Models
 {
     public class Question : DataModel
     {
+        public Question()
+        {
+            this.Answers = new HashSet<Answer>();
+        }
         public string Body { get; set; }
         public ICollection<Answer> Answers { get; set; }
         public Guid TestId { get; set; }
