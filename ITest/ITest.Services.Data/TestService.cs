@@ -76,9 +76,9 @@ namespace ITest.Services.Data
             this.dataSaver.SaveChanges();
         }
 
-        public TestDto GetTestById(string id)
+        public TestDto GetTestById(string testId)
         {
-            var test = testRepo.All.Where(t => t.Id.ToString() == id)
+            var test = testRepo.All.Where(t => t.Id.ToString() == testId)
                 .FirstOrDefault();
 
             if (test == null)
@@ -89,6 +89,18 @@ namespace ITest.Services.Data
             var testDto = this.mapper.MapTo<TestDto>(test);
 
             return testDto;
+        }
+
+        public IEnumerable<QuestionDto> GetTestQuestions(string testId)
+        {
+            var testQuestions = testRepo.All
+                                    .Include(t => t.Questions)
+                                    .Where(t => t.Id.ToString() == testId)
+                                    .SelectMany(t => t.Questions);
+
+            var testQuestionDto = mapper.ProjectTo<QuestionDto>(testQuestions);
+
+            return testQuestionDto.ToList();
         }
 
         // need to refactor var random = new Random() 

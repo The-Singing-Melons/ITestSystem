@@ -12,5 +12,6 @@ namespace ITest.Services.Data.Contracts
         void AddTestsToUser(ApplicationUser user);
         IEnumerable<TestDto> GetUserTests(string id);
         TestDto GetTestById(string id);
+        IEnumerable<QuestionDto> GetTestQuestions(string testId);
     }
 }

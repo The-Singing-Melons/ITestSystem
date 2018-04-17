@@ -9,7 +9,7 @@ namespace ITest.Web.Properties
     {
         public MappingSettings()
         {
-            this.CreateMap<TestDto, DashboardTestViewModel>()
+            this.CreateMap<TestDto, TestViewModel>()
                 .ForMember(t => t.Name, o => o.MapFrom(x => x.Name))
                 .ForMember(t => t.CategoryName, o => o.MapFrom(x => x.Category.Name))
                 .ForMember(t => t.Id, o => o.MapFrom(x => x.Id));
