@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "DashBoard";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="container index">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel with-nav-tabs panel-default">
+                <div class="panel-heading">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab1default" data-toggle="tab">Your Test List</a></li>
+                        <li><a href="#tab2default" data-toggle="tab">Test Results</a></li>
+                        <a asp-area="Admin" asp-controller="Manage" asp-action="CreateTest" class="btn btn-primary pull-right">New Test</a>
+                    </ul>
+                </div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="tab1default">
+                            <table class="table table-striped custab">
+                                <thead>
+                                    <tr>
+                                        <th>Test Name</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <td>1</td>
+                                    <td>News</td>
+                                    <td>News Cate</td>
+                                    <td class="text-center">
+                                        <a class='btn btn-success btn-xs' href="#">
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                            Publish
+                                        </a>
+                                        <a class='btn btn-warning btn-xs' href="#">
+                                            <span class="glyphicon glyphicon-edit"></span>
+                                            Edit
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-xs">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="tab2default">Default 2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
