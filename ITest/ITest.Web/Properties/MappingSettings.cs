@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Itest.Data.Models;
+using ITest.DTO;
+using ITest.Web.Areas.User.Models;
 
 namespace ITest.Web.Properties
 {
@@ -10,7 +9,11 @@ namespace ITest.Web.Properties
     {
         public MappingSettings()
         {
-
+            this.CreateMap<TestDto, DashboardTestViewModel>()
+                .ForMember(t => t.Name, o => o.MapFrom(x => x.Name))
+                .ForMember(t => t.CategoryName, o => o.MapFrom(x => x.Category.Name))
+                .ForMember(t => t.Id, o => o.MapFrom(x => x.Id));
+            this.CreateMap<TestDto, Test>(MemberList.Source);
         }
     }
 }

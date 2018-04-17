@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ITest.Web.Areas.User.Models
 {
-    public class TestViewModel
+    public class TakeTestViewModel
     {
-        [Required]
-        string Name { get; set; }
+        public IEnumerable<QuestionViewModel> Questions { get; set; }
     }
 }

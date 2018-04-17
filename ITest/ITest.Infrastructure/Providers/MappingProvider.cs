@@ -27,8 +27,9 @@ namespace ITest.Infrastructure.Providers
             return source.ProjectTo<TDestination>();
         }
 
-        public IEnumerable<TDestination> ProjectTo<TDestination>(IEnumerable<object> source)
+        public IEnumerable<TDestination> EnumerableProjectTo<TSource, TDestination>(IEnumerable<TSource> source)
         {
+            // AsQuryable cast to avoid query materialization errors
             return source.AsQueryable().ProjectTo<TDestination>();
         }
     }

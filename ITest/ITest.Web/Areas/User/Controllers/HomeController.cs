@@ -1,4 +1,7 @@
-﻿using ITest.Infrastructure.Providers.Contracts;
+﻿using System;
+using System.Linq;
+using ITest.DTO;
+using ITest.Infrastructure.Providers.Contracts;
 using ITest.Models;
 using ITest.Services.Data.Contracts;
 using ITest.Web.Areas.User.Models;
@@ -9,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ITest.Web.Areas.User.Controllers
 {
     [Area("User")]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IMappingProvider mapper;
@@ -28,12 +32,24 @@ namespace ITest.Web.Areas.User.Controllers
             // possibly async method?
             var userId = this.userManager.GetUserId(this.HttpContext.User);
             var userTests = this.testService.GetUserTests(userId);
-            // mapping currently does not work
-            // the test view model is not right
-            var userTestsViewModel = new TestViewModel();
-            this.mapper.ProjectTo<TestViewModel>(userTests);
 
-            return View(userTests);
+            var userTestsViewModel = new DashboardTestViewModel();
+            var userTestsVM = this.mapper.EnumerableProjectTo<TestDto, DashboardTestViewModel>(userTests);
+
+            return View(userTestsVM);
+        }
+
+        public IActionResult TakeTest(string id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException("Id cannot be null or empty");
+            }
+            var testDto = this.testService.GetTestById(id);
+
+            var takeTestViewModel = new TakeTestViewModel();
+
+            return View();
         }
     }
 }

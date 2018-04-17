@@ -19,6 +19,7 @@ using ITest.Infrastructure.Providers;
 using AutoMapper;
 using ITest.Data.Repository;
 using ITest.Data.UnitOfWork;
+using ITest.Web.Properties;
 
 namespace ITest.Web
 {
@@ -53,7 +54,10 @@ namespace ITest.Web
         private void RegisterInfrastructure(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddAutoMapper();
+            services.AddAutoMapper(options =>
+            {
+                options.AddProfile<MappingSettings>();
+            });
 
             services.AddScoped<IMappingProvider, MappingProvider>();
         }

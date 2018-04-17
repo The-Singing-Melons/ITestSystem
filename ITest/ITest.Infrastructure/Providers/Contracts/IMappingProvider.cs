@@ -9,6 +9,6 @@ namespace ITest.Infrastructure.Providers.Contracts
 
         IQueryable<TDestination> ProjectTo<TDestination>(IQueryable<object> source);
 
-        IEnumerable<TDestination> ProjectTo<TDestination>(IEnumerable<object> source);
+        IEnumerable<TDestination> EnumerableProjectTo<TSource, TDestination>(IEnumerable<TSource> source);
     }
 }
