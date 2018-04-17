@@ -1,0 +1,40 @@
+﻿@model CreateTestViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<div class="container">
+    <form asp-area="Admin" asp-controller="Manage" asp-action="CreateTest" method="post">
+        <h4>Create Test</h4>
+        <hr />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="TestName"></label>
+            <input asp-for="TestName" class="form-control" />
+            <span asp-validation-for="TestName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RequestedTime"></label>
+            <input asp-for="RequestedTime" class="form-control" />
+            <span asp-validation-for="RequestedTime" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CategoryName"></label>
+            <input asp-for="CategoryName" class="form-control" />
+            <span asp-validation-for="CategoryName" class="text-danger"></span>
+        </div>
+
+        <div id="questions-container">
+            <div class="row">
+                <h4>Add questions to your Test</h4>
+                <button type="button" class="btn btn-default pull-right add-question">Add Question</button>
+            </div>
+            <div class="row questions-body">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-default create-test">Save as Draft</button>
+    </form>
+</div>
