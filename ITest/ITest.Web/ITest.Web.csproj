@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" PrivateAssets="All" />
@@ -22,12 +23,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Itest.Data.Models\Itest.Data.Models.csproj" />
     <ProjectReference Include="..\ITest.Data\ITest.Data.csproj" />
+    <ProjectReference Include="..\ITest.Infrastructure\ITest.Infrastructure.csproj" />
+    <ProjectReference Include="..\ITest.Services.Data\ITest.Services.Data.csproj" />
     <ProjectReference Include="..\ITest.Services.External\ITest.Services.External.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\User\Data\" />
-    <Folder Include="Areas\User\Models\" />
   </ItemGroup>
 
 </Project>

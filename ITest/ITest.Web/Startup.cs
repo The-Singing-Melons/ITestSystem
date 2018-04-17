@@ -12,32 +12,84 @@ using ITest.Web.Services;
 using ITest.Data;
 using ITest.Models;
 using ITest.Services.External.EmailSenderService;
+using ITest.Services.Data;
+using ITest.Services.Data.Contracts;
+using ITest.Infrastructure.Providers.Contracts;
+using ITest.Infrastructure.Providers;
+using AutoMapper;
+using ITest.Data.Repository;
+using ITest.Data.UnitOfWork;
 
 namespace ITest.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
+            this.Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment Environment { get; }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            this.RegisterData(services);
+            this.RegisterAuthentication(services);
+            this.RegisterServices(services);
+            this.RegisterInfrastructure(services);
+        }
+
+        private void RegisterServices(IServiceCollection services)
+        {
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<ITestService, TestService>();
+
+        }
+
+        private void RegisterInfrastructure(IServiceCollection services)
+        {
+            services.AddMvc();
+            services.AddAutoMapper();
+
+            services.AddScoped<IMappingProvider, MappingProvider>();
+        }
+
+        private void RegisterAuthentication(IServiceCollection services)
+        {
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<ITestDbContext>()
+            .AddDefaultTokenProviders();
+
+            if (this.Environment.IsDevelopment())
+            {
+                services.Configure<IdentityOptions>(options =>
+                {
+                    // Password settings
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 3;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequiredUniqueChars = 0;
+
+                    // Lockout settings
+                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(1);
+                    options.Lockout.MaxFailedAccessAttempts = 999;
+                });
+            }
+        }
+
+        private void RegisterData(IServiceCollection services)
+        {
             services.AddDbContext<ITestDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ITestDbContext>()
-                .AddDefaultTokenProviders();
-
-            // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
-
-            services.AddMvc();
+            services.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
+            services.AddScoped<IDataSaver, DataSaver>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

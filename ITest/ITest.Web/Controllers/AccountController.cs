@@ -10,6 +10,7 @@ using ITest.Web.Models.AccountViewModels;
 using ITest.Web.Services;
 using ITest.Models;
 using ITest.Services.External.EmailSenderService;
+using ITest.Services.Data.Contracts;
 
 namespace ITest.Web.Controllers
 {
@@ -21,17 +22,20 @@ namespace ITest.Web.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly ITestService _testService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            ITestService testService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _testService = testService;
         }
 
         [TempData]
@@ -229,6 +233,7 @@ namespace ITest.Web.Controllers
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
+                    this._testService.AddTestsToUser(user);
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);

@@ -8,6 +8,11 @@ namespace Itest.Data.Models
 {
     public class Test : DataModel
     {
+        public Test()
+        {
+            this.Questions = new HashSet<Question>();
+            //this.UserTests = new HashSet<UserTest>();
+        }
         public string Name { get; set; }
         public int Duration { get; set; }
         public bool IsPublished { get; set; }
