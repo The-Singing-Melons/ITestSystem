@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace ITest.Web.Areas.User.Models
 {
-    public class TakeTestViewModel
+    public class TakeTestAnswerViewModel
     {
+        string Body { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ITest.DTO;
 using ITest.Infrastructure.Providers.Contracts;
@@ -17,14 +18,16 @@ namespace ITest.Web.Areas.User.Controllers
     {
         private readonly IMappingProvider mapper;
         private readonly ITestService testService;
+        private readonly IQuestionService questionService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public HomeController(IMappingProvider mapper, ITestService testService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, IQuestionService questionService)
         {
             this.mapper = mapper;
             this.testService = testService;
             this.userManager = userManager;
+            this.questionService = questionService;
         }
 
         public IActionResult Index()
@@ -33,8 +36,7 @@ namespace ITest.Web.Areas.User.Controllers
             var userId = this.userManager.GetUserId(this.HttpContext.User);
             var userTests = this.testService.GetUserTests(userId);
 
-            var userTestsViewModel = new DashboardTestViewModel();
-            var userTestsVM = this.mapper.EnumerableProjectTo<TestDto, DashboardTestViewModel>(userTests);
+            var userTestsVM = this.mapper.EnumerableProjectTo<TestDto, TestViewModel>(userTests);
 
             return View(userTestsVM);
         }
@@ -45,9 +47,13 @@ namespace ITest.Web.Areas.User.Controllers
             {
                 throw new ArgumentNullException("Id cannot be null or empty");
             }
-            var testDto = this.testService.GetTestById(id);
 
-            var takeTestViewModel = new TakeTestViewModel();
+            var test = this.testService.GetTestById(id);
+            var testQuestions = this.testService.GetTestQuestions(id);
+            var questionWithAnswers = new Dictionary<QuestionDto, AnswerDto>();
+
+            var testViewModel = this.mapper.MapTo<TestViewModel>(test);
+            var testQuestionsViewModels = this.mapper.EnumerableProjectTo<QuestionDto, QuestionViewModel>(testQuestions);
 
             return View();
         }

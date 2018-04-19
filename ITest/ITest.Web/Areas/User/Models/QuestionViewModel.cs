@@ -1,4 +1,6 @@
-﻿namespace ITest.Web.Areas.User.Models
+﻿using System.Collections.Generic;
+
+namespace ITest.Web.Areas.User.Models
 {
     public class QuestionViewModel
     {

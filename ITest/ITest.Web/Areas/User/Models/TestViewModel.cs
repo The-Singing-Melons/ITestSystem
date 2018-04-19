@@ -2,7 +2,7 @@
 
 namespace ITest.Web.Areas.User.Models
 {
-    public class DashboardTestViewModel
+    public class TestViewModel
     {
         [Required]
         public string Id { get; set; }
