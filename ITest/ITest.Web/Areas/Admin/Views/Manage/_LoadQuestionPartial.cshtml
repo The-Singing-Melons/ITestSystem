@@ -1,4 +1,6 @@
-﻿<div class="panel panel-default">
+﻿@model CreateQuestionViewModel
+
+<div class="panel panel-default">
     <button type="button" class="btn btn-danger btn-xs pull-right delete-question">
         <span class="glyphicon glyphicon-remove"></span>
     </button>
@@ -13,7 +15,9 @@
         <div class="panel-body">
             <div class="question-description">
                 <h3>Description</h3>
-                <div class="summernote"></div>
+                <label asp-for="Body"></label>
+                <textarea asp-for="Body" class="summernote form-control"></textarea>
+                <span asp-validation-for="Body" class="text-danger"></span>
             </div>
             <div class="answers-container">
 
