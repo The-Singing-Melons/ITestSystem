@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace ITest.Web.Areas.User.Models
 {
-    public class TakeTestAnswerViewModel
+    public class CategoryViewModel
     {
-        public string Content { get; set; }
-        public bool IsSelected { get; set; }
+        public string Name { get; set; }
     }
 }

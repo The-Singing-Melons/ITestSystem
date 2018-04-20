@@ -17,38 +17,19 @@ namespace ITest.Services.Data
     {
         private readonly IDataRepository<ApplicationUser> userRepo;
         private readonly IDataRepository<Test> testRepo;
+        private readonly IDataRepository<Category> categoryRepo;
         private readonly IDataSaver dataSaver;
         private readonly IMappingProvider mapper;
 
         public TestService(IDataRepository<ApplicationUser> userRepo,
             IDataRepository<Test> testRepo, IDataSaver dataSaver,
-            IMappingProvider mapper)
+            IMappingProvider mapper, IDataRepository<Category> categoryRepo)
         {
             this.userRepo = userRepo;
             this.testRepo = testRepo;
             this.dataSaver = dataSaver;
             this.mapper = mapper;
-        }
-
-        public IEnumerable<TestDto> GetAllTests(string userId)
-        {
-            var user = this.userRepo.All
-                .Include(u => u.UserTests)
-                    .ThenInclude(ut => ut.Test)
-                        .ThenInclude(t => t.Category)
-                .FirstOrDefault(u => u.Id == userId);
-
-            var testsToReturn = user.UserTests.Select(ut =>
-            {
-                return new
-                {
-                    IsPassed = ut.IsPassed,
-                    IsSubmitted = ut.IsSubmited,
-                    TestType = ut.Test.Category.Name
-                };
-            });
-
-            throw new NotImplementedException();
+            this.categoryRepo = categoryRepo;
         }
 
         public IEnumerable<TestDto> GetUserTests(string id)
@@ -63,22 +44,11 @@ namespace ITest.Services.Data
             return userTestsDto.ToList();
         }
 
-        public void AddTestsToUser(ApplicationUser user)
-        {
-            var javaTest = GetRandomJavaTest();
-            var javascriptTest = GetRandomJavaScriptTest();
-            var dotNetTest = GetRandomDotNetTest();
-            var sqlTest = GetRandomSqlTest();
-            user.Tests.Add(javaTest);
-            user.Tests.Add(javascriptTest);
-            user.Tests.Add(dotNetTest);
-            user.Tests.Add(sqlTest);
-            this.dataSaver.SaveChanges();
-        }
-
         public TestDto GetTestById(string testId)
         {
-            var test = testRepo.All.Where(t => t.Id.ToString() == testId)
+            var test = testRepo.All
+                .Include(t => t.Category)
+                .Where(t => t.Id.ToString() == testId)
                 .FirstOrDefault();
 
             if (test == null)
@@ -91,8 +61,27 @@ namespace ITest.Services.Data
             return testDto;
         }
 
+        public TestDto GetRandomTest(string categoryName)
+        {
+            // get test with and category and test in a single query
+            // how?
+            var random = new Random();
+            var allTestsFromCategory = testRepo.All
+                .Where(t => t.Category.Name == categoryName &&
+                            t.IsPublished)
+                .ToList();
+
+            int r = random.Next(allTestsFromCategory.Count);
+            var randomTest = allTestsFromCategory[r];
+
+            var randomTestDto = this.mapper.MapTo<TestDto>(randomTest);
+
+            return randomTestDto;
+        }
+
         public IEnumerable<QuestionDto> GetTestQuestions(string testId)
         {
+
             var testQuestions = testRepo.All
                                     .Include(t => t.Questions)
                                     .Where(t => t.Id.ToString() == testId)
@@ -103,55 +92,17 @@ namespace ITest.Services.Data
             return testQuestionDto.ToList();
         }
 
-        // need to refactor var random = new Random() 
-        // code duplication & dependency
-        private Test GetRandomSqlTest()
+        public IEnumerable<TestDto> GetRandomTestForEachCategory()
         {
-            var random = new Random();
-            var sqlTests = testRepo.All
-                .Where(t => t.Category.Name == "SQL" && t.IsPublished)
-                .ToList();
-            int r = random.Next(sqlTests.Count);
-            var sqlTest = sqlTests[r];
+            var testsForEachCategory = new List<TestDto>();
+            var allCategories = this.categoryRepo.All;
 
-            return sqlTest;
+            foreach (var c in allCategories)
+            {
+                //var testForCategory = this.GetRandomTest();
+            }
+
+            return testsForEachCategory;
         }
-
-        private Test GetRandomDotNetTest()
-        {
-            var random = new Random();
-            var dotNetTests = testRepo.All
-                .Where(t => t.Category.Name == "DotNet" && t.IsPublished)
-                .ToList();
-            int r = random.Next(dotNetTests.Count);
-            var dotNetTest = dotNetTests[r];
-
-            return dotNetTest;
-        }
-
-        private Test GetRandomJavaScriptTest()
-        {
-            var random = new Random();
-            var JavaScriptTests = testRepo.All
-                .Where(t => t.Category.Name == "JavaScript" && t.IsPublished)
-                .ToList();
-            int r = random.Next(JavaScriptTests.Count);
-            var javaScriptTest = JavaScriptTests[r];
-
-            return javaScriptTest;
-        }
-
-        private Test GetRandomJavaTest()
-        {
-            var random = new Random();
-            var JavaTests = testRepo.All
-                .Where(t => t.Category.Name == "Java" && t.IsPublished)
-                .ToList();
-            int r = random.Next(JavaTests.Count);
-            var javaTest = JavaTests[r];
-
-            return javaTest;
-        }
-
     }
 }

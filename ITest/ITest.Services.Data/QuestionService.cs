@@ -27,7 +27,6 @@ namespace ITest.Services.Data
 
         public IEnumerable<AnswerDto> GetAnswersForQuestion(string questionId)
         {
-            ;
 
             var answersForQuestion = this.questionRepo.All.
                                         Include(q => q.Answers)

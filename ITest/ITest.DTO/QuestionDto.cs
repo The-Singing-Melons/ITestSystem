@@ -5,6 +5,7 @@ namespace ITest.DTO
 {
     public class QuestionDto
     {
+        public string Id { get; set; }
         public string Body { get; set; }
         public ICollection<AnswerDto> Answers { get; set; }
         public Guid TestId { get; set; }

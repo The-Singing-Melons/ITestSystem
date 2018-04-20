@@ -1,0 +1,30 @@
+﻿@using ITest.Web.Areas.User.Models
+@model TakeTestViewModel
+@{
+    ViewData["Title"] = "Take Test";
+}
+<h3>@Model.TestViewModel.Name</h3>
+<hr class="dashboard-breaker">
+<br>
+<h4><strong>Category:</strong>@Model.TestViewModel.CategoryName</h4>
+<br />
+<form asp-area="User" asp-controller="Home" asp-action="TestSubmit" method="post">
+    @{var idCounter = 1; var nameCounter = 1;}
+    @foreach (var key in Model.QuestionWithAnswersVM.Keys)
+    {
+        <br />
+        <div class="well well-sm">@Html.DisplayFor(x => key.Body)</div>
+        foreach (var item in Model.QuestionWithAnswersVM[key])
+        {
+            <div class="funkyradio">
+                <div class="funkyradio-primary">
+                    <input type="radio" name="radio-@nameCounter" id="radio-@idCounter" checked />
+                    <label for="radio-@idCounter">@item.Content</label>
+                </div>
+            </div>
+            idCounter++;
+        }
+        nameCounter++;
+    }
+    <button type="submit" class="btn">Submit Test</button>
+</form>
