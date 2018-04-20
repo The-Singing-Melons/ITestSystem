@@ -233,7 +233,6 @@ namespace ITest.Web.Controllers
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
-                    this._testService.AddTestsToUser(user);
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);

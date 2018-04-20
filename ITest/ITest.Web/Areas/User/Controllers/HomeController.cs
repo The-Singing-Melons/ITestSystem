@@ -20,27 +20,41 @@ namespace ITest.Web.Areas.User.Controllers
         private readonly ITestService testService;
         private readonly IQuestionService questionService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly ICategoryService categoryService;
 
         public HomeController(IMappingProvider mapper, ITestService testService,
-            UserManager<ApplicationUser> userManager, IQuestionService questionService)
+            UserManager<ApplicationUser> userManager, IQuestionService questionService, ICategoryService categoryService)
         {
             this.mapper = mapper;
             this.testService = testService;
             this.userManager = userManager;
             this.questionService = questionService;
+            this.categoryService = categoryService;
         }
 
         public IActionResult Index()
         {
-            // possibly async method?
-            var userId = this.userManager.GetUserId(this.HttpContext.User);
-            var userTests = this.testService.GetUserTests(userId);
+            var allCategories = this.categoryService.GetAllCategories();
+            var categoriesViewModel = this.mapper.EnumerableProjectTo
+                <CategoryDto, CategoryViewModel>(allCategories);
 
-            var userTestsVM = this.mapper.EnumerableProjectTo<TestDto, TestViewModel>(userTests);
-
-            return View(userTestsVM);
+            return View(categoriesViewModel);
         }
 
+        public IActionResult GetRandomTest(string id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var randomTest = this.testService.GetRandomTest(id);
+            var randomTestViewModel = this.mapper.MapTo<TestViewModel>(randomTest);
+
+            return RedirectToAction("TakeTest", "Home", randomTestViewModel.Id);
+        }
+
+        [HttpPost]
         public IActionResult TakeTest(string id)
         {
             if (id == null)
@@ -48,14 +62,44 @@ namespace ITest.Web.Areas.User.Controllers
                 throw new ArgumentNullException("Id cannot be null or empty");
             }
 
+            // DTO
             var test = this.testService.GetTestById(id);
             var testQuestions = this.testService.GetTestQuestions(id);
-            var questionWithAnswers = new Dictionary<QuestionDto, AnswerDto>();
 
+            // VM
+            var questionWithAnswersVM = new Dictionary<QuestionViewModel, IEnumerable<TakeTestAnswerViewModel>>();
             var testViewModel = this.mapper.MapTo<TestViewModel>(test);
-            var testQuestionsViewModels = this.mapper.EnumerableProjectTo<QuestionDto, QuestionViewModel>(testQuestions);
 
+            foreach (var question in testQuestions)
+            {
+                var answersForQuestion = this.questionService
+                                        .GetAnswersForQuestion(question.Id);
+
+                var questionVM = this.mapper.MapTo<QuestionViewModel>(question);
+                var answersVM = this.mapper.EnumerableProjectTo<AnswerDto, TakeTestAnswerViewModel>(answersForQuestion);
+
+                questionWithAnswersVM.Add(questionVM, answersVM);
+            }
+
+            var takeTestViewModel = new TakeTestViewModel
+            {
+                QuestionWithAnswersVM = questionWithAnswersVM,
+                TestViewModel = testViewModel
+            };
+
+            return View(takeTestViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult SubmitTest(TakeTestViewModel takeTestViewModel)
+        {
             return View();
+        }
+
+        [HttpGet]
+        public TestViewModel GetRandomTests()
+        {
+            throw new NotImplementedException();
         }
     }
 }

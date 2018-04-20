@@ -4,6 +4,6 @@ namespace ITest.Web.Areas.User.Models
 {
     public class QuestionViewModel
     {
-        string Content { get; set; }
+        public string Body { get; set; }
     }
 }

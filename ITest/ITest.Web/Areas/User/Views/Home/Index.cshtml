@@ -1,5 +1,5 @@
 ﻿@using ITest.Web.Areas.User.Models
-@model IEnumerable<DashboardTestViewModel>
+@model IEnumerable<CategoryViewModel>
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -15,33 +15,41 @@
             <div class="panel with-nav-tabs panel-default">
                 <div class="panel-heading">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab1default" data-toggle="tab">Java</a></li>
-                        <li><a href="#tab2default" data-toggle="tab">SQL</a></li>
-                        <li><a href="#tab3default" data-toggle="tab">JavaScript</a></li>
-                        <li><a href="#tab3default" data-toggle="tab">.NET</a></li>
+                        @foreach (var c in Model)
+                        {
+                            var className = c.Name == "JAVA" ? "active" : "";
+
+                            <li class="@className">
+                                <a href="#tab1default"
+                                   id="#category-tab"
+                                   data-toggle="tab"
+                                   data-category="@c.Name">
+                                    @c.Name
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
                 <div class="panel-body">
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="tab1default">
                             <div class="well well-sm clearfix">
-                                <span class="pull-left">@Model.Where(x => x.CategoryName == "JAVA").FirstOrDefault().Name</span>
+                                <span class="pull-left"></span>
                                 <a id="test-start-btn" class="btn btn-default pull-right"
                                    asp-area="User"
                                    asp-controller="Home"
-                                   asp-action="TakeTest"
-                                   asp-route-id="@Model.Where(x => x.CategoryName == "JAVA").FirstOrDefault().Id">
+                                   asp-action="GetRandomTest">
                                     Start Test
                                 </a>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="tab2default">Default 2</div>
-                        <div class="tab-pane fade" id="tab3default">Default 3</div>
-                        <div class="tab-pane fade" id="tab4default">Default 4</div>
-                        <div class="tab-pane fade" id="tab5default">Default 5</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/user-tests.js"></script>
+}
