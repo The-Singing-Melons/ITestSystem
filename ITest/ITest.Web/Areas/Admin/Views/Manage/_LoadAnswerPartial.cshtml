@@ -1,5 +1,12 @@
-﻿<div class="answer-container">
-    <h3>Answer</h3>
-    <input type="radio" name="answer" class="radio-inline pull-right" />
-    <div class="summernote"></div>
+﻿@model CreateAnswerViewModel
+
+<div>
+    <h3 class="form-inline">Answer</h3>
+    <label class="btn btn-success pull-right">
+        <input type="radio" autocomplete="off" chacked>
+        <span class="glyphicon glyphicon-ok"></span>
+    </label>
+    <label asp-for="Content"></label>
+    <textarea asp-for="Content" class="summernote form-control"></textarea>
+    <span asp-validation-for="Content" class="text-danger"></span>
 </div>
