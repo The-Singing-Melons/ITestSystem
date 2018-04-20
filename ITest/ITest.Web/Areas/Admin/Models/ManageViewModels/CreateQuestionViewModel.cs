@@ -8,10 +8,10 @@ namespace ITest.Web.Areas.Admin.Models.ManageViewModels
 {
     public class CreateQuestionViewModel
     {
-        [Required(ErrorMessage = "Required!!!")]
-        [StringLength(5, MinimumLength = 4, ErrorMessage = "Error")]
+        //[Required(ErrorMessage = "Required!!!")]
+        //[StringLength(5, MinimumLength = 4, ErrorMessage = "Error")]
         public string Body { get; set; }
 
-        public IList<CreateAnswerViewModel> Answers { get; set; }
+        public List<CreateAnswerViewModel> Answers { get; set; }
     }
 }

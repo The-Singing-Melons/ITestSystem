@@ -11,36 +11,20 @@ namespace ITest.Web.Areas.Admin.Controllers
         {
             return View();
         }
-
-
+        
         [HttpGet]
         public IActionResult CreateTest()
         {
             return View();
         }
-
+        
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public IActionResult CreateTest(CreateTestViewModel model)
         {
-            //if (validationsFail)
-            //{
-            //  return View(model);
-            //}
 
-            //When all fine
 
             return RedirectToAction(nameof(this.Index));
-        }
-
-        public IActionResult LoadQuestion()
-        {
-            return PartialView("_LoadQuestionPartial");
-        }
-
-        public IActionResult LoadAnswer()
-        {
-            return PartialView("_LoadAnswerPartial");
         }
     }
 }

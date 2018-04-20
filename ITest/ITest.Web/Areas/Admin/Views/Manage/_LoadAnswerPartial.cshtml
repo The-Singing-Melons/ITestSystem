@@ -1,12 +1,8 @@
-﻿@model CreateAnswerViewModel
-
-<div>
+﻿<div>
     <h3 class="form-inline">Answer</h3>
     <label class="btn btn-success pull-right">
         <input type="radio" autocomplete="off" chacked>
         <span class="glyphicon glyphicon-ok"></span>
     </label>
-    <label asp-for="Content"></label>
-    <textarea asp-for="Content" class="summernote form-control"></textarea>
-    <span asp-validation-for="Content" class="text-danger"></span>
+    <input id="Questions_{{q_id}}__Answers_{{a_id}}__Content" name="Questions[{{q_id}}].Answers[{{a_id}}].Content" class="summernote form-control"></input>
 </div>
