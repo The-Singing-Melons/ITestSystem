@@ -10,6 +10,7 @@ using ITest.Infrastructure.Providers.Contracts;
 using ITest.Models;
 using ITest.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace ITest.Services.Data
 {
@@ -103,6 +104,23 @@ namespace ITest.Services.Data
             }
 
             return testsForEachCategory;
+        }
+
+        public void CreateTest(CreateTestDto testDto)
+        {
+            if (testDto == null)
+            {
+                throw new ArgumentNullException(nameof(testDto));
+            }
+
+            var testToAdd = this.mapper.MapTo<Test>(testDto);
+
+            var category = this.categoryRepo.All.SingleOrDefault(c => c.Name == testDto.CategoryName)
+                ?? throw new ArgumentException($"Category {testDto.CategoryName} does not exists!");
+
+            testToAdd.Category = category;
+
+            //this.testRepo.Add()
         }
     }
 }

@@ -12,6 +12,6 @@ namespace ITest.Web.Areas.Admin.Models.ManageViewModels
         //[StringLength(5, MinimumLength = 4, ErrorMessage = "Error")]
         public string Body { get; set; }
 
-        public List<CreateAnswerViewModel> Answers { get; set; }
+        public IEnumerable<CreateAnswerViewModel> Answers { get; set; }
     }
 }

@@ -12,5 +12,6 @@ namespace ITest.Services.Data.Contracts
         TestDto GetTestById(string id);
         IEnumerable<QuestionDto> GetTestQuestions(string testId);
         TestDto GetRandomTest(string categoryName);
+        void CreateTest(CreateTestDto testToAdd);
     }
 }
