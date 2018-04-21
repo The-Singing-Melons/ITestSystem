@@ -51,10 +51,9 @@ namespace ITest.Web.Areas.User.Controllers
             var randomTest = this.testService.GetRandomTest(id);
             var randomTestViewModel = this.mapper.MapTo<TestViewModel>(randomTest);
 
-            return RedirectToAction("TakeTest", "Home", randomTestViewModel.Id);
+            return Json(Url.Action("TakeTest/" + randomTestViewModel.Id));
         }
 
-        [HttpPost]
         public IActionResult TakeTest(string id)
         {
             if (id == null)
