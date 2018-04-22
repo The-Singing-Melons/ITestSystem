@@ -17,6 +17,6 @@ namespace ITest.Web.Areas.Admin.Models.ManageViewModels
         //[StringLength(5, MinimumLength = 4, ErrorMessage = "Error")]
         public string CategoryName { get; set; }
 
-        public List<CreateQuestionViewModel> Questions { get; set; }
+        public IEnumerable<CreateQuestionViewModel> Questions { get; set; }
     }
 }

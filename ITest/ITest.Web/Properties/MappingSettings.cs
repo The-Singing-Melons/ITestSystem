@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Itest.Data.Models;
 using ITest.DTO;
+using ITest.Web.Areas.Admin.Models.ManageViewModels;
 using ITest.Web.Areas.User.Models;
 
 namespace ITest.Web.Properties
@@ -9,8 +10,32 @@ namespace ITest.Web.Properties
     {
         public MappingSettings()
         {
-            this.CreateMap<TestDto, TestViewModel>()
-                //.ForMember(t => t.Name, o => o.MapFrom(x => x.Name))
+            //Test:
+            //From ViewModel to Dto
+            this.CreateMap<CreateTestViewModel, CreateTestDto>(MemberList.Source)
+                .ForMember(t => t.Questions, o => o.MapFrom(t => t.Questions));
+
+            this.CreateMap<CreateQuestionViewModel, CreateQuestionDto>(MemberList.Source)
+                .ForMember(q => q.Answers, o => o.MapFrom(q => q.Answers));
+
+            this.CreateMap<CreateAnswerViewModel, CreateAnswerDto>(MemberList.Source)
+                .ForMember(a => a.Content, o => o.MapFrom(a => a.Content))
+                .ForMember(a => a.IsCorrect, o => o.MapFrom(a => a.IsCorrect));
+
+            //From Dto to DataModel
+            this.CreateMap<CreateTestDto, Test>(MemberList.Source)
+                .ForMember(t => t.Questions, o => o.MapFrom(t => t.Questions));
+
+            this.CreateMap<CreateQuestionDto, Question>(MemberList.Source)
+                .ForMember(q => q.Answers, o => o.MapFrom(q => q.Answers));
+
+            this.CreateMap<CreateAnswerDto, Answer>(MemberList.Source)
+                .ForMember(a => a.Content, o => o.MapFrom(a => a.Content))
+                .ForMember(a => a.IsCorrect, o => o.MapFrom(a => a.IsCorrect));
+
+
+            this.CreateMap<TestDto, Areas.User.Models.TestViewModel>()
+                .ForMember(t => t.Name, o => o.MapFrom(x => x.Name))
                 .ForMember(t => t.CategoryName, o => o.MapFrom(x => x.Category.Name))
                 //.ForMember(t => t.Id, o => o.MapFrom(x => x.Id))
                 .ForMember(t => t.Questions, o => o.MapFrom(x => x.Questions))

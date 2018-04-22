@@ -10,37 +10,56 @@
     <form asp-area="Admin" asp-controller="Manage" asp-action="CreateTest" method="post">
         <h4>Create Test</h4>
         <hr />
-        <div class="form-group">
-            <label asp-for="TestName"></label>
-            <input asp-for="TestName" class="form-control" />
-            <span asp-validation-for="TestName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="RequestedTime"></label>
-            <input asp-for="RequestedTime" class="form-control" />
-            <span asp-validation-for="RequestedTime" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="CategoryName"></label>
-            <input asp-for="CategoryName" class="form-control" />
-            <span asp-validation-for="CategoryName" class="text-danger"></span>
-        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        @*<label asp-for="TestName"></label>*@
+                        <input asp-for="TestName" class="form-control" placeholder="TestName*" />
+                    </div>
+                    <span asp-validation-for="TestName" class="text-danger"></span>
+                </div>
 
-        <div id="questions-container">
-            <div class="row">
-                <h4>Add questions to your Test</h4>
-                <button type="button" class="btn btn-default pull-right" id="add-question">Add Question</button>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        @*<label asp-for="RequestedTime"></label>*@
+                        <input asp-for="RequestedTime" class="form-control" placeholder="RequestedTime*" />
+                    </div>
+                    <span asp-validation-for="RequestedTime" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        @*<label asp-for="CategoryName"></label>*@
+                        <input asp-for="CategoryName" class="form-control" placeholder="CategoryName*" />
+                    </div>
+                    <span asp-validation-for="CategoryName" class="text-danger"></span>
+                </div>
             </div>
+        </div>
 
-            <div class="row questions-body">
+        <div class="row">
+            <div id="questions-container">
+                <div class="row">
+                    <h4>Add questions to your Test</h4>
+                    <button id="add-question" class="btn btn-default pull-right" type="button">Add Question</button>
+                </div>
 
+                <div class="row">
+                    <div id="questions-body" class="row"></div>
+                </div>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-default" id="create-test">Save as Draft</button>
+        <button class="create-test btn btn-default" type="submit">Save as Draft</button>
+        <button class="create-test btn btn-default" type="submit">Publish</button>
     </form>
 </div>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="~/js/createTestAsyncOperations.js"></script>
 }

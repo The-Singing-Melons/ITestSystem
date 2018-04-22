@@ -1,4 +1,4 @@
-﻿
+﻿@model CreatedTestsViewModel
 @{
     ViewData["Title"] = "DashBoard";
 }
@@ -28,25 +28,65 @@
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
-                                <tr>
-                                    <td>1</td>
-                                    <td>News</td>
-                                    <td>News Cate</td>
-                                    <td class="text-center">
-                                        <a class='btn btn-success btn-xs' href="#">
-                                            <span class="glyphicon glyphicon-ok"></span>
-                                            Publish
-                                        </a>
-                                        <a class='btn btn-warning btn-xs' href="#">
-                                            <span class="glyphicon glyphicon-edit"></span>
-                                            Edit
-                                        </a>
-                                        <a href="#" class="btn btn-danger btn-xs">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                            Delete
-                                        </a>
-                                    </td>
-                                </tr>
+                                @{
+                                    if (Model.CreatedTests.Any())
+                                    {
+                                        foreach (var test in Model.CreatedTests)
+                                        {
+                                            <tr>
+                                                <td>@test.TestName</td>
+                                                <td>@test.CategoryName</td>
+
+                                                @{
+                                                    if (test.IsPublished)
+                                                    {
+                                                        <td>Publlished</td>
+                                                        <td class="text-center">
+                                                            <a class='btn btn-success btn-xs disabled' href="#">
+                                                                <span class="glyphicon glyphicon-ok"></span>
+                                                                Publish
+                                                            </a>
+                                                            <a class='btn btn-warning btn-xs disabled' href="#">
+                                                                <span class="glyphicon glyphicon-edit"></span>
+                                                                Edit
+                                                            </a>
+                                                            <a class="btn btn-danger btn-xs">
+                                                                <span class="glyphicon glyphicon-remove"></span>
+                                                                Disable
+                                                            </a>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>Draft</td>
+                                                        <td class="text-center">
+                                                            <a class='btn btn-success btn-xs' href="#">
+                                                                <span class="glyphicon glyphicon-ok"></span>
+                                                                Publish
+                                                            </a>
+                                                            <a class='btn btn-warning btn-xs' href="#">
+                                                                <span class="glyphicon glyphicon-edit"></span>
+                                                                Edit
+                                                            </a>
+                                                            <a href="#" class="btn btn-danger btn-xs">
+                                                                <span class="glyphicon glyphicon-remove"></span>
+                                                                Delete
+                                                            </a>
+                                                        </td>
+                                                    }
+                                                }
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td>
+                                                NO TESTS!!!
+                                            </td>
+                                        </tr>
+                                    }
+                                }
                             </table>
                         </div>
                         <div class="tab-pane fade" id="tab2default">Default 2</div>
