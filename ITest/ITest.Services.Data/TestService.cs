@@ -79,30 +79,19 @@ namespace ITest.Services.Data
             return randomTestDto;
         }
 
-        public IEnumerable<QuestionDto> GetTestQuestions(string testId)
+        public TestDto GetTestQuestionsWithAnswers(string testId)
         {
 
-            var testQuestions = testRepo.All
-                                    .Include(t => t.Questions)
-                                    .Where(t => t.Id.ToString() == testId)
-                                    .SelectMany(t => t.Questions);
+            var testWithQuestionsAndAnswers = testRepo.All
+                                        .Where(t => t.Id.ToString() == testId)
+                                        .Include(t => t.Category)
+                                        .Include(t => t.Questions)
+                                        .ThenInclude(q => q.Answers)
+                                        .SingleOrDefault();
 
-            var testQuestionDto = mapper.ProjectTo<QuestionDto>(testQuestions);
+            var testWithQuestionsAndAnswersDto = this.mapper.MapTo<TestDto>(testWithQuestionsAndAnswers);
 
-            return testQuestionDto.ToList();
-        }
-
-        public IEnumerable<TestDto> GetRandomTestForEachCategory()
-        {
-            var testsForEachCategory = new List<TestDto>();
-            var allCategories = this.categoryRepo.All;
-
-            foreach (var c in allCategories)
-            {
-                //var testForCategory = this.GetRandomTest();
-            }
-
-            return testsForEachCategory;
+            return testWithQuestionsAndAnswersDto;
         }
     }
 }

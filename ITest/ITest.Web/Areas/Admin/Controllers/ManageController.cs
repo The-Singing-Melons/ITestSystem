@@ -11,19 +11,17 @@ namespace ITest.Web.Areas.Admin.Controllers
         {
             return View();
         }
-        
+
         [HttpGet]
         public IActionResult CreateTest()
         {
             return View();
         }
-        
+
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public IActionResult CreateTest(CreateTestViewModel model)
         {
-
-
             return RedirectToAction(nameof(this.Index));
         }
     }

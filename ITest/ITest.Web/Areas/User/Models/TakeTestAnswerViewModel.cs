@@ -7,7 +7,8 @@ namespace ITest.Web.Areas.User.Models
 {
     public class TakeTestAnswerViewModel
     {
+        public string Id { get; set; }
         public string Content { get; set; }
-        public bool IsSelected { get; set; }
+        public string SelectedAnswerId { get; set; }
     }
 }
