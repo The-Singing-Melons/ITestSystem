@@ -14,6 +14,6 @@ namespace ITest.DTO
 
         public string CreatedByUserId { get; set; }
 
-        public IEnumerable<CreateQuestionDto> Questions { get; set; }
+        public ICollection<CreateQuestionDto> Questions { get; set; }
     }
 }

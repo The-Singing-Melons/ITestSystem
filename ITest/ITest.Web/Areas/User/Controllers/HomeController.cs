@@ -21,22 +21,28 @@ namespace ITest.Web.Areas.User.Controllers
         private readonly IQuestionService questionService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ICategoryService categoryService;
+        private readonly IUserTestService userTestService;
+        private readonly IUserTestQuestionAnswerService userTestQuestionAnswerService;
 
         public HomeController(IMappingProvider mapper, ITestService testService,
-            UserManager<ApplicationUser> userManager, IQuestionService questionService, ICategoryService categoryService)
+            UserManager<ApplicationUser> userManager, IQuestionService questionService,
+            ICategoryService categoryService, IUserTestService userTestService,
+            IUserTestQuestionAnswerService userTestQuestionAnswerService)
         {
             this.mapper = mapper;
             this.testService = testService;
             this.userManager = userManager;
             this.questionService = questionService;
             this.categoryService = categoryService;
+            this.userTestService = userTestService;
+            this.userTestQuestionAnswerService = userTestQuestionAnswerService;
         }
 
         public IActionResult Index()
         {
             var allCategories = this.categoryService.GetAllCategories();
             var categoriesViewModel = this.mapper.EnumerableProjectTo
-                <CategoryDto, CategoryViewModel>(allCategories);
+                                        <CategoryDto, CategoryViewModel>(allCategories);
 
             return View(categoriesViewModel);
         }
@@ -75,15 +81,25 @@ namespace ITest.Web.Areas.User.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userId = this.userManager.GetUserId(this.HttpContext.User);
+                var submitedTest = this.mapper.MapTo<TestDto>(takeTestViewModel);
+
+                // calculate if test is passed
+                var totalCorrectQuestions = this.testService
+                    .CalculateCorrectAnswers(submitedTest);
+
+                var isPassed = this.testService.IsTestPassed(submitedTest.Questions.Count, totalCorrectQuestions);
+
+                this.userTestService.AddUserToTest(submitedTest.Id,
+                    userId, isPassed);
+
+                // record answer of user to each test of the question
+                //this.userTestQuestionAnswerService.RecordUserAnswerToQuestionInTest
+                //    (userId, submitedTest);
+
                 return RedirectToAction("Index");
             }
             return View(takeTestViewModel);
-        }
-
-        [HttpGet]
-        public TestViewModel GetRandomTests()
-        {
-            throw new NotImplementedException();
         }
     }
 }

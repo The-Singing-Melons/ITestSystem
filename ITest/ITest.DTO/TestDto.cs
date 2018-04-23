@@ -17,7 +17,7 @@ namespace ITest.DTO
         public Guid CategoryId { get; set; }
         public CategoryDto Category { get; set; }
 
-        public ICollection<QuestionDto> Questions { get; set; }
-        public ICollection<UserTestDto> UserTests { get; set; }
+        public IList<QuestionDto> Questions { get; set; }
+        public IList<UserTestDto> UserTests { get; set; }
     }
 }

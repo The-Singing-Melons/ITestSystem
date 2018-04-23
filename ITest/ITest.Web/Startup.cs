@@ -49,6 +49,8 @@ namespace ITest.Web
             services.AddTransient<IQuestionService, QuestionService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUserTestService, UserTestService>();
+            services.AddTransient<IUserTestQuestionAnswerService, UserTestQuestionAnswerService>();
         }
 
         private void RegisterInfrastructure(IServiceCollection services)

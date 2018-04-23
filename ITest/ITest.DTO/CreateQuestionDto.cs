@@ -6,6 +6,6 @@ namespace ITest.DTO
     {
         public string Body { get; set; }
 
-        public IEnumerable<CreateAnswerDto> Answers { get; set; }
+        public ICollection<CreateAnswerDto> Answers { get; set; }
     }
 }
