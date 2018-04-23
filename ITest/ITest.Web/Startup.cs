@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ITest.Web.Services;
 using ITest.Data;
 using ITest.Models;
 using ITest.Services.External.EmailSenderService;
@@ -51,6 +47,8 @@ namespace ITest.Web
             services.AddTransient<IQuestionService, QuestionService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUserTestService, UserTestService>();
+            services.AddTransient<IUserTestQuestionAnswerService, UserTestQuestionAnswerService>();
         }
 
         private void RegisterInfrastructure(IServiceCollection services)

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Itest.Data.Models.Abstracts;
 using ITest.Models;
 
 namespace Itest.Data.Models
 {
-    public class UserTest
+    public class UserTest : IDeletable
     {
         // Possibly Add DateTime Started / Finished
         public string UserId { get; set; }
@@ -17,5 +18,7 @@ namespace Itest.Data.Models
         public bool IsPassed { get; set; }
         public bool IsSubmited { get; set; }
         public float ExecutionTime { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedOn { get; set; }
     }
 }

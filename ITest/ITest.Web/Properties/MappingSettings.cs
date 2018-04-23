@@ -39,7 +39,8 @@ namespace ITest.Web.Properties
                 .ForMember(t => t.CategoryName, o => o.MapFrom(x => x.Category.Name))
                 //.ForMember(t => t.Id, o => o.MapFrom(x => x.Id))
                 .ForMember(t => t.Questions, o => o.MapFrom(x => x.Questions))
-                .MaxDepth(3);
+                .MaxDepth(3)
+                .ReverseMap();
 
             // Without .MaxDepth() - stackoverflow exception in GetTestById() in Test
             // Service - Ask why
@@ -55,11 +56,13 @@ namespace ITest.Web.Properties
 
             this.CreateMap<QuestionDto, QuestionViewModel>()
                 .ForMember(q => q.Answers, o => o.MapFrom(x => x.Answers))
-                .MaxDepth(3);
+                .MaxDepth(3)
+                .ReverseMap();
             //.ForMember(q => q.Body, o => o.MapFrom(x => x.Body))
             //.ForMember(q => q.Id, o => o.MapFrom(x => x.Id));
 
-            this.CreateMap<AnswerDto, TakeTestAnswerViewModel>();
+            this.CreateMap<AnswerDto, AnswerViewModel>()
+                .ReverseMap();
 
             this.CreateMap<CategoryDto, Category>(MemberList.Source)
                 .ReverseMap().MaxDepth(3);

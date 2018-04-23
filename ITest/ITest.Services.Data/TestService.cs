@@ -111,5 +111,43 @@ namespace ITest.Services.Data
 
             //this.testRepo.Add()
         }
+
+        public bool IsTestPassed(int testQuestionsCount, int totalCorrectQuestions)
+        {
+            var isPassed = false;
+            var resultPercentage = (totalCorrectQuestions / testQuestionsCount) * 100;
+            if (resultPercentage >= 80D)
+            {
+                isPassed = true;
+            }
+
+            return isPassed;
+        }
+
+
+        public int CalculateCorrectAnswers(TestDto testToBeCalculated)
+        {
+            var testWithQuestions = this.GetTestQuestionsWithAnswers(testToBeCalculated.Id);
+            var totalCorrectQuestions = 0;
+            for (int i = 0; i < testWithQuestions.Questions.Count; i++)
+            {
+                var correctAnswer = testWithQuestions
+                    .Questions[i].Answers
+                    .Where(x => x.IsCorrect == true)
+                    .FirstOrDefault();
+
+                var selectedAnswer = testToBeCalculated.Questions[i]
+                    .Answers
+                    .Where(x => x.SelectedAnswerId != null)
+                    .FirstOrDefault();
+
+                if (correctAnswer.Id == selectedAnswer.Id)
+                {
+                    totalCorrectQuestions++;
+                }
+            }
+
+            return totalCorrectQuestions;
+        }
     }
 }

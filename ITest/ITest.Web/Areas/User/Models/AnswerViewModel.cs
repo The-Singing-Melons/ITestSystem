@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ITest.Web.Areas.User.Models
 {
-    public class TakeTestAnswerViewModel
+    public class AnswerViewModel
     {
         public string Id { get; set; }
         public string Content { get; set; }

@@ -6,6 +6,6 @@ namespace ITest.Web.Areas.User.Models
     {
         public string Id { get; set; }
         public string Body { get; set; }
-        public IList<TakeTestAnswerViewModel> Answers { get; set; }
+        public IList<AnswerViewModel> Answers { get; set; }
     }
 }
