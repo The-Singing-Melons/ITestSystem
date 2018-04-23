@@ -9,9 +9,15 @@ namespace ITest.Services.Data.Contracts
     public interface ITestService
     {
         IEnumerable<TestDto> GetUserTests(string id);
+
         TestDto GetTestById(string id);
+
         TestDto GetTestQuestionsWithAnswers(string testId);
+
         TestDto GetRandomTest(string categoryName);
+
         void CreateTest(CreateTestDto testToAdd);
+
+        IEnumerable<TestDashBoardDto> GetTestsDashboardInfo();
     }
 }

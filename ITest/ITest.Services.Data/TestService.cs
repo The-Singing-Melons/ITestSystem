@@ -109,7 +109,14 @@ namespace ITest.Services.Data
             testToAdd.Category = category;
 
             this.testRepo.Add(testToAdd);
-            this.dataSaver.SaveChangesAsync();
+            this.dataSaver.SaveChanges();
+        }
+
+        public IEnumerable<TestDashBoardDto> GetTestsDashboardInfo()
+        {
+            var tests = this.testRepo.All;
+            
+            return this.mapper.EnumerableProjectTo<Test, TestDashBoardDto>(tests);
         }
     }
 }

@@ -15,9 +15,12 @@
                 <div class="panel-body">
                     <div class="question-description">
                         <h3>Description</h3>
-                        <input type="text" id="Questions_{{q_id}}__Body" name="Questions[{{q_id}}].Body" class="summernote form-control" value=""></input>
+                        <input type="text" id="Questions_{{q_id}}__Body" name="Questions[{{q_id}}].Body" class="summernote form-control" value=""/>
+                        <span data-valmsg-for="Questions[{{q_id}}].Body" class="text-danger field-validation-valid" data-valmsg-replace="true">Please enter the Question's description!</span>
                     </div>
-                    <div class="answers-container"></div>
+                    <div class="answers-container">
+                    </div>
+                    <span class="text-danger field-validation-error" data-valmsg-for="Questions[{{q_id}}].Answers" data-valmsg-replace="true">Please add Answers to your Question!</span>
                 </div>
                 <div class="panel-body">
                     <button class="add-answer btn btn-default pull-right" name="collapse-{{q_id}}" type="button">Add Answer</button>
@@ -35,16 +38,32 @@
                 <input id="Questions_{{q_id}}__Answers_{{a_id}}__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off">
                 <span class="glyphicon glyphicon-ok"></span>
             </label>
-            <input id="Questions_{{q_id}}__Answers_{{a_id}}__Content" name="Questions[{{q_id}}].Answers[{{a_id}}].Content" class="answer-content summernote form-control"></input>
+            <input id="Questions_{{q_id}}__Answers_{{a_id}}__Content" name="Questions[{{q_id}}].Answers[{{a_id}}].Content" class="answer-content summernote form-control"/>
+            <span class="text-danger field-validation-error" data-valmsg-for="Questions[{{q_id}}].Answers[{{a_id}}].Content" data-valmsg-replace="true">Please enter the Answer's content!</span>
         </div>`;
 
     var addQuestionClickEvent = $('#questions-container #add-question').on('click', function () {
+        $('#questions-container .question-container > a')
+            .filter(function () {
+                var isCollapsed = $(`#${this.parentNode.id} > div`)[0].classList.contains('in');
+
+                return isCollapsed;
+            })
+            .click();
+
         var newQuestionId = $('#questions-body .question-container').length;
 
         $('#questions-container #questions-body')
             .append(questionFrame
                 .replace(/\{\{\q_id\}\}/g, newQuestionId)
                 .replace(/\{\{\q_number\}\}/g, newQuestionId + 1));
+
+        $(`#questions-container #questions-body #question-${newQuestionId} a`).click();
+
+        var addAnswerButton = $(`#questions-container #questions-body #question-${newQuestionId} .add-answer`);
+        addAnswerButton.click();
+        addAnswerButton.click();
+        addAnswerButton.click();
     });
 
     var deleteQuestionClickEvent = $('#questions-container #questions-body').on('click', '.delete-question', function () {
@@ -68,12 +87,17 @@
             $(`#question-${newQuestionId} .panel-collapse`).attr('id', `collapse-${newQuestionId}`);
             $(`#question-${newQuestionId} .question-description input`).attr('id', `Questions_${newQuestionId}__Body`);
             $(`#question-${newQuestionId} .question-description input`).attr('name', `Questions[${newQuestionId}].Body`);
+
+            $(`#question-${newQuestionId} .question-description span`).attr('data-valmsg-for', `Questions[${newQuestionId}].Body`);
+            $(`#question-${newQuestionId} .panel-collapse .panel-body > span`).attr('data-valmsg-for', `Questions[${newQuestionId}].Body`);
+
             $(`#question-${newQuestionId} .add-answer`).attr('name', `collapse-${newQuestionId}`);
 
             var answers = $(`#Question-${newQuestionId} .answer-container`).toArray();
 
             answers.forEach(function (answer) {
                 var answerId = parseInt(answer.id.split('-')[3]) - 1;
+                $(`#question-${newQuestionId} .answer-container > span`).attr('data-valmsg-for', `Questions_${newQuestionId}__Answers_${answerId}__Content`);
                 $(`#question-${newQuestionId} .answer-container .answer-content`).attr('id', `Questions_${newQuestionId}__Answers_${answerId}__Content`);
 
                 $(`#question-${newQuestionId} .answer-container .answer-content`).attr('id', `Questions_${newQuestionId}__Answers_${answerId}__Content`);
@@ -81,6 +105,7 @@
             });
 
         });
+
     });
 
     var addAnswerClickEvent = $('#questions-container #questions-body').on('click', '.add-answer', function () {
