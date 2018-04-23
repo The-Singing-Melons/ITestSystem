@@ -18,7 +18,7 @@ namespace ITest.Web.Areas.Admin.Models.ManageViewModels
         public string CategoryName { get; set; }
 
         //[Required(ErrorMessage = "Please add Questions to your Test!")]
-        [CollectionLegth(10, ErrorMessage = "Please add atleast ten Questions to your Test!")]
+        //[CollectionLegth(10, ErrorMessage = "Please add atleast ten Questions to your Test!")]
         public ICollection<CreateQuestionViewModel> Questions { get; set; }
     }
 }

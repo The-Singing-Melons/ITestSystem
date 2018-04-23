@@ -94,8 +94,8 @@ namespace ITest.Web.Areas.User.Controllers
                     userId, isPassed);
 
                 // record answer of user to each test of the question
-                this.userTestQuestionAnswerService.RecordUserAnswerToQuestionInTest
-                    (userId, submitedTest);
+                //this.userTestQuestionAnswerService.RecordUserAnswerToQuestionInTest
+                //    (userId, submitedTest);
 
                 return RedirectToAction("Index");
             }

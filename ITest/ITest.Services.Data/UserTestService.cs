@@ -37,7 +37,8 @@ namespace ITest.Services.Data
                 TestId = Guid.Parse(testId),
                 UserId = userId,
                 IsPassed = isPassed,
-                IsSubmited = true
+                IsSubmited = true,
+                IsDeleted = false,
             };
             this.userTestRepo.Add(userToTestObject);
             this.dataSaver.SaveChanges();
