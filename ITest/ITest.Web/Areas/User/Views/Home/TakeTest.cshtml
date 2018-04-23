@@ -1,30 +1,49 @@
 ﻿@using ITest.Web.Areas.User.Models
-@model TakeTestViewModel
+@model TestViewModel
 @{
     ViewData["Title"] = "Take Test";
 }
-<h3>@Model.TestViewModel.Name</h3>
-<hr class="dashboard-breaker">
-<br>
-<h4><strong>Category:</strong>@Model.TestViewModel.CategoryName</h4>
-<br />
-<form asp-area="User" asp-controller="Home" asp-action="TestSubmit" method="post">
-    @{var idCounter = 1; var nameCounter = 1;}
-    @foreach (var key in Model.QuestionWithAnswersVM.Keys)
+<form asp-area="User" asp-controller="Home" asp-action="TakeTest" method="post">
+
+    <h3>@Model.Name</h3>
+    @*BELOW LINE IS MODEL BINDING FROM GET REQUEST TO POST REQUEST HAHA*@
+    <input asp-for="@Model.Name" value="@Model.Name" type="hidden" />
+    <hr class="dashboard-breaker">
+    <br>
+    <h4><strong>Category:</strong>@Model.CategoryName</h4>
+    <input asp-for="@Model.CategoryName" value="@Model.CategoryName" type="hidden" />
+    <br />
+    @{var idCounter = 0; var nameCounter = 0;}
+    @for (int i = 0; i < @Model.Questions.Count(); i++)
     {
+        <input asp-for="@Model.Questions[i].Id"
+               value="@Model.Questions[i].Id"
+               type="hidden" />
         <br />
-        <div class="well well-sm">@Html.DisplayFor(x => key.Body)</div>
-        foreach (var item in Model.QuestionWithAnswersVM[key])
+        <div class="well well-sm">@Html.DisplayFor(x => Model.Questions[i].Body)</div>
+
+        @for (int j = 0; j < Model.Questions[i].Answers.Count; j++)
         {
             <div class="funkyradio">
+                <input asp-for="@Model.Questions[i].Answers[j].Id"
+                       value="@Model.Questions[i].Answers[j].Id" type="hidden" />
                 <div class="funkyradio-primary">
-                    <input type="radio" name="radio-@nameCounter" id="radio-@idCounter" checked />
-                    <label for="radio-@idCounter">@item.Content</label>
+                    <input asp-for="@Model.Questions[i].Answers[j].SelectedAnswerId"
+                           type="radio"
+                           class="radio-btn-to-change"
+                           value="@Model.Questions[i].Answers[j].Id"
+                           name="radio-@nameCounter"
+                           id="radio-@idCounter" />
+                    <label for="radio-@idCounter">@Model.Questions[i].Answers[j].Content</label>
                 </div>
             </div>
             idCounter++;
         }
         nameCounter++;
     }
-    <button type="submit" class="btn">Submit Test</button>
+    <button type="submit" id="test-submit-btn" class="btn">Submit Test</button>
 </form>
+
+@section Scripts {
+    <script src="~/js/take-test.js"></script>
+}

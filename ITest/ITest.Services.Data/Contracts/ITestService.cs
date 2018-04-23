@@ -10,7 +10,7 @@ namespace ITest.Services.Data.Contracts
     {
         IEnumerable<TestDto> GetUserTests(string id);
         TestDto GetTestById(string id);
-        IEnumerable<QuestionDto> GetTestQuestions(string testId);
+        TestDto GetTestQuestionsWithAnswers(string testId);
         TestDto GetRandomTest(string categoryName);
         void CreateTest(CreateTestDto testToAdd);
     }

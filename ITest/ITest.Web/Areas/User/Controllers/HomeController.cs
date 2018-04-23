@@ -62,37 +62,22 @@ namespace ITest.Web.Areas.User.Controllers
             }
 
             // DTO
-            var test = this.testService.GetTestById(id);
-            var testQuestions = this.testService.GetTestQuestions(id);
+            var testWithQuestions = this.testService.GetTestQuestionsWithAnswers(id);
 
             // VM
-            var questionWithAnswersVM = new Dictionary<QuestionViewModel, IEnumerable<TakeTestAnswerViewModel>>();
-            var testViewModel = this.mapper.MapTo<TestViewModel>(test);
+            var testWithQuestionsViewModel = this.mapper.MapTo<TestViewModel>(testWithQuestions);
 
-            foreach (var question in testQuestions)
-            {
-                var answersForQuestion = this.questionService
-                                        .GetAnswersForQuestion(question.Id);
-
-                var questionVM = this.mapper.MapTo<QuestionViewModel>(question);
-                var answersVM = this.mapper.EnumerableProjectTo<AnswerDto, TakeTestAnswerViewModel>(answersForQuestion);
-
-                questionWithAnswersVM.Add(questionVM, answersVM);
-            }
-
-            var takeTestViewModel = new TakeTestViewModel
-            {
-                QuestionWithAnswersVM = questionWithAnswersVM,
-                TestViewModel = testViewModel
-            };
-
-            return View(takeTestViewModel);
+            return View(testWithQuestionsViewModel);
         }
 
         [HttpPost]
-        public IActionResult SubmitTest(TakeTestViewModel takeTestViewModel)
+        public IActionResult TakeTest(TestViewModel takeTestViewModel)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(takeTestViewModel);
         }
 
         [HttpGet]
