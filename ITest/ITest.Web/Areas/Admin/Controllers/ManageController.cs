@@ -2,13 +2,14 @@
 using ITest.Infrastructure.Providers.Contracts;
 using ITest.Services.Data.Contracts;
 using ITest.Web.Areas.Admin.Models.ManageViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace ITest.Web.Areas.Admin.Controllers
 {
-    //[Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator")]
     [Area("Admin")]
     public class ManageController : Controller
     {
@@ -72,7 +73,7 @@ namespace ITest.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult CreateTest(CreateTestViewModel createTestViewModel)
         {
             if (createTestViewModel == null)
@@ -86,7 +87,14 @@ namespace ITest.Web.Areas.Admin.Controllers
             var createTestDto = this.mapper.MapTo<CreateTestDto>(createTestViewModel);
             createTestDto.CreatedByUserId = logggedUserId;
 
-            this.testService.CreateTest(createTestDto);
+            try
+            {
+                this.testService.CreateTest(createTestDto);
+            }
+            catch (Exception)
+            {
+                return View(createTestViewModel);
+            }
 
             return RedirectToRoute(new
             {

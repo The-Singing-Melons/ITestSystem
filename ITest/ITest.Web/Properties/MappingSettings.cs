@@ -24,14 +24,14 @@ namespace ITest.Web.Properties
 
             //From Dto to DataModel
             this.CreateMap<CreateTestDto, Test>(MemberList.Source)
+                .ForMember(t => t.Name, o => o.MapFrom(t => t.TestName))
+                .ForMember(t => t.Duration, o => o.MapFrom(t => t.RequestedTime))
                 .ForMember(t => t.Questions, o => o.MapFrom(t => t.Questions));
 
             this.CreateMap<CreateQuestionDto, Question>(MemberList.Source)
                 .ForMember(q => q.Answers, o => o.MapFrom(q => q.Answers));
 
-            this.CreateMap<CreateAnswerDto, Answer>(MemberList.Source)
-                .ForMember(a => a.Content, o => o.MapFrom(a => a.Content))
-                .ForMember(a => a.IsCorrect, o => o.MapFrom(a => a.IsCorrect));
+            this.CreateMap<CreateAnswerDto, Answer>(MemberList.Source);
 
 
             this.CreateMap<TestDto, Areas.User.Models.TestViewModel>()

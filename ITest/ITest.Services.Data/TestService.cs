@@ -117,10 +117,10 @@ namespace ITest.Services.Data
 
             var category = this.categoryRepo.All.SingleOrDefault(c => c.Name == testDto.CategoryName)
                 ?? throw new ArgumentException($"Category {testDto.CategoryName} does not exists!");
-
             testToAdd.Category = category;
 
-            //this.testRepo.Add()
+            this.testRepo.Add(testToAdd);
+            this.dataSaver.SaveChangesAsync();
         }
     }
 }
