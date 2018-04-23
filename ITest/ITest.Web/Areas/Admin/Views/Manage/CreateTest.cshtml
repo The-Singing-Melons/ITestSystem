@@ -14,27 +14,24 @@
             <div class="form-group">
                 <div class="col-md-4">
                     <div class="input-group">
-                        <span class="input-group-addon">$</span>
-                        @*<label asp-for="TestName"></label>*@
-                        <input asp-for="TestName" class="form-control" placeholder="TestName*" />
+                        <span class="input-group-addon">*</span>
+                        <input asp-for="TestName" class="form-control" placeholder="TestName" />
                     </div>
                     <span asp-validation-for="TestName" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-4">
                     <div class="input-group">
-                        <span class="input-group-addon">$</span>
-                        @*<label asp-for="RequestedTime"></label>*@
-                        <input asp-for="RequestedTime" class="form-control" placeholder="RequestedTime*" />
+                        <span class="input-group-addon">*</span>
+                        <input asp-for="RequestedTime" class="form-control" placeholder="RequestedTime" />
                     </div>
                     <span asp-validation-for="RequestedTime" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-4">
                     <div class="input-group">
-                        <span class="input-group-addon">$</span>
-                        @*<label asp-for="CategoryName"></label>*@
-                        <input asp-for="CategoryName" class="form-control" placeholder="CategoryName*" />
+                        <span class="input-group-addon">*</span>
+                        <input asp-for="CategoryName" class="form-control" placeholder="CategoryName" />
                     </div>
                     <span asp-validation-for="CategoryName" class="text-danger"></span>
                 </div>
@@ -50,6 +47,7 @@
 
                 <div class="row">
                     <div id="questions-body" class="row"></div>
+                    <span asp-validation-for="Questions" class="text-danger"></span>
                 </div>
             </div>
         </div>

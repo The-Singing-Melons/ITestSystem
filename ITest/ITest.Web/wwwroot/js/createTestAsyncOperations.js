@@ -32,7 +32,7 @@
                 <span class="glyphicon glyphicon-remove"></span>
             </button>
             <label class="btn btn-success pull-right">
-                <input id="Questions_{{q_id}}__Answers_{{a_id}}__IsCorrect" name="radio-{{q_id}}" type="radio" value="true" autocomplete="off">
+                <input id="Questions_{{q_id}}__Answers_{{a_id}}__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off">
                 <span class="glyphicon glyphicon-ok"></span>
             </label>
             <input id="Questions_{{q_id}}__Answers_{{a_id}}__Content" name="Questions[{{q_id}}].Answers[{{a_id}}].Content" class="answer-content summernote form-control"></input>
@@ -149,8 +149,14 @@
     });
 
     var createTestClickEvent = $('.create-test').on('click', function (event) {
-        var testJson = $(this.parentNode).serialize();
+        $('#questions-container #questions-body .answer-is-correct')
+            .toArray()
+            .forEach(function (rButton) {
+                var params = $(rButton).closest('.answer-container')[0].id.split('-');
+                var questionId = params[1];
+                var answerNumber = params[3];
 
-        console.log(testJson.split('&'));
+                $(rButton).attr('name', `Questions[${questionId}].Answers[${answerNumber}].IsCorrect`);
+            });
     });
 });

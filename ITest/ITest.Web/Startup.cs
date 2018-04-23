@@ -32,12 +32,14 @@ namespace ITest.Web
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             this.RegisterData(services);
             this.RegisterAuthentication(services);
             this.RegisterServices(services);
             this.RegisterInfrastructure(services);
+
+            return services.BuildServiceProvider();
         }
 
         private void RegisterServices(IServiceCollection services)
@@ -97,7 +99,7 @@ namespace ITest.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -124,6 +126,8 @@ namespace ITest.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            Seed.Initialize(serviceProvider).Wait();
         }
     }
 }
