@@ -11,6 +11,7 @@ using ITest.Models;
 using ITest.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using ITest.DTO.TakeTest;
 
 namespace ITest.Services.Data
 {
@@ -112,7 +113,7 @@ namespace ITest.Services.Data
             this.dataSaver.SaveChanges();
         }
 
-        public bool IsTestPassed(int testQuestionsCount, int totalCorrectQuestions)
+        private bool IsTestPassed(int testQuestionsCount, int totalCorrectQuestions)
         {
             var isPassed = false;
             var resultPercentage = (totalCorrectQuestions / testQuestionsCount) * 100;
@@ -125,10 +126,11 @@ namespace ITest.Services.Data
         }
 
 
-        public int CalculateCorrectAnswers(TestDto testToBeCalculated)
+        public bool IsTestPassed(string testId, TestRequestViewModelDto submitedTest)
         {
-            var testWithQuestions = this.GetTestQuestionsWithAnswers(testToBeCalculated.Id);
+            var testWithQuestions = this.GetTestQuestionsWithAnswers(testId);
             var totalCorrectQuestions = 0;
+
             for (int i = 0; i < testWithQuestions.Questions.Count; i++)
             {
                 var correctAnswer = testWithQuestions
@@ -136,18 +138,20 @@ namespace ITest.Services.Data
                     .Where(x => x.IsCorrect == true)
                     .FirstOrDefault();
 
-                var selectedAnswer = testToBeCalculated.Questions[i]
-                    .Answers
-                    .Where(x => x.SelectedAnswerId != null)
-                    .FirstOrDefault();
+                var selectedAnswer = submitedTest.Questions[i].Answers;
 
-                if (correctAnswer.Id == selectedAnswer.Id)
+                if (selectedAnswer == null)
+                {
+                    continue;
+                }
+
+                if (correctAnswer.Id == correctAnswer.Id)
                 {
                     totalCorrectQuestions++;
                 }
             }
 
-            return totalCorrectQuestions;
+            return this.IsTestPassed(testWithQuestions.Questions.Count(), totalCorrectQuestions);
         }
     }
 }

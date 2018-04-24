@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Itest.Data.Models;
 using ITest.DTO;
+using ITest.DTO.TakeTest;
 using ITest.Web.Areas.Admin.Models.ManageViewModels;
 using ITest.Web.Areas.User.Models;
 
@@ -42,12 +43,18 @@ namespace ITest.Web.Properties
                 .MaxDepth(3)
                 .ReverseMap();
 
+            // TakeTestDto to TakeTestViewModels
+            this.CreateMap<TestRequestViewModelDto, TestRequestViewModel>()
+                .ForMember(x => x.Questions, o => o.MapFrom(x => x.Questions));
+
+            this.CreateMap<QuestionResponseViewModelDto, QuestionResponseModel>();
+
             // Without .MaxDepth() - stackoverflow exception in GetTestById() in Test
             // Service - Ask why
             this.CreateMap<Test, TestDto>(MemberList.Source)
-                .ForMember(q => q.Questions, o => o.MapFrom(x => x.Questions))
-                .MaxDepth(3)
-                .ReverseMap();
+              .ForMember(q => q.Questions, o => o.MapFrom(x => x.Questions))
+              .MaxDepth(3)
+              .ReverseMap();
 
             this.CreateMap<Question, QuestionDto>()
                 .ForMember(q => q.Answers, o => o.MapFrom(x => x.Answers));
@@ -69,6 +76,7 @@ namespace ITest.Web.Properties
 
             this.CreateMap<CategoryDto, CategoryViewModel>()
                 .ForMember(c => c.Name, o => o.MapFrom(x => x.Name));
+
         }
     }
 }

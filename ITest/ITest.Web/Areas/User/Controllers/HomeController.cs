@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ITest.DTO;
+using ITest.DTO.TakeTest;
 using ITest.Infrastructure.Providers.Contracts;
 using ITest.Models;
 using ITest.Services.Data.Contracts;
@@ -77,20 +78,20 @@ namespace ITest.Web.Areas.User.Controllers
         }
 
         [HttpPost]
-        public IActionResult TakeTest(TestViewModel takeTestViewModel)
+        public IActionResult TakeTest(TestRequestViewModel takeTestRequestViewModel)
         {
             if (ModelState.IsValid)
             {
                 var userId = this.userManager.GetUserId(this.HttpContext.User);
-                var submitedTest = this.mapper.MapTo<TestDto>(takeTestViewModel);
+                var testId = takeTestRequestViewModel.Id;
+                var submitedTest = this.mapper.MapTo<TestRequestViewModelDto>
+                    (takeTestRequestViewModel);
 
                 // calculate if test is passed
-                var totalCorrectQuestions = this.testService
-                    .CalculateCorrectAnswers(submitedTest);
+                var isPassed = this.testService
+                    .IsTestPassed(testId, submitedTest);
 
-                var isPassed = this.testService.IsTestPassed(submitedTest.Questions.Count, totalCorrectQuestions);
-
-                this.userTestService.AddUserToTest(submitedTest.Id,
+                this.userTestService.AddUserToTest(testId,
                     userId, isPassed);
 
                 // record answer of user to each test of the question
@@ -99,7 +100,7 @@ namespace ITest.Web.Areas.User.Controllers
 
                 return RedirectToAction("Index");
             }
-            return View(takeTestViewModel);
+            return View(takeTestRequestViewModel);
         }
     }
 }

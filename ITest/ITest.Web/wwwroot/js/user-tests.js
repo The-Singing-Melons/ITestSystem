@@ -3,7 +3,6 @@
         event.preventDefault();
 
         var category = $('.active a').data('category').replace(/\s+/g, '+');
-        console.log(category);
 
         var url = '/user/home/GetRandomTest/' + category;
 
