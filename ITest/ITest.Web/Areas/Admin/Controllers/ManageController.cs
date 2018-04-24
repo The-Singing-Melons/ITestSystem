@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ITest.Web.Areas.Admin.Controllers
 {
@@ -28,40 +30,18 @@ namespace ITest.Web.Areas.Admin.Controllers
         {
             var model = new CreatedTestsViewModel();
 
-            model.CreatedTests.Add(new TestViewModel()
+            var testDtos = this.testService.GetTestsDashboardInfo();
+            var createdTestsViewModels = new List<TestViewModel>();
+
+            testDtos
+                .ToList()
+                .ForEach(tDto =>
             {
-                TestName = "testfake1",
-                CategoryName = "testcategory2",
-                IsPublished = true
+                var createdTestsViewModel = this.mapper.MapTo<TestViewModel>(tDto);
+                createdTestsViewModels.Add(createdTestsViewModel);
             });
 
-            model.CreatedTests.Add(new TestViewModel()
-            {
-                TestName = "testfake2",
-                CategoryName = "testcategory2",
-                IsPublished = true
-            });
-
-            model.CreatedTests.Add(new TestViewModel()
-            {
-                TestName = "testfake6",
-                CategoryName = "testcategory1",
-                IsPublished = false
-            });
-
-            model.CreatedTests.Add(new TestViewModel()
-            {
-                TestName = "testfake5",
-                CategoryName = "testcategory1",
-                IsPublished = true
-            });
-
-            model.CreatedTests.Add(new TestViewModel()
-            {
-                TestName = "testfake4",
-                CategoryName = "testcategory3",
-                IsPublished = false
-            });
+            model.CreatedTests = createdTestsViewModels;
 
             return View(model);
         }
@@ -69,7 +49,7 @@ namespace ITest.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult CreateTest()
         {
-            return View();
+            return View(new CreateTestViewModel() { Questions = new List<CreateQuestionViewModel>() });
         }
 
         [HttpPost]
@@ -78,9 +58,14 @@ namespace ITest.Web.Areas.Admin.Controllers
         {
             if (createTestViewModel == null)
             {
-                throw new ArgumentNullException(nameof(createTestViewModel));
+                return View(createTestViewModel);
             }
             //Vallidations
+
+            if (!this.ModelState.IsValid)
+            {
+                return View(createTestViewModel);
+            }
 
             var logggedUserId = this.userService.GetLoggedUserId(this.User);
 

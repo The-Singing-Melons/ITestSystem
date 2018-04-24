@@ -153,5 +153,12 @@ namespace ITest.Services.Data
 
             return this.IsTestPassed(testWithQuestions.Questions.Count(), totalCorrectQuestions);
         }
+
+        public IEnumerable<TestDashBoardDto> GetTestsDashboardInfo()
+        {
+            var tests = this.testRepo.All;
+            
+            return this.mapper.EnumerableProjectTo<Test, TestDashBoardDto>(tests);
+        }
     }
 }

@@ -10,10 +10,18 @@ namespace ITest.Services.Data.Contracts
     public interface ITestService
     {
         IEnumerable<TestDto> GetUserTests(string id);
+
         TestDto GetTestById(string id);
+
         TestDto GetTestQuestionsWithAnswers(string testId);
+
         TestDto GetRandomTest(string categoryName);
+
         void CreateTest(CreateTestDto testToAdd);
-        bool IsTestPassed(string testId, TestRequestViewModelDto submitedTest);
+        bool IsTestPassed(int count, int totalCorrectQuestions);
+        int CalculateCorrectAnswers(TestDto testToBeCalculated);
+
+
+        IEnumerable<TestDashBoardDto> GetTestsDashboardInfo();
     }
 }

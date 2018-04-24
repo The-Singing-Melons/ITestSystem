@@ -10,6 +10,8 @@ namespace ITest.DTO
 
         public int RequestedTime { get; set; }
 
+        public bool IsPublished { get; set; }
+
         public string CreatedByUserId { get; set; }
 
         public ICollection<CreateQuestionDto> Questions { get; set; }

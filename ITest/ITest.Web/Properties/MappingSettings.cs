@@ -34,6 +34,14 @@ namespace ITest.Web.Properties
 
             this.CreateMap<CreateAnswerDto, Answer>(MemberList.Source);
 
+            //From Test to Dto
+            this.CreateMap<Test, TestDashBoardDto>(MemberList.Destination)
+                .ForMember(t => t.CategoryName, o => o.MapFrom(t => t.Category.Name))
+                .ForMember(t => t.TestName, o => o.MapFrom(t => t.Name));
+
+            //From Dto to ViewModel
+            this.CreateMap<TestDashBoardDto, Areas.Admin.Models.ManageViewModels.TestViewModel>(MemberList.Destination);
+
 
             this.CreateMap<TestDto, Areas.User.Models.TestViewModel>()
                 .ForMember(t => t.Name, o => o.MapFrom(x => x.Name))

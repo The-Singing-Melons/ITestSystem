@@ -10,14 +10,11 @@ public static class Seed
 {
     public static async Task Initialize(IServiceProvider provider)
     {
-        
+        var context = provider.GetRequiredService<ITestDbContext>();
         var userManager = provider.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        using (var context = provider.GetRequiredService<ITestDbContext>())
-        {
-            await EnsureSeedData(context, userManager, roleManager);
-        }
+        await EnsureSeedData(context, userManager, roleManager);
     }
 
     public static async Task EnsureSeedData(ITestDbContext context, UserManager<ApplicationUser> userMgr, RoleManager<IdentityRole> roleMgr)
