@@ -129,36 +129,6 @@ namespace ITest.Data.Migrations
                     b.ToTable("UserTests");
                 });
 
-            modelBuilder.Entity("Itest.Data.Models.UserTestQuestionAnswer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("AnswerId");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<Guid>("QuestionId");
-
-                    b.Property<Guid>("TestId");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnswerId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("TestId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserTestQuestionAnswer");
-                });
-
             modelBuilder.Entity("ITest.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -365,28 +335,6 @@ namespace ITest.Data.Migrations
                         .WithMany("UserTests")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Itest.Data.Models.UserTestQuestionAnswer", b =>
-                {
-                    b.HasOne("Itest.Data.Models.Answer", "Answer")
-                        .WithMany("UsersTestsQuestionsAnswers")
-                        .HasForeignKey("AnswerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Itest.Data.Models.Question", "Question")
-                        .WithMany("UsersTestsQuestionsAnswers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Itest.Data.Models.Test", "Test")
-                        .WithMany("UsersTestsQuestionsAnswers")
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ITest.Models.ApplicationUser", "User")
-                        .WithMany("UsersTestsQuestionsAnswers")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

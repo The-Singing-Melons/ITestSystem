@@ -1,5 +1,6 @@
 ﻿using ITest.DTO;
 using ITest.Infrastructure.Providers.Contracts;
+using ITest.Models;
 using ITest.Services.Data.Contracts;
 using ITest.Web.Areas.Admin.Models.ManageViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -16,13 +17,13 @@ namespace ITest.Web.Areas.Admin.Controllers
     public class ManageController : Controller
     {
         private readonly ITestService testService;
-        private readonly IUserService userService;
         private readonly IMappingProvider mapper;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ManageController(ITestService testService, IUserService userService, IMappingProvider mapper)
+        public ManageController(ITestService testService, IMappingProvider mapper, UserManager<ApplicationUser> userManager)
         {
             this.testService = testService ?? throw new ArgumentNullException(nameof(testService));
-            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -67,7 +68,7 @@ namespace ITest.Web.Areas.Admin.Controllers
                 return View(createTestViewModel);
             }
 
-            var logggedUserId = this.userService.GetLoggedUserId(this.User);
+            var logggedUserId = this.userManager.GetUserId(this.HttpContext.User);
 
             var createTestDto = this.mapper.MapTo<CreateTestDto>(createTestViewModel);
             createTestDto.CreatedByUserId = logggedUserId;

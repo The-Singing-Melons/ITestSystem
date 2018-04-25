@@ -23,27 +23,6 @@ namespace ITest.Data
         {
             base.OnModelCreating(builder);
 
-            // User-Test-Question-Answer
-            builder.Entity<UserTestQuestionAnswer>()
-                .HasOne(utqa => utqa.User)
-                .WithMany(u => u.UsersTestsQuestionsAnswers)
-                .HasForeignKey(utqa => utqa.UserId);
-
-            builder.Entity<UserTestQuestionAnswer>()
-                .HasOne(utqa => utqa.Test)
-                .WithMany(t => t.UsersTestsQuestionsAnswers)
-                .HasForeignKey(utqa => utqa.TestId);
-
-            builder.Entity<UserTestQuestionAnswer>()
-                .HasOne(utqa => utqa.Question)
-                .WithMany(q => q.UsersTestsQuestionsAnswers)
-                .HasForeignKey(utqa => utqa.QuestionId);
-
-            builder.Entity<UserTestQuestionAnswer>()
-                .HasOne(utqa => utqa.Answer)
-                .WithMany(a => a.UsersTestsQuestionsAnswers)
-                .HasForeignKey(utqa => utqa.AnswerId);
-
             // Test-To-Users
             builder.Entity<Test>()
                 .HasOne(t => t.CreatedByUser)
