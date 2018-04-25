@@ -10,11 +10,9 @@ namespace Itest.Data.Models
         public Question()
         {
             this.Answers = new HashSet<Answer>();
-            this.UsersTestsQuestionsAnswers = new HashSet<UserTestQuestionAnswer>();
         }
         public string Body { get; set; }
         public ICollection<Answer> Answers { get; set; }
-        public ICollection<UserTestQuestionAnswer> UsersTestsQuestionsAnswers { get; set; }
         public Guid TestId { get; set; }
         public Test Test { get; set; }
     }

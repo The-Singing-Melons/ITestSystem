@@ -15,12 +15,10 @@ namespace ITest.Models
         public ApplicationUser()
         {
             this.Tests = new HashSet<Test>();
-            this.UsersTestsQuestionsAnswers = new HashSet<UserTestQuestionAnswer>();
             //this.UserTests = new HashSet<UserTest>();
         }
         public ICollection<Test> Tests { get; set; }
 
-        public ICollection<UserTestQuestionAnswer> UsersTestsQuestionsAnswers { get; set; }
 
         public ICollection<UserTest> UserTests { get; set; }
         public bool IsDeleted { get; set; }

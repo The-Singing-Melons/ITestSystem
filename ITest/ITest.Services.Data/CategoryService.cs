@@ -24,7 +24,7 @@ namespace ITest.Services.Data
             this.mapper = mapper;
         }
 
-        public IEnumerable<CategoryDto> GetAllCategories()
+        public IList<CategoryDto> GetAllCategories()
         {
             var allCategoriesDto = this.mapper.ProjectTo<CategoryDto>(
                 this.categoryRepo.All);

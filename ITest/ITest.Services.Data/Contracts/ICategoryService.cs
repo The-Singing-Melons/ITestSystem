@@ -7,7 +7,7 @@ namespace ITest.Services.Data.Contracts
 {
     public interface ICategoryService
     {
-        IEnumerable<CategoryDto> GetAllCategories();
+        IList<CategoryDto> GetAllCategories();
 
         IEnumerable<string> GetAllCategoriesNames();
     }

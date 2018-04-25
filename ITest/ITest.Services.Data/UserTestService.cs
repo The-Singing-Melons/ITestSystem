@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using Itest.Data.Models;
 using ITest.Data.Repository;
 using ITest.Data.UnitOfWork;
 using ITest.Infrastructure.Providers.Contracts;
 using ITest.Models;
 using ITest.Services.Data.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITest.Services.Data
 {
@@ -42,6 +42,22 @@ namespace ITest.Services.Data
             };
             this.userTestRepo.Add(userToTestObject);
             this.dataSaver.SaveChanges();
+        }
+
+
+        public bool CheckFoCompletedUserTestInCategory(string userId, string categoryName)
+        {
+            // TO-DO : Do this fat query only once 
+            var testsTakenByUser = this.userTestRepo.All
+                        .Where(x => x.UserId.ToString() == userId)
+                        .Include(t => t.Test)
+                        .ThenInclude(t => t.Category)
+                        .ToList();
+
+            var isTestTaken = testsTakenByUser
+                .Any(x => x.Test.Category.Name == categoryName);
+
+            return isTestTaken;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ITest.DTO;
 using ITest.Infrastructure.Providers.Contracts;
+using ITest.Models;
 using ITest.Services.Data.Contracts;
 using ITest.Web.Areas.Admin.Models.ManageViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -17,14 +18,13 @@ namespace ITest.Web.Areas.Admin.Controllers
     {
         private readonly ITestService testService;
         private readonly IUserService userService;
-        private readonly ICategoryService categoryService;
         private readonly IMappingProvider mapper;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ManageController(ITestService testService, IUserService userService, ICategoryService categoryService, IMappingProvider mapper)
+        public ManageController(ITestService testService, IUserService userService, IMappingProvider mapper)
         {
             this.testService = testService ?? throw new ArgumentNullException(nameof(testService));
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            this.categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -80,44 +80,6 @@ namespace ITest.Web.Areas.Admin.Controllers
             catch (Exception)
             {
                 return this.View(createTestViewModel);
-            }
-
-            return RedirectToRoute(new
-            {
-                area = "Admin",
-                controller = "Manage",
-                action = "Index"
-            });
-        }
-
-        [HttpGet]
-        public IActionResult EditTest(string testName, string categoryName)
-        {
-            if (string.IsNullOrEmpty(testName))
-            {
-                return this.View();
-            }
-
-            if (string.IsNullOrEmpty(categoryName))
-            {
-                return this.View();
-            }
-
-            var testDto = this.testService.GetTestByNameAndCategory(testName, categoryName);
-
-            var testViewModel = this.mapper.MapTo<ManageTestViewModel>(testDto);
-            testViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
-
-            return this.View(testViewModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditTest(ManageTestViewModel manageTestViewModel)
-        {
-            if (manageTestViewModel == null || !this.ModelState.IsValid)
-            {
-                return this.View(manageTestViewModel);
             }
 
             var logggedUserId = this.userService.GetLoggedUserId(this.User);

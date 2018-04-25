@@ -23,12 +23,11 @@ namespace ITest.Web.Areas.User.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ICategoryService categoryService;
         private readonly IUserTestService userTestService;
-        private readonly IUserTestQuestionAnswerService userTestQuestionAnswerService;
+
 
         public HomeController(IMappingProvider mapper, ITestService testService,
             UserManager<ApplicationUser> userManager, IQuestionService questionService,
-            ICategoryService categoryService, IUserTestService userTestService,
-            IUserTestQuestionAnswerService userTestQuestionAnswerService)
+            ICategoryService categoryService, IUserTestService userTestService)
         {
             this.mapper = mapper;
             this.testService = testService;
@@ -36,18 +35,29 @@ namespace ITest.Web.Areas.User.Controllers
             this.questionService = questionService;
             this.categoryService = categoryService;
             this.userTestService = userTestService;
-            this.userTestQuestionAnswerService = userTestQuestionAnswerService;
         }
 
         public IActionResult Index()
         {
             var allCategories = this.categoryService.GetAllCategories();
             var categoriesViewModel = this.mapper.EnumerableProjectTo
-                                        <CategoryDto, CategoryViewModel>(allCategories);
+                                        <CategoryDto, CategoryViewModel>(allCategories)
+                                        .ToList(); ;
+
+            var userId = this.userManager.GetUserId(this.HttpContext.User);
+
+            for (int i = 0; i < allCategories.Count; i++)
+            {
+                var result = this.userTestService
+                    .CheckFoCompletedUserTestInCategory(userId, allCategories[i].Name);
+
+                categoriesViewModel[i].HasUserTakenTestForThisCategory = result;
+            }
 
             return View(categoriesViewModel);
         }
 
+        //[HttpGet("[action]/{categoryName}")]
         public IActionResult GetRandomTest(string id)
         {
             if (id == null)
@@ -87,19 +97,16 @@ namespace ITest.Web.Areas.User.Controllers
                 var submitedTest = this.mapper.MapTo<TestRequestViewModelDto>
                     (takeTestRequestViewModel);
 
-                // calculate if test is passed
                 var isPassed = this.testService
                     .IsTestPassed(testId, submitedTest);
 
                 this.userTestService.AddUserToTest(testId,
                     userId, isPassed);
 
-                // record answer of user to each test of the question
-                //this.userTestQuestionAnswerService.RecordUserAnswerToQuestionInTest
-                //    (userId, submitedTest);
 
                 return RedirectToAction("Index");
             }
+
             return View(takeTestRequestViewModel);
         }
     }

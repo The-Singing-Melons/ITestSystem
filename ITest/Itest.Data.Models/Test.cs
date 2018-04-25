@@ -11,7 +11,6 @@ namespace Itest.Data.Models
         public Test()
         {
             this.Questions = new HashSet<Question>();
-            this.UsersTestsQuestionsAnswers = new HashSet<UserTestQuestionAnswer>();
             //this.UserTests = new HashSet<UserTest>();
         }
         public string Name { get; set; }
@@ -26,7 +25,5 @@ namespace Itest.Data.Models
 
         public ICollection<Question> Questions { get; set; }
         public ICollection<UserTest> UserTests { get; set; }
-
-        public ICollection<UserTestQuestionAnswer> UsersTestsQuestionsAnswers { get; set; }
     }
 }

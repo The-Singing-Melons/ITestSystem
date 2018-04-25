@@ -8,5 +8,7 @@ namespace ITest.Web.Areas.User.Models
     public class CategoryViewModel
     {
         public string Name { get; set; }
+
+        public bool HasUserTakenTestForThisCategory { get; set; }
     }
 }

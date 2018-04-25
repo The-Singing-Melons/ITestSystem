@@ -14,13 +14,14 @@
         <div class="col-md-6">
             <div class="panel with-nav-tabs panel-default">
                 <div class="panel-heading">
-                    <ul class="nav nav-tabs">
+                    <ul class="category-select nav nav-tabs">
+                        @{ var x = 0; }
                         @foreach (var c in Model)
                         {
-                            var className = c.Name == "JAVA" ? "active" : "";
+                            //var className = c.Name == "JAVA" ? "active" : "";
 
-                            <li class="@className">
-                                <a href="#tab1default"
+                            <li class="">
+                                <a href="#tab@(x++)default"
                                    id="#category-tab"
                                    data-toggle="tab"
                                    data-category="@c.Name">
@@ -32,13 +33,24 @@
                 </div>
                 <div class="panel-body">
                     <div class="tab-content">
-                        <div class="tab-pane fade in active" id="tab1default">
-                            <div class="well well-sm clearfix">
-                                <span class="pull-left"></span>
-                                <button type="button" id="test-start-btn" class="btn btn-default pull-right">Start Test</button>
+                        @{ x = 0; }
+                        @foreach (var c in Model)
+                        {
+                            <div class="tab-pane fade in" id="tab@(x++)default">
+                                <div class="well well-sm clearfix">
+                                    <span class="pull-left"></span>
+                                    @if (c.HasUserTakenTestForThisCategory)
+                                    {
+                                        <button type="button" class="btn btn-default pull-right" disabled>Submited</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" id="test-start-btn" class="btn btn-default pull-right">Start Test</button>
+                                    }
 
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
             </div>
