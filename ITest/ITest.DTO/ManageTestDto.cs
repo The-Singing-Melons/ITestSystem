@@ -2,7 +2,7 @@
 
 namespace ITest.DTO
 {
-    public class CreateTestDto
+    public class ManageTestDto
     {
         public string TestName { get; set; }
 
@@ -14,6 +14,6 @@ namespace ITest.DTO
 
         public string CreatedByUserId { get; set; }
 
-        public ICollection<CreateQuestionDto> Questions { get; set; }
+        public ICollection<ManageQuestionDto> Questions { get; set; }
     }
 }

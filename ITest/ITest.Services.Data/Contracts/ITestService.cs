@@ -17,10 +17,13 @@ namespace ITest.Services.Data.Contracts
 
         TestDto GetRandomTest(string categoryName);
 
-        void CreateTest(CreateTestDto testToAdd);
+        void CreateTest(ManageTestDto testToAdd);
         bool IsTestPassed(string userId, TestRequestViewModelDto submitedTest);
 
 
         IEnumerable<TestDashBoardDto> GetTestsDashboardInfo();
+
+        ManageTestDto GetTestByNameAndCategory(string name, string category);
+        void EditTest(ManageTestDto createTestDto);
     }
 }

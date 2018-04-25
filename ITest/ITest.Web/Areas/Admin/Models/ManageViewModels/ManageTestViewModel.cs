@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ITest.Web.Areas.Admin.Models.ManageViewModels
 {
-    public class CreateTestViewModel
+    public class ManageTestViewModel
     {
         [Required(ErrorMessage = "Please enter the Test's name!")]
         [StringLength(30, MinimumLength = 4, ErrorMessage = "Test name's length must be atleast 4 and maximum 50 symbols!")]
@@ -17,10 +17,12 @@ namespace ITest.Web.Areas.Admin.Models.ManageViewModels
         [Required(ErrorMessage = "Please specify the Test's category!")]
         public string CategoryName { get; set; }
 
+        public IList<string> CategoryNames { get; set; }
+
         public bool IsPublished { get; set; }
 
         [Required(ErrorMessage = "Please add Questions to your Test!")]
-        [CollectionLegth(10, ErrorMessage = "Please add atleast ten Questions to your Test!")]
-        public IList<CreateQuestionViewModel> Questions { get; set; }
+        [CollectionLegth(1, ErrorMessage = "Please add atleast one Question to your Test!")]
+        public IList<ManageQuestionViewModel> Questions { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace ITest.DTO
 {
-    public class CreateAnswerDto
+    public class ManageAnswerDto
     {
         public string Content { get; set; }
 

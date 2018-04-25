@@ -31,5 +31,10 @@ namespace ITest.Services.Data
 
             return allCategoriesDto.ToList();
         }
+
+        public IEnumerable<string> GetAllCategoriesNames()
+        {
+            return this.categoryRepo.All.Select(c => c.Name);
+        }
     }
 }

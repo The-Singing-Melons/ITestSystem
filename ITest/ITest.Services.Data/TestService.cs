@@ -96,7 +96,7 @@ namespace ITest.Services.Data
             return testWithQuestionsAndAnswersDto;
         }
 
-        public void CreateTest(CreateTestDto testDto)
+        public void CreateTest(ManageTestDto testDto)
         {
             if (testDto == null)
             {
@@ -157,8 +157,37 @@ namespace ITest.Services.Data
         public IEnumerable<TestDashBoardDto> GetTestsDashboardInfo()
         {
             var tests = this.testRepo.All;
-            
+
             return this.mapper.EnumerableProjectTo<Test, TestDashBoardDto>(tests);
+        }
+
+        public ManageTestDto GetTestByNameAndCategory(string name, string category)
+        {
+            var test = this.testRepo.All
+                .Where(t => t.Name == name && t.Category.Name == category)
+                .Include(t => t.Category)
+                .Include(t => t.Questions)
+                .ThenInclude(q => q.Answers)
+                .SingleOrDefault();
+
+            return this.mapper.MapTo<ManageTestDto>(test);
+        }
+
+        public void EditTest(ManageTestDto testDto)
+        {
+            if (testDto == null)
+            {
+                throw new ArgumentNullException(nameof(testDto));
+            }
+
+            var testToAdd = this.mapper.MapTo<Test>(testDto);
+
+            var category = this.categoryRepo.All.SingleOrDefault(c => c.Name == testDto.CategoryName)
+                ?? throw new ArgumentException($"Category {testDto.CategoryName} does not exists!");
+            testToAdd.Category = category;
+
+            this.testRepo.Update(testToAdd);
+            this.dataSaver.SaveChanges();
         }
     }
 }
