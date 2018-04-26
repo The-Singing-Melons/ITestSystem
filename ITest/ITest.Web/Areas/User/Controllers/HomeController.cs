@@ -44,11 +44,14 @@ namespace ITest.Web.Areas.User.Controllers
                                         <CategoryDto, CategoryViewModel>(allCategories).ToList();
 
             var userId = this.userManager.GetUserId(this.HttpContext.User);
+            var allTestsDoneByUser = this.userTestService
+                   .GetAllTestsDoneByUser(userId);
 
             for (int i = 0; i < allCategories.Count; i++)
             {
+
                 var result = this.userTestService
-                    .CheckForCompletedUserTestInCategory(userId, allCategories[i].Name);
+                    .CheckForCompletedUserTestInCategory(userId, allCategories[i].Name, allTestsDoneByUser);
 
                 categoriesViewModel[i].HasUserTakenTestForThisCategory = result;
             }
@@ -111,7 +114,6 @@ namespace ITest.Web.Areas.User.Controllers
                     (testWithQuestionsViewModel.Duration) - DateTime.Now).TotalSeconds));
                 return View(testWithQuestionsViewModel);
             }
-
         }
 
         [HttpPost]

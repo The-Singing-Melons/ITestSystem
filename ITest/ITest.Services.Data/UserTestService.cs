@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Itest.Data.Models;
 using ITest.Data.Repository;
@@ -46,8 +47,8 @@ namespace ITest.Services.Data
 
         public DateTime GetStartingTimeForUserTest(string userId, string testId)
         {
-            var currentTest = this.userTestRepo.All.
-                Where(x => x.UserId == userId && x.TestId.ToString() == testId)
+            var currentTest = this.userTestRepo.All
+                .Where(x => x.UserId == userId && x.TestId.ToString() == testId)
                 .FirstOrDefault();
 
             return currentTest.StartedOn;
@@ -63,15 +64,19 @@ namespace ITest.Services.Data
             return userStartedTest;
         }
 
-        public bool CheckForCompletedUserTestInCategory(string userId, string categoryName)
+        public IEnumerable<UserTest> GetAllTestsDoneByUser(string userId)
         {
-            // TO-DO : Do this fat query only once 
             var testsTakenByUser = this.userTestRepo.All
                         .Where(x => x.UserId.ToString() == userId)
                         .Include(t => t.Test)
                         .ThenInclude(t => t.Category)
                         .ToList();
 
+            return testsTakenByUser;
+        }
+
+        public bool CheckForCompletedUserTestInCategory(string userId, string categoryName, IEnumerable<UserTest> testsTakenByUser)
+        {
             var isTestTaken = testsTakenByUser
                 .Any(x => x.Test.Category.Name == categoryName && x.IsSubmited == true);
 
@@ -80,8 +85,8 @@ namespace ITest.Services.Data
 
         public void SubmitUserTest(string testId, string userId, bool isPassed)
         {
-            var currentTest = this.userTestRepo.All.
-               Where(x => x.UserId == userId && x.TestId.ToString() == testId)
+            var currentTest = this.userTestRepo.All
+              .Where(x => x.UserId == userId && x.TestId.ToString() == testId)
               .FirstOrDefault();
 
             currentTest.IsPassed = isPassed;
