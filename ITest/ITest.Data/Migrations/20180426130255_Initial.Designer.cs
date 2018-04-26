@@ -11,8 +11,8 @@ using System;
 namespace ITest.Data.Migrations
 {
     [DbContext(typeof(ITestDbContext))]
-    [Migration("20180426092340_some columns on UserTests are now nullable")]
-    partial class somecolumnsonUserTestsarenownullable
+    [Migration("20180426130255_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -122,6 +122,8 @@ namespace ITest.Data.Migrations
                     b.Property<bool?>("IsPassed");
 
                     b.Property<bool?>("IsSubmited");
+
+                    b.Property<DateTime>("StartedOn");
 
                     b.HasKey("UserId", "TestId");
 

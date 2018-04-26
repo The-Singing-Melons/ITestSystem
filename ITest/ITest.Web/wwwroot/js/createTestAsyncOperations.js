@@ -71,8 +71,7 @@
             answerRadioButtons.first().prop('checked', true);
         }
     };
-
-    var addQuestionClickEvent = $('#questions-container #add-question').on('click', function () {
+    var collapseQuestions = function () {
         $('#questions-container .question-container > a')
             .filter(function () {
                 var isCollapsed = $(`#${this.parentNode.id} > div`)[0]
@@ -82,6 +81,12 @@
                 return isCollapsed;
             })
             .click();
+    }
+
+    var collapseQuestionsClickEvent = $('#questions-container #collapse-questions').on('click', collapseQuestions);
+
+    var addQuestionClickEvent = $('#questions-container #add-question').on('click', function () {
+        collapseQuestions();
 
         var newQuestionId = $('#questions-body .question-container').length;
         var questionHtml = questionFrame
@@ -116,7 +121,7 @@
             })
             .toArray();
 
-        if (nextQuestions.length === 0) {
+        if ($('#questions-body .question-container').length === 0) {
             $('#questions-body').html(noQuestionFrame);
         }
         else {
@@ -186,7 +191,7 @@
             })
             .toArray();
 
-        if (nextAnswers.length === 0) {
+        if ($(`#questions-body #question-${questionId} .answer-container`).length === 0) {
             $(`#questions-body #question-${questionId} .answers-container`).html(noAnswersFrame);
         }
         else {

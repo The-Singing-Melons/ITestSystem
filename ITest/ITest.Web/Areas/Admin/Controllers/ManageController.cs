@@ -18,33 +18,30 @@ namespace ITest.Web.Areas.Admin.Controllers
     {
         private readonly ITestService testService;
         private readonly ICategoryService categoryService;
+        private readonly IUserTestService userTestService;
         private readonly IMappingProvider mapper;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ManageController(ITestService testService, ICategoryService categoryService, UserManager<ApplicationUser> userManager, IMappingProvider mapper)
+        public ManageController(ITestService testService, ICategoryService categoryService, IUserTestService userTestService, UserManager<ApplicationUser> userManager, IMappingProvider mapper)
         {
             this.testService = testService ?? throw new ArgumentNullException(nameof(testService));
             this.categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
+            this.userTestService = userTestService ?? throw new ArgumentNullException(nameof(userTestService));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public IActionResult Index()
         {
-            var model = new CreatedTestsViewModel();
+            var model = new IndexViewModel();
 
             var testDtos = this.testService.GetTestsDashboardInfo();
-            var createdTestsViewModels = new List<TestViewModel>();
+            var createdTestsViewModels = this.mapper.EnumerableProjectTo<TestDashBoardDto, CreatedTestViewModel>(testDtos);
+            model.CreatedTests = createdTestsViewModels.ToList();
 
-            testDtos
-                .ToList()
-                .ForEach(tDto =>
-            {
-                var createdTestsViewModel = this.mapper.MapTo<TestViewModel>(tDto);
-                createdTestsViewModels.Add(createdTestsViewModel);
-            });
-
-            model.CreatedTests = createdTestsViewModels;
+            var resultDtos = this.userTestService.GetUserTestResults();
+            var resultTestViewModels = this.mapper.EnumerableProjectTo<UserTestResultDto, TestResultViewModel>(resultDtos);
+            model.TestResults = resultTestViewModels.ToList();
 
             return View(model);
         }
@@ -157,7 +154,7 @@ namespace ITest.Web.Areas.Admin.Controllers
             }
 
             var isPublished = this.testService.PublishTest(testName, categoryName);
-            
+
             return this.Json(isPublished);
         }
 
