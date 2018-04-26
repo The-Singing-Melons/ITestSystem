@@ -30,22 +30,40 @@ namespace ITest.Services.Data
             this.mapper = mapper;
         }
 
-        public void AddUserToTest(string testId, string userId, bool isPassed)
+        public void AddUserToTest(string testId, string userId)
         {
             var userToTestObject = new UserTest
             {
                 TestId = Guid.Parse(testId),
                 UserId = userId,
-                IsPassed = isPassed,
-                IsSubmited = true,
                 IsDeleted = false,
+                StartedOn = DateTime.Now
             };
+
             this.userTestRepo.Add(userToTestObject);
             this.dataSaver.SaveChanges();
         }
 
+        public DateTime GetStartingTimeForUserTest(string userId, string testId)
+        {
+            var currentTest = this.userTestRepo.All.
+                Where(x => x.UserId == userId && x.TestId.ToString() == testId)
+                .FirstOrDefault();
 
-        public bool CheckFoCompletedUserTestInCategory(string userId, string categoryName)
+            return currentTest.StartedOn;
+        }
+
+        public bool UserStartedTest(string testId, string userId)
+        {
+            var userStartedTest = false;
+
+            userStartedTest = this.userTestRepo.All
+                .Any(ut => ut.UserId == userId & ut.TestId.ToString() == testId);
+
+            return userStartedTest;
+        }
+
+        public bool CheckForCompletedUserTestInCategory(string userId, string categoryName)
         {
             // TO-DO : Do this fat query only once 
             var testsTakenByUser = this.userTestRepo.All
@@ -55,9 +73,20 @@ namespace ITest.Services.Data
                         .ToList();
 
             var isTestTaken = testsTakenByUser
-                .Any(x => x.Test.Category.Name == categoryName);
+                .Any(x => x.Test.Category.Name == categoryName && x.IsSubmited == true);
 
             return isTestTaken;
+        }
+
+        public void SubmitUserTest(string testId, string userId, bool isPassed)
+        {
+            var currentTest = this.userTestRepo.All.
+               Where(x => x.UserId == userId && x.TestId.ToString() == testId)
+              .FirstOrDefault();
+
+            currentTest.IsPassed = isPassed;
+            currentTest.IsSubmited = true;
+            this.dataSaver.SaveChanges();
         }
     }
 }

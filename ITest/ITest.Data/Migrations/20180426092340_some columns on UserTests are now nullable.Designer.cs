@@ -11,9 +11,10 @@ using System;
 namespace ITest.Data.Migrations
 {
     [DbContext(typeof(ITestDbContext))]
-    partial class ITestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180426092340_some columns on UserTests are now nullable")]
+    partial class somecolumnsonUserTestsarenownullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,8 +122,6 @@ namespace ITest.Data.Migrations
                     b.Property<bool?>("IsPassed");
 
                     b.Property<bool?>("IsSubmited");
-
-                    b.Property<DateTime>("StartedOn");
 
                     b.HasKey("UserId", "TestId");
 

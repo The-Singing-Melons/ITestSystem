@@ -4,7 +4,7 @@
     ViewData["Title"] = "Take Test";
 }
 
-<div class="timer" id="timer-id" style="height:150px" data-timer="@(Model.Duration * 60)"></div>
+<div class="timer" id="timer-id" style="height:150px" data-timer="@(Model.TimeRemaining)"></div>
 <div class="p-3 mb-2 bg-danger text-white" id="warning-text"> Warning: If you refresh or leave the page your test will be automatically submited!</div>
 <form asp-area="User" asp-controller="Home" asp-action="TakeTest" method="post">
 

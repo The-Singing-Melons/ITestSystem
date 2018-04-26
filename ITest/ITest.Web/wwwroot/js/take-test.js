@@ -17,20 +17,20 @@ $(function () {
     //            })
     //    })
 
-    window.onbeforeunload = function () {
-        return ""
-    }
+    //window.onbeforeunload = function () {
+    //    return ""
+    //}
 
-    if (window.performance) {
-        console.info("window.performance works fine on this browser");
-    }
-    if (performance.navigation.type == 1) {
-        alert("You refreshed the page and your test was automatically submited");
-        $('#test-submit-btn').click();
+    //if (window.performance) {
+    //    console.info("window.performance works fine on this browser");
+    //}
+    //if (performance.navigation.type == 1) {
+    //    alert("You refreshed the page and your test was automatically submited");
+    //    $('#test-submit-btn').click();
 
-    } else {
-        console.info("This page is not reloaded");
-    }
+    //} else {
+    //    console.info("This page is not reloaded");
+    //}
 
     $(".timer").TimeCircles({
         time: {

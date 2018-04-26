@@ -9,7 +9,7 @@ namespace ITest.Web.Areas.User.Models
     {
         public string Id { get; set; }
 
-        public string Category { get; set; }
+        public string CategoryName { get; set; }
 
         public IList<QuestionResponseModel> Questions { get; set; }
     }
