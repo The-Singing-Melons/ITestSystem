@@ -17,14 +17,15 @@ namespace ITest.Web.Areas.Admin.Controllers
     public class ManageController : Controller
     {
         private readonly ITestService testService;
-        private readonly IUserService userService;
+        private readonly ICategoryService categoryService;
         private readonly IMappingProvider mapper;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ManageController(ITestService testService, IUserService userService, IMappingProvider mapper)
+        public ManageController(ITestService testService, ICategoryService categoryService, UserManager<ApplicationUser> userManager, IMappingProvider mapper)
         {
             this.testService = testService ?? throw new ArgumentNullException(nameof(testService));
-            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            this.categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -65,10 +66,11 @@ namespace ITest.Web.Areas.Admin.Controllers
         {
             if (createTestViewModel == null || !this.ModelState.IsValid)
             {
+                createTestViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
                 return this.View(createTestViewModel);
             }
 
-            var logggedUserId = this.userService.GetLoggedUserId(this.User);
+            var logggedUserId = this.userManager.GetUserId(this.HttpContext.User);
 
             var createTestDto = this.mapper.MapTo<ManageTestDto>(createTestViewModel);
             createTestDto.CreatedByUserId = logggedUserId;
@@ -81,15 +83,52 @@ namespace ITest.Web.Areas.Admin.Controllers
             {
                 return this.View(createTestViewModel);
             }
+            return RedirectToRoute(new
+            {
+                area = "Admin",
+                controller = "Manage",
+                action = "Index"
+            });
+        }
 
-            var logggedUserId = this.userService.GetLoggedUserId(this.User);
+        [HttpGet]
+        public IActionResult EditTest(string testName, string categoryName)
+        {
+            if (string.IsNullOrEmpty(testName))
+            {
+                return this.View();
+            }
 
-            var createTestDto = this.mapper.MapTo<ManageTestDto>(manageTestViewModel);
-            createTestDto.CreatedByUserId = logggedUserId;
+            if (string.IsNullOrEmpty(categoryName))
+            {
+                return this.View();
+            }
+
+            var testDto = this.testService.GetTestByNameAndCategory(testName, categoryName);
+
+            var testViewModel = this.mapper.MapTo<ManageTestViewModel>(testDto);
+            testViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
+
+            return this.View(testViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditTest(ManageTestViewModel manageTestViewModel)
+        {
+            if (manageTestViewModel == null || !this.ModelState.IsValid)
+            {
+                return this.View(manageTestViewModel);
+            }
+
+            var logggedUserId = this.userManager.GetUserId(this.HttpContext.User);
+
+            var editTestDto = this.mapper.MapTo<ManageTestDto>(manageTestViewModel);
+            editTestDto.CreatedByUserId = logggedUserId;
 
             try
             {
-                this.testService.EditTest(createTestDto);
+                this.testService.EditTest(editTestDto);
             }
             catch (Exception)
             {
@@ -102,6 +141,45 @@ namespace ITest.Web.Areas.Admin.Controllers
                 controller = "Manage",
                 action = "Index"
             });
+        }
+
+        [HttpGet]
+        public IActionResult PublishTest(string testName, string categoryName)
+        {
+            if (string.IsNullOrEmpty(testName))
+            {
+                return this.View();
+            }
+
+            if (string.IsNullOrEmpty(categoryName))
+            {
+                return this.View();
+            }
+
+            var isPublished = this.testService.PublishTest(testName, categoryName);
+            
+            return this.Json(isPublished);
+        }
+
+        [HttpGet]
+        public IActionResult DeleteTest(string testName, string categoryName)
+        {
+            if (string.IsNullOrEmpty(testName))
+            {
+                return this.View();
+            }
+
+            if (string.IsNullOrEmpty(categoryName))
+            {
+                return this.View();
+            }
+
+            var testDto = this.testService.GetTestByNameAndCategory(testName, categoryName);
+
+            var testViewModel = this.mapper.MapTo<ManageTestViewModel>(testDto);
+            testViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
+
+            return this.View(testViewModel);
         }
     }
 }

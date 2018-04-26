@@ -6,6 +6,8 @@ namespace ITest.Web.Areas.Admin.Models.ManageViewModels
 {
     public class ManageTestViewModel
     {
+        public string Id { get; set; }
+
         [Required(ErrorMessage = "Please enter the Test's name!")]
         [StringLength(30, MinimumLength = 4, ErrorMessage = "Test name's length must be atleast 4 and maximum 50 symbols!")]
         public string TestName { get; set; }

@@ -127,11 +127,6 @@
             </div>
         </div>
 
-        @for (int c = 0; c < Model.CategoryNames.Count; c++)
-        {
-            <input asp-for="CategoryNames[c]" type="hidden" value="@Model.CategoryNames[c]" />
-        }
-
         <button id="IsPublished" name="IsPublished" class="create-test btn btn-default" type="submit" value="false">Save as Draft</button>
         <button id="IsPublished" name="IsPublished" class="create-test btn btn-default" type="submit" value="true">Publish</button>
     </form>

@@ -173,21 +173,29 @@ namespace ITest.Services.Data
             return this.mapper.MapTo<ManageTestDto>(test);
         }
 
-        public void EditTest(ManageTestDto testDto)
+        public void EditTest(ManageTestDto editedDto)
         {
-            if (testDto == null)
+            if (editedDto == null)
             {
-                throw new ArgumentNullException(nameof(testDto));
+                throw new ArgumentNullException(nameof(editedDto));
             }
 
-            var testToAdd = this.mapper.MapTo<Test>(testDto);
+            var testToEdit = this.testRepo.All.Where(t => t.Id.ToString() == editedDto.Id).SingleOrDefault();
 
-            var category = this.categoryRepo.All.SingleOrDefault(c => c.Name == testDto.CategoryName)
-                ?? throw new ArgumentException($"Category {testDto.CategoryName} does not exists!");
-            testToAdd.Category = category;
+            testToEdit = this.mapper.MapTo(editedDto, testToEdit);
 
-            this.testRepo.Update(testToAdd);
+            var category = this.categoryRepo.All.SingleOrDefault(c => c.Name == editedDto.CategoryName)
+                ?? throw new ArgumentException($"Category {editedDto.CategoryName} does not exists!");
+
+            testToEdit.Category = category;
+
+            this.testRepo.Update(testToEdit);
             this.dataSaver.SaveChanges();
+        }
+
+        public bool PublishTest(string name, string category)
+        {
+            return true;
         }
     }
 }
