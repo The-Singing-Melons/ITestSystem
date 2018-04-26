@@ -1,6 +1,6 @@
 ﻿namespace ITest.Web.Areas.Admin.Models.ManageViewModels
 {
-    public class TestViewModel
+    public class CreatedTestViewModel
     {
         public string TestName { get; set; }
 

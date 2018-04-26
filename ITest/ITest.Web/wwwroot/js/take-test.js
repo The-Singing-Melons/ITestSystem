@@ -35,7 +35,7 @@ $(function () {
     $(".timer").TimeCircles({
         time: {
             Days: { color: "#FF7F50", show: false },
-            Hours: { color: "#FF7F50", show: false },
+            Hours: { color: "#FF7F50" },
             Minutes: { color: "#FF7F50" },
             Seconds: { color: "#FF7F50" }
         }

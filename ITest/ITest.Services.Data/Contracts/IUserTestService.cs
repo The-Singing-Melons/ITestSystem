@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ITest.DTO;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Itest.Data.Models;
@@ -20,5 +21,6 @@ namespace ITest.Services.Data.Contracts
 
         IEnumerable<UserTest> GetAllTestsDoneByUser(string userId);
 
+        IEnumerable<UserTestResultDto> GetUserTestResults();
     }
 }

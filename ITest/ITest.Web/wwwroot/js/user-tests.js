@@ -1,5 +1,5 @@
 ﻿$(function () {
-    $('#test-start-btn').on('click', function (event) {
+    $('.test-start-btn').on('click', function (event) {
         event.preventDefault();
 
         var category = $('.active a').data('category').replace(/\s+/g, '+');

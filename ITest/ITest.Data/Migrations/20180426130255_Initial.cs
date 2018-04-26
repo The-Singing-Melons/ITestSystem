@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ITest.Data.Migrations
 {
-    public partial class Changesonmodelrelationship : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,10 +30,14 @@ namespace ITest.Data.Migrations
                     Id = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
@@ -52,12 +56,14 @@ namespace ITest.Data.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    CategoryId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -170,9 +176,10 @@ namespace ITest.Data.Migrations
                 name: "Tests",
                 columns: table => new
                 {
-                    TestId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false),
                     CreatedByUserId = table.Column<string>(nullable: true),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
                     Duration = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     IsPublished = table.Column<bool>(nullable: false),
@@ -180,12 +187,12 @@ namespace ITest.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tests", x => x.TestId);
+                    table.PrimaryKey("PK_Tests", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Tests_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "CategoryId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Tests_AspNetUsers_CreatedByUserId",
@@ -199,18 +206,20 @@ namespace ITest.Data.Migrations
                 name: "Questions",
                 columns: table => new
                 {
-                    QuestionId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Body = table.Column<string>(nullable: true),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     TestId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Questions", x => x.QuestionId);
+                    table.PrimaryKey("PK_Questions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Questions_Tests_TestId",
                         column: x => x.TestId,
                         principalTable: "Tests",
-                        principalColumn: "TestId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -220,8 +229,12 @@ namespace ITest.Data.Migrations
                 {
                     UserId = table.Column<string>(nullable: false),
                     TestId = table.Column<Guid>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
                     ExecutionTime = table.Column<float>(nullable: false),
-                    IsPassed = table.Column<bool>(nullable: false)
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    IsPassed = table.Column<bool>(nullable: true),
+                    IsSubmited = table.Column<bool>(nullable: true),
+                    StartedOn = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -230,7 +243,7 @@ namespace ITest.Data.Migrations
                         name: "FK_UserTests_Tests_TestId",
                         column: x => x.TestId,
                         principalTable: "Tests",
-                        principalColumn: "TestId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserTests_AspNetUsers_UserId",
@@ -244,19 +257,21 @@ namespace ITest.Data.Migrations
                 name: "Answers",
                 columns: table => new
                 {
-                    AnswerId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Content = table.Column<string>(nullable: true),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
                     IsCorrect = table.Column<bool>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     QuestionId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Answers", x => x.AnswerId);
+                    table.PrimaryKey("PK_Answers", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Answers_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
-                        principalColumn: "QuestionId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 

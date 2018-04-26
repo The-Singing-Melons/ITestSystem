@@ -1,4 +1,4 @@
-﻿@model CreatedTestsViewModel
+﻿@model ITest.Web.Areas.Admin.Models.ManageViewModels.IndexViewModel
 @{
     ViewData["Title"] = "DashBoard";
 }
@@ -19,7 +19,7 @@
                 <div class="panel-body">
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="tab1default">
-                            <table class="table table-striped custab">
+                            <table id="dashboard-table" style="width:100%" class="display table table-striped custab" data-page-length='10'>
                                 <thead>
                                     <tr>
                                         <th>Test Name</th>
@@ -79,7 +79,7 @@
                                                 <td>Draft</td>
                                                 <td class="text-center">
                                                     <div class="row">
-                                                        <div class="col-lg-2">
+                                                        <div class="col-lg-5">
                                                             <form asp-area="Admin" asp-controller="Manage" asp-action="PublishTest" method="get">
                                                                 <input id="testName" name="testName" type="hidden" value="@test.TestName" />
                                                                 <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
@@ -170,10 +170,65 @@
                                 }
                             </table>
                         </div>
-                        <div class="tab-pane fade" id="tab2default">Default 2</div>
+                        <div class="tab-pane fade" id="tab2default">
+                            <table id="dashboard-table" style="width:100%" class="display table table-striped custab" data-page-length='10'>
+                                <thead>
+                                    <tr>
+                                        <th>Test Name</th>
+                                        <th>User Name</th>
+                                        <th>Category</th>
+                                        <th>Requested Time</th>
+                                        <th>Execution Time</th>
+                                        <th>Results</th>
+                                    </tr>
+                                </thead>
+                                @if (Model.TestResults.Any())
+                                {
+                                    foreach (var result in Model.TestResults)
+                                    {
+                                        <tr>
+                                            <td>@result.TestName</td>
+                                            <td>@result.UserName</td>
+                                            <td>@result.CategoryName</td>
+                                            <td>@result.RequestedTime min</td>
+                                            <td>@result.ExecutionTime min</td>
+
+                                            @if (result.IsPassed)
+                                            {
+                                                <td>Passed</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Failed</td>
+                                            }
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>
+                                            NO USERTESTS!!!
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+    <script>
+        $('#dashboard-table').DataTable({
+            "order": [[3, "desc"]],
+            searching: false,
+            "lengthChange": false,
+            "info": false
+        });
+    </script>
+}

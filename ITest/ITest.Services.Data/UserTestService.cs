@@ -8,6 +8,8 @@ using ITest.Infrastructure.Providers.Contracts;
 using ITest.Models;
 using ITest.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using ITest.DTO;
 
 namespace ITest.Services.Data
 {
@@ -92,6 +94,16 @@ namespace ITest.Services.Data
             currentTest.IsPassed = isPassed;
             currentTest.IsSubmited = true;
             this.dataSaver.SaveChanges();
+        }
+
+        public IEnumerable<UserTestResultDto> GetUserTestResults()
+        {
+            var results = this.userTestRepo.All
+                .Include(ut => ut.User)
+                .Include(ut => ut.Test)
+                .ThenInclude(t => t.Category);
+
+            return this.mapper.ProjectTo<UserTestResultDto>(results).ToList();
         }
     }
 }
