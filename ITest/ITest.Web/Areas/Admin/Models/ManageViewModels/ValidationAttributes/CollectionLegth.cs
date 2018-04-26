@@ -18,7 +18,7 @@ namespace ITest.Web.Areas.Admin.Models.ManageViewModels.ValidationAttributes
             var list = value as ICollection;
             if (list != null)
             {
-                return list.Count > this.min;
+                return list.Count >= this.min;
             }
             return false;
         }

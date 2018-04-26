@@ -1,37 +1,41 @@
-﻿@model CreateTestViewModel
+﻿@model ManageTestViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "New Test";
 }
-
-<h2>Create</h2>
 
 <div class="container">
     <form asp-area="Admin" asp-controller="Manage" asp-action="CreateTest" method="post">
-        <h4>Create Test</h4>
+        <h4>@ViewData["Title"]</h4>
         <hr />
         <div class="row">
             <div class="form-group">
                 <div class="col-md-4">
                     <div class="input-group">
-                        <span class="input-group-addon">*</span>
-                        <input asp-for="TestName" class="form-control" placeholder="TestName" />
+                        <span class="input-group-addon">Test Name</span>
+                        <input asp-for="TestName" class="form-control" />
                     </div>
                     <span asp-validation-for="TestName" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-4">
                     <div class="input-group">
-                        <span class="input-group-addon">*</span>
-                        <input asp-for="RequestedTime" class="form-control" placeholder="RequestedTime" />
+                        <span class="input-group-addon">Requested Time</span>
+                        <input asp-for="RequestedTime" class="form-control" />
                     </div>
                     <span asp-validation-for="RequestedTime" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-4">
                     <div class="input-group">
-                        <span class="input-group-addon">*</span>
-                        <input asp-for="CategoryName" class="form-control" placeholder="CategoryName" />
+                        <span class="input-group-addon">Category Name</span>
+                        <select asp-for="CategoryName" class="selectpicker form-control">
+                            <option disabled selected>Select category</option>
+                            @for (int c = 0; c < Model.CategoryNames.Count; c++)
+                            {
+                                <option>@Model.CategoryNames[c]</option>
+                            }
+                        </select>
                     </div>
                     <span asp-validation-for="CategoryName" class="text-danger"></span>
                 </div>
@@ -96,7 +100,9 @@
                                                     }
                                                     else
                                                     {
-                                                        <h1>NO ANSWERS!!!</h1>
+                                                        <div class="no-answers">
+                                                            <h4 class="w-100 p-3">You need to add Answers to your Question</h4>
+                                                        </div>
                                                     }
                                                 </div>
                                                 <span asp-validation-for="Questions[q].Answers" class="text-danger"></span>
@@ -110,8 +116,8 @@
                             }
                             else
                             {
-                                <div class="mx-auto">
-                                    <h1 class="w-100 p-3">NO QUESTIONS!!!</h1>
+                                <div>
+                                    <h4 class="w-100 p-3">You need to add Questions to your Test</h4>
                                 </div>
                             }
                         }

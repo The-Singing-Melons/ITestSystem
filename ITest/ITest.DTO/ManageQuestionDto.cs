@@ -2,10 +2,10 @@
 
 namespace ITest.DTO
 {
-    public class CreateQuestionDto
+    public class ManageQuestionDto
     {
         public string Body { get; set; }
 
-        public ICollection<CreateAnswerDto> Answers { get; set; }
+        public ICollection<ManageAnswerDto> Answers { get; set; }
     }
 }

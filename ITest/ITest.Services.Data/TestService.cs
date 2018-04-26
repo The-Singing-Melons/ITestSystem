@@ -96,7 +96,7 @@ namespace ITest.Services.Data
             return testWithQuestionsAndAnswersDto;
         }
 
-        public void CreateTest(CreateTestDto testDto)
+        public void CreateTest(ManageTestDto testDto)
         {
             if (testDto == null)
             {
@@ -157,8 +157,45 @@ namespace ITest.Services.Data
         public IEnumerable<TestDashBoardDto> GetTestsDashboardInfo()
         {
             var tests = this.testRepo.All;
-            
+
             return this.mapper.EnumerableProjectTo<Test, TestDashBoardDto>(tests);
+        }
+
+        public ManageTestDto GetTestByNameAndCategory(string name, string category)
+        {
+            var test = this.testRepo.All
+                .Where(t => t.Name == name && t.Category.Name == category)
+                .Include(t => t.Category)
+                .Include(t => t.Questions)
+                .ThenInclude(q => q.Answers)
+                .SingleOrDefault();
+
+            return this.mapper.MapTo<ManageTestDto>(test);
+        }
+
+        public void EditTest(ManageTestDto editedDto)
+        {
+            if (editedDto == null)
+            {
+                throw new ArgumentNullException(nameof(editedDto));
+            }
+
+            var testToEdit = this.testRepo.All.Where(t => t.Id.ToString() == editedDto.Id).SingleOrDefault();
+
+            testToEdit = this.mapper.MapTo(editedDto, testToEdit);
+
+            var category = this.categoryRepo.All.SingleOrDefault(c => c.Name == editedDto.CategoryName)
+                ?? throw new ArgumentException($"Category {editedDto.CategoryName} does not exists!");
+
+            testToEdit.Category = category;
+
+            this.testRepo.Update(testToEdit);
+            this.dataSaver.SaveChanges();
+        }
+
+        public bool PublishTest(string name, string category)
+        {
+            return true;
         }
     }
 }
