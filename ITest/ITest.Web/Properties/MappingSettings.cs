@@ -41,6 +41,7 @@ namespace ITest.Web.Properties
             this.CreateMap<ManageAnswerDto, Answer>()
                 .ReverseMap();
 
+
             //From Test to Dto
             this.CreateMap<Test, TestDashBoardDto>()
                 .ForMember(t => t.CategoryName, o => o.MapFrom(t => t.Category.Name))
@@ -100,6 +101,8 @@ namespace ITest.Web.Properties
                 .ForMember(ut => ut.RequestedTime, o => o.MapFrom(ut => ut.Test.Duration));
 
             this.CreateMap<UserTestResultDto, TestResultViewModel>(MemberList.Destination);
+
+            this.CreateMap<UserTestDto, UserTest>().ReverseMap();
         }
     }
 }

@@ -8,7 +8,6 @@ using ITest.Infrastructure.Providers.Contracts;
 using ITest.Models;
 using ITest.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using ITest.DTO;
 
 namespace ITest.Services.Data
@@ -80,7 +79,8 @@ namespace ITest.Services.Data
         public bool CheckForCompletedUserTestInCategory(string userId, string categoryName, IEnumerable<UserTest> testsTakenByUser)
         {
             var isTestTaken = testsTakenByUser
-                .Any(x => x.Test.Category.Name == categoryName && x.IsSubmited == true);
+                .Any(x => x.Test.Category.Name == categoryName
+                                                    && x.IsSubmited == true);
 
             return isTestTaken;
         }
@@ -93,6 +93,9 @@ namespace ITest.Services.Data
 
             currentTest.IsPassed = isPassed;
             currentTest.IsSubmited = true;
+            var testExecutionTime = currentTest.StartedOn - DateTime.Now;
+            currentTest.ExecutionTime = Math.Abs(testExecutionTime.TotalMinutes);
+
             this.dataSaver.SaveChanges();
         }
 
@@ -104,6 +107,18 @@ namespace ITest.Services.Data
                 .ThenInclude(t => t.Category);
 
             return this.mapper.ProjectTo<UserTestResultDto>(results).ToList();
+        }
+
+        public UserTestDto CheckForTestInProgress(string userId)
+        {
+            var result = this.userTestRepo.All
+                .Where(ut => ut.UserId == userId && ut.IsSubmited == null)
+                .Include(ut => ut.Test)
+                .FirstOrDefault();
+
+            var userTestDto = this.mapper.MapTo<UserTestDto>(result);
+            return userTestDto;
+
         }
     }
 }

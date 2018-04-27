@@ -13,12 +13,18 @@ namespace ITest.Models
         public ApplicationUser()
         {
             this.Tests = new HashSet<Test>();
-            //this.UserTests = new HashSet<UserTest>();
+            this.Answers = new HashSet<Answer>();
+            this.UserTests = new HashSet<UserTest>();
         }
+
         public ICollection<Test> Tests { get; set; }
 
+        public ICollection<Answer> Answers { get; set; }
 
         public ICollection<UserTest> UserTests { get; set; }
+
+        public ICollection<UserAnswer> UserAnswers { get; set; }
+
         public bool IsDeleted { get; set; }
 
         [DataType(DataType.DateTime)]

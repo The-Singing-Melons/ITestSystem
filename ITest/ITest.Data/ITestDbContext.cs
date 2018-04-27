@@ -18,10 +18,40 @@ namespace ITest.Data
         public DbSet<Question> Questions { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<UserTest> UserTests { get; set; }
+        public DbSet<UserAnswer> UserAnswers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            // Users-To-Answers
+            builder.Entity<UserAnswer>()
+                .HasOne(ut => ut.User)
+                .WithMany(u => u.UserAnswers)
+                .HasForeignKey(ua => ua.UserId);
+
+            builder.Entity<UserAnswer>()
+                .HasOne(ut => ut.Answer)
+                .WithMany(a => a.UserAnswers)
+                .HasForeignKey(ua => ua.AnswerId);
+
+            builder.Entity<UserAnswer>()
+                .HasKey(ua => new { ua.UserId, ua.AnswerId });
+
+            // Users-To-Tests
+            builder.Entity<UserTest>()
+                .HasOne(ut => ut.Test)
+                .WithMany(t => t.UserTests)
+                .HasForeignKey(t => t.TestId);
+
+            builder.Entity<UserTest>()
+                .HasOne(t => t.User)
+                .WithMany(t => t.UserTests)
+                .HasForeignKey(ut => ut.UserId);
+
+            // Composite key
+            builder.Entity<UserTest>()
+                .HasKey(ut => new { ut.UserId, ut.TestId });
 
             // Test-To-Users
             builder.Entity<Test>()
@@ -29,20 +59,6 @@ namespace ITest.Data
                 .WithMany(u => u.Tests)
                 .HasForeignKey(t => t.CreatedByUserId);
 
-            // UserTest
-            builder.Entity<UserTest>()
-                .HasOne(t => t.Test)
-                .WithMany(t => t.UserTests)
-                .HasForeignKey(t => t.TestId);
-
-            builder.Entity<UserTest>()
-                .HasOne(t => t.User)
-                .WithMany(t => t.UserTests)
-                .HasForeignKey(t => t.UserId);
-
-            // Composite key
-            builder.Entity<UserTest>()
-                .HasKey(u => new { u.UserId, u.TestId });
 
             // Category-To-Tests
             builder.Entity<Test>()

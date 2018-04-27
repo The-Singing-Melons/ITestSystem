@@ -11,7 +11,7 @@ namespace Itest.Data.Models
         public Test()
         {
             this.Questions = new HashSet<Question>();
-            //this.UserTests = new HashSet<UserTest>();
+            this.UserTests = new HashSet<UserTest>();
         }
         public string Name { get; set; }
         public int Duration { get; set; }
