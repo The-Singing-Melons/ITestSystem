@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using ITest.DTO;
 using ITest.DTO.TakeTest;
@@ -19,6 +18,7 @@ namespace ITest.Web.Areas.User.Controllers
     {
         private readonly IMappingProvider mapper;
         private readonly ITestService testService;
+        private readonly IUserAnswerService answerService;
         private readonly IQuestionService questionService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ICategoryService categoryService;
@@ -27,7 +27,8 @@ namespace ITest.Web.Areas.User.Controllers
 
         public HomeController(IMappingProvider mapper, ITestService testService,
             UserManager<ApplicationUser> userManager, IQuestionService questionService,
-            ICategoryService categoryService, IUserTestService userTestService)
+            ICategoryService categoryService, IUserTestService userTestService,
+            IUserAnswerService answerService)
         {
             this.mapper = mapper;
             this.testService = testService;
@@ -35,21 +36,41 @@ namespace ITest.Web.Areas.User.Controllers
             this.questionService = questionService;
             this.categoryService = categoryService;
             this.userTestService = userTestService;
+            this.answerService = answerService;
         }
 
         public IActionResult Index()
         {
+
+            var userId = this.userManager.GetUserId(this.HttpContext.User);
+
+            var testInProgress = this.userTestService
+                .CheckForTestInProgress(userId);
+
+            if (testInProgress != null)
+            {
+                var endTime = testInProgress.StartedOn
+                    .AddMinutes(testInProgress.Test.Duration);
+
+                var timeRemaining = Math.Round((endTime - DateTime.Now).TotalSeconds);
+
+                if (timeRemaining == 0)
+                {
+                    this.userTestService
+                        .SubmitUserTest(testInProgress.Test.Id, userId, false);
+                    return RedirectToAction("Index");
+                }
+            }
+
             var allCategories = this.categoryService.GetAllCategories();
             var categoriesViewModel = this.mapper.EnumerableProjectTo
                                         <CategoryDto, CategoryViewModel>(allCategories).ToList();
 
-            var userId = this.userManager.GetUserId(this.HttpContext.User);
             var allTestsDoneByUser = this.userTestService
                    .GetAllTestsDoneByUser(userId);
 
             for (int i = 0; i < allCategories.Count; i++)
             {
-
                 var result = this.userTestService
                     .CheckForCompletedUserTestInCategory(userId, allCategories[i].Name, allTestsDoneByUser);
 
@@ -126,12 +147,14 @@ namespace ITest.Web.Areas.User.Controllers
                 var submitedTest = this.mapper.MapTo<TestRequestViewModelDto>
                     (takeTestRequestViewModel);
 
+
+                this.answerService.AddAnswersToUser(userId, submitedTest.Questions);
+
                 var isPassed = this.testService
                     .IsTestPassed(testId, submitedTest);
 
                 this.userTestService.SubmitUserTest(testId,
                     userId, isPassed);
-
 
                 return RedirectToAction("Index");
             }

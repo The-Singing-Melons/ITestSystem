@@ -11,9 +11,10 @@ using System;
 namespace ITest.Data.Migrations
 {
     [DbContext(typeof(ITestDbContext))]
-    partial class ITestDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180427084350_Change on UserTest table. Added new Users-To-Answers to table")]
+    partial class ChangeonUserTesttableAddednewUsersToAnswerstotable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,6 +26,8 @@ namespace ITest.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationUserId");
+
                     b.Property<string>("Content");
 
                     b.Property<DateTime?>("DeletedOn");
@@ -35,13 +38,11 @@ namespace ITest.Data.Migrations
 
                     b.Property<Guid>("QuestionId");
 
-                    b.Property<string>("UserId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionId");
+                    b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("QuestionId");
 
                     b.ToTable("Answers");
                 });
@@ -321,14 +322,14 @@ namespace ITest.Data.Migrations
 
             modelBuilder.Entity("Itest.Data.Models.Answer", b =>
                 {
+                    b.HasOne("ITest.Models.ApplicationUser")
+                        .WithMany("Answers")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("Itest.Data.Models.Question", "Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ITest.Models.ApplicationUser", "User")
-                        .WithMany("Answers")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Itest.Data.Models.Question", b =>

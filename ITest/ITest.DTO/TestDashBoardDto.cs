@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ITest.DTO
+﻿namespace ITest.DTO
 {
     public class TestDashBoardDto
     {

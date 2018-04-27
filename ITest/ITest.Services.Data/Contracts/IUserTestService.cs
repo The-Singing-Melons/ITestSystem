@@ -22,5 +22,6 @@ namespace ITest.Services.Data.Contracts
         IEnumerable<UserTest> GetAllTestsDoneByUser(string userId);
 
         IEnumerable<UserTestResultDto> GetUserTestResults();
+        UserTestDto CheckForTestInProgress(string userId);
     }
 }

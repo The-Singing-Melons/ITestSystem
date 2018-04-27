@@ -49,7 +49,6 @@ namespace ITest.Services.Data
         public TestDto GetTestById(string testId)
         {
             var test = testRepo.All
-                .Include(t => t.Category)
                 .Where(t => t.Id.ToString() == testId)
                 .FirstOrDefault();
 
@@ -65,14 +64,14 @@ namespace ITest.Services.Data
 
         public TestDto GetRandomTest(string categoryName)
         {
-            // get test with and category and test in a single query
-            // how?
+
             var random = new Random();
             var allTestsFromCategory = testRepo.All
                 .Where(t => t.Category.Name == categoryName &&
                             t.IsPublished)
                 .ToList();
 
+            // To-do: Add a try-catch block if there is no test in the category
             int r = random.Next(allTestsFromCategory.Count);
             var randomTest = allTestsFromCategory[r];
 
