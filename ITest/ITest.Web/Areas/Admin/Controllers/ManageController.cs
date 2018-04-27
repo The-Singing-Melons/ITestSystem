@@ -78,6 +78,7 @@ namespace ITest.Web.Areas.Admin.Controllers
             }
             catch (Exception)
             {
+                createTestViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
                 return this.View(createTestViewModel);
             }
             return RedirectToRoute(new
@@ -115,6 +116,7 @@ namespace ITest.Web.Areas.Admin.Controllers
         {
             if (manageTestViewModel == null || !this.ModelState.IsValid)
             {
+                manageTestViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
                 return this.View(manageTestViewModel);
             }
 
@@ -129,6 +131,7 @@ namespace ITest.Web.Areas.Admin.Controllers
             }
             catch (Exception)
             {
+                manageTestViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
                 return this.View(manageTestViewModel);
             }
 

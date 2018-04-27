@@ -47,6 +47,7 @@
                 <div class="row">
                     <h4>Add questions to your Test</h4>
                     <button id="add-question" class="btn btn-default pull-right" type="button">Add Question</button>
+                    <button id="collapse-questions" class="btn btn-default pull-right" type="button">Collapse All</button>
                 </div>
 
                 <div class="row">
@@ -127,10 +128,6 @@
             </div>
         </div>
 
-        @for (int c = 0; c < Model.CategoryNames.Count; c++)
-        {
-            <input asp-for="CategoryNames[c]" type="hidden" value="@Model.CategoryNames[c]" />
-        }
         <input asp-for="Id" type="hidden" value="@Model.Id" />
 
         <button id="IsPublished" name="IsPublished" class="create-test btn btn-default" type="submit" value="false">Save as Draft</button>

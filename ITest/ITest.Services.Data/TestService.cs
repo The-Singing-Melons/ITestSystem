@@ -195,7 +195,13 @@ namespace ITest.Services.Data
 
         public bool PublishTest(string name, string category)
         {
-            return true;
+            var isPublished = this.testRepo.All
+                .Include(t => t.Category)
+                .Where(t => t.Name == name && t.Category.Name == category)
+                .Select(t => t.IsPublished)
+                .FirstOrDefault();
+
+            return isPublished;
         }
     }
 }

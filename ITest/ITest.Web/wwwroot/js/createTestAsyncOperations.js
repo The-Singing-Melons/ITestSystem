@@ -53,9 +53,6 @@
             <h4 class="w-100 p-3">You need to add Answers to your Question</h4>
         </div>`;
 
-    var hiddenInputCateogry =
-        `<input id="CategoryNames_{{q_id}}" name="CategoryNames[{{q_id}}]" type="hidden" value="@Model.CategoryNames[c]" />`;
-
     var radioButtonClick = function (questionNumber) {
         var answerRadioButtons = $(`#question-${questionNumber} .answers-container .answer-container input`)
             .filter(function () {
@@ -135,23 +132,17 @@
                 $(`#question-${newQuestionId} .question-description input`).attr('id', `Questions_${newQuestionId}__Body`);
                 $(`#question-${newQuestionId} .question-description input`).attr('name', `Questions[${newQuestionId}].Body`);
 
-                $(`#question-${newQuestionId} .question-description span`).attr('data-valmsg-for', `Questions[${newQuestionId}].Body`);
-                $(`#question-${newQuestionId} .panel-collapse .panel-body > span`).attr('data-valmsg-for', `Questions[${newQuestionId}].Body`);
-
                 $(`#question-${newQuestionId} .add-answer`).attr('name', `collapse-${newQuestionId}`);
 
                 var answers = $(`#Question-${newQuestionId} .answer-container`).toArray();
 
                 answers.forEach(function (answer) {
                     var answerId = parseInt(answer.id.split('-')[3]) - 1;
-                    $(`#question-${newQuestionId} .answer-container > span`).attr('data-valmsg-for', `Questions_${newQuestionId}__Answers_${answerId}__Content`);
                     $(`#question-${newQuestionId} .answer-container .answer-content`).attr('id', `Questions_${newQuestionId}__Answers_${answerId}__Content`);
 
                     $(`#question-${newQuestionId} .answer-container .answer-content`).attr('id', `Questions_${newQuestionId}__Answers_${answerId}__Content`);
                     $(`#question-${newQuestionId} .answer-container .answer-content`).attr('name', `Questions[${newQuestionId}].Answers[${answerId}].Content`);
                 });
-
-
             });
         }
     });
@@ -208,7 +199,7 @@
         }
     });
 
-    var createTestClickEvent = $('.create-test').on('click', function (event) {
+    var createTestClickEvent = $('.create-test').on('click', function () {
         $('#questions-container #questions-body .answer-is-correct')
             .toArray()
             .forEach(function (rButton) {
