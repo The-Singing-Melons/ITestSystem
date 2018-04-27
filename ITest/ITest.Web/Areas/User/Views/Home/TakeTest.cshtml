@@ -9,7 +9,6 @@
 <form asp-area="User" asp-controller="Home" asp-action="TakeTest" method="post">
 
     <h3>@Model.Name</h3>
-    @*BELOW LINE IS MODEL BINDING FROM GET REQUEST TO POST REQUEST HAHA*@
     <input asp-for="@Model.Name" value="@Model.Name" type="hidden" />
     <hr class="dashboard-breaker">
     <br>

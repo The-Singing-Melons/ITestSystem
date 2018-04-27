@@ -195,13 +195,42 @@ namespace ITest.Services.Data
 
         public bool PublishTest(string name, string category)
         {
-            var isPublished = this.testRepo.All
+            var test = this.testRepo.All
                 .Include(t => t.Category)
                 .Where(t => t.Name == name && t.Category.Name == category)
-                .Select(t => t.IsPublished)
                 .FirstOrDefault();
 
-            return isPublished;
+            if (test.IsPublished)
+            {
+                return true;
+            }
+
+            test.IsPublished = true;
+
+            this.testRepo.Update(test);
+            this.dataSaver.SaveChanges();
+
+            return true;
+        }
+
+        public bool DeleteTest(string name, string category)
+        {
+            var test = this.testRepo.All
+                .Include(t => t.Category)
+                .Where(t => t.Name == name && t.Category.Name == category)
+                .FirstOrDefault();
+
+            if (test.IsDeleted)
+            {
+                return true;
+            }
+
+            test.IsDeleted = true;
+
+            this.testRepo.Delete(test);
+            this.dataSaver.SaveChanges();
+
+            return true;
         }
     }
 }

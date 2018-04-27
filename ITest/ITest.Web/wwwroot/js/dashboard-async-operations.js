@@ -9,53 +9,65 @@
             Edit
         </a>
 
-        <form action="/Admin/Manage/DisableTest" method="get" class="disable-test">
+        <form action="/Admin/Manage/DisableTest" method="post" class="disable-test">
             <input id="testName" name="testName" type="hidden" value="{{t_name}}" />
             <input id="categoryName" name="categoryName" type="hidden" value="{{c_name}}" />
 
-            <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#disable-modal">
+            <button type="submit" class="btn btn-danger btn-xs">
                 <span class="glyphicon glyphicon-ban-circle"></span>
                 Disable
             </button>
-
-            <div class="modal fade" id="disable-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            Are you sure you want to Disable this Test?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
-                            <button type="submit" class="btn btn-primary">Yes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </form>`
 
-    var publishTestSubmitEvent = $('.publish-test').on('submit', function (event) {
+    var draftTestActionsFrame =
+        `<form action="/Admin/Manage/PublishTest" method="post" class="publish-test">
+            <input id="testName" name="testName" type="hidden" value="{{t_name}}" />
+            <input id="categoryName" name="categoryName" type="hidden" value="{{c_name}}" />
+
+            <button type="submit" class="btn btn-success btn-xs">
+                <span class="glyphicon glyphicon-ok"></span>
+                Publish
+            </button>
+        </form>
+
+        <form action="/Admin/Manage/EditTest" method="get">
+            <input id="testName" name="testName" type="hidden" value="{{t_name}}" />
+            <input id="categoryName" name="categoryName" type="hidden" value="{{c_name}}" />
+
+            <button type="submit" class='btn btn-warning btn-xs'>
+                <span class="glyphicon glyphicon-edit"></span>
+                Edit
+            </button>
+        </form>
+
+        <form action="/Admin/Manage/DeleteTest" method="post" class="delete-test">
+            <input id="testName" name="testName" type="hidden" value="{{t_name}}" />
+            <input id="categoryName" name="categoryName" type="hidden" value="{{c_name}}" />
+
+            <button type="submit" class="btn btn-danger btn-xs">
+                <span class="glyphicon glyphicon-remove"></span>
+                Delete
+            </button>
+        </form>`;
+
+    var publishTestSubmitEvent = $('.created-tests-table').on('submit', '.publish-test', function (event) {
         event.preventDefault();
 
         var testName = $(this).children('#testName').val();
         var categoryName = $(this).children('#categoryName').val();
 
-        var isPublishedCol = $(this).closest('tr').children('.is-published')
+        var isPublishedCol = $(this).closest('tr').children('.is-published');
         var actionsCol = $(this).closest('td');
 
         var url = this.action;
         var data = $(this).serialize();
 
         $.ajax({
-            type: 'GET',
-            url: `${url}?${data}`,
-            success: function (response) {
-                if (response) {
+            type: 'POST',
+            url: url,
+            data: data,
+            success: function (isPublished) {
+                if (isPublished === true) {
                     isPublishedCol.text('Published');
 
                     var actionsHtml = publishedTestActionsFrame
@@ -64,8 +76,38 @@
 
                     actionsCol.html(actionsHtml);
                 }
-                else {
-                    // already published?
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr);
+                alert(xhr.status);
+                alert(thrownError);
+            }
+        });
+    });
+
+    var deleteTestSubmitEvent = $('.created-tests-table').on('submit', '.delete-test', function (event) {
+        event.preventDefault();
+
+        var table = $(this).closest('.created-tests-table').DataTable();
+
+        var testName = $(this).children('#testName').val();
+        var categoryName = $(this).children('#categoryName').val();
+
+        var testRow = $(this).closest('tr');
+
+        var url = this.action;
+        var data = $(this).serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: data,
+            success: function (isDeleted) {
+                if (isDeleted === true) {
+                    table
+                        .row(testRow)
+                        .remove()
+                        .draw();
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {

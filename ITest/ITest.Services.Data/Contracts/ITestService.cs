@@ -28,5 +28,7 @@ namespace ITest.Services.Data.Contracts
         void EditTest(ManageTestDto createTestDto);
 
         bool PublishTest(string name, string category);
+
+        bool DeleteTest(string name, string category);
     }
 }

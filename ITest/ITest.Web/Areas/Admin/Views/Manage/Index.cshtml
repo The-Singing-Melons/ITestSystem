@@ -19,7 +19,7 @@
                 <div class="panel-body">
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="tab1default">
-                            <table style="width:100%" class="dashboard-table display table table-striped custab" data-page-length='10'>
+                            <table style="width:100%" class="created-tests-table dashboard-table display table table-striped custab" data-page-length='10'>
                                 <thead>
                                     <tr>
                                         <th>Test Name</th>
@@ -44,39 +44,20 @@
                                                         <span class="glyphicon glyphicon-ok"></span>
                                                         Published
                                                     </a>
+
                                                     <a class='btn btn-warning btn-xs disabled'>
                                                         <span class="glyphicon glyphicon-edit"></span>
                                                         Edit
                                                     </a>
 
-                                                    <form asp-area="Admin" asp-controller="Manage" asp-action="DisableTest" method="get" class="disable-test">
+                                                    <form asp-area="Admin" asp-controller="Manage" asp-action="DisableTest" method="post" class="disable-test">
                                                         <input id="testName" name="testName" type="hidden" value="@test.TestName" />
                                                         <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
 
-                                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#disable-modal">
+                                                        <button type="submit" class="btn btn-danger btn-xs">
                                                             <span class="glyphicon glyphicon-ban-circle"></span>
                                                             Disable
                                                         </button>
-
-                                                        <div class="modal fade" id="disable-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        Are you sure you want to Disable this Test?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
-                                                                        <button type="submit" class="btn btn-primary">Yes</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </form>
                                                 </td>
                                             }
@@ -84,34 +65,14 @@
                                             {
                                                 <td class="is-published">Draft</td>
                                                 <td class="text-center">
-                                                    <form asp-area="Admin" asp-controller="Manage" asp-action="PublishTest" method="get" class="publish-test">
+                                                    <form asp-area="Admin" asp-controller="Manage" asp-action="PublishTest" method="post" class="publish-test">
                                                         <input id="testName" name="testName" type="hidden" value="@test.TestName" />
                                                         <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
 
-                                                        <button type="button" class='btn btn-success btn-xs' data-toggle="modal" data-target="#publish-modal">
+                                                        <button type="submit" class="btn btn-success btn-xs">
                                                             <span class="glyphicon glyphicon-ok"></span>
                                                             Publish
                                                         </button>
-
-                                                        <div class="modal fade" id="publish-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        Are you sure you want to Publish this Test?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
-                                                                        <button type="submit" class="btn btn-primary">Yes</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </form>
 
                                                     <form asp-area="Admin" asp-controller="Manage" asp-action="EditTest" method="get">
@@ -124,34 +85,14 @@
                                                         </button>
                                                     </form>
 
-                                                    <form asp-area="Admin" asp-controller="Manage" asp-action="DeleteTest" method="get">
+                                                    <form asp-area="Admin" asp-controller="Manage" asp-action="DeleteTest" method="post" class="delete-test">
                                                         <input id="testName" name="testName" type="hidden" value="@test.TestName" />
                                                         <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
 
-                                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-modal">
+                                                        <button type="submit" class="btn btn-danger btn-xs">
                                                             <span class="glyphicon glyphicon-remove"></span>
                                                             Delete
                                                         </button>
-
-                                                        <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        Are you sure you want to Delete this Test?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
-                                                                        <button type="submit" class="btn btn-primary">Yes</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </form>
                                                 </td>
                                             }
@@ -169,7 +110,7 @@
                             </table>
                         </div>
                         <div class="tab-pane fade" id="tab2default">
-                            <table style="width:100%" class="dashboard-table display table table-striped custab" data-page-length='10'>
+                            <table style="width:100%" class="attended-tests dashboard-table display table table-striped custab" data-page-length='10'>
                                 <thead>
                                     <tr>
                                         <th>Test Name</th>
@@ -222,13 +163,5 @@
 @section Scripts {
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
     <script src="~/js/dashboard-async-operations.js"></script>
-    <script>
-        $('.dashboard-table').DataTable({
-            "order": [[3, "desc"]],
-            searching: false,
-            "lengthChange": false,
-            "info": false,
-            "pagingType": "full_numbers"
-        });
-    </script>
+    <script src="~/js/datatables-include.js"></script>
 }

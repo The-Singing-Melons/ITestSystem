@@ -143,7 +143,8 @@ namespace ITest.Web.Areas.Admin.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult PublishTest(string testName, string categoryName)
         {
             if (string.IsNullOrEmpty(testName))
@@ -156,12 +157,22 @@ namespace ITest.Web.Areas.Admin.Controllers
                 return this.View();
             }
 
-            var isPublished = this.testService.PublishTest(testName, categoryName);
+            //validate rights
 
-            return this.Json(isPublished);
+            try
+            {
+                this.testService.PublishTest(testName, categoryName);
+            }
+            catch (Exception)
+            {
+                return this.Json(false);
+            }
+
+            return this.Json(true);
         }
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteTest(string testName, string categoryName)
         {
             if (string.IsNullOrEmpty(testName))
@@ -174,12 +185,19 @@ namespace ITest.Web.Areas.Admin.Controllers
                 return this.View();
             }
 
-            var testDto = this.testService.GetTestByNameAndCategory(testName, categoryName);
+            //validate rights
 
-            var testViewModel = this.mapper.MapTo<ManageTestViewModel>(testDto);
-            testViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
+            try
+            {
+                this.testService.DeleteTest(testName, categoryName);
+            }
+            catch (Exception)
+            {
+                return this.Json(false);
+            }
 
-            return this.View(testViewModel);
+
+            return this.Json(true);
         }
     }
 }
