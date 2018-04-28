@@ -11,6 +11,7 @@ namespace Itest.Data.Models
 
         public Answer Answer { get; set; }
         public Guid AnswerId { get; set; }
+
         public bool IsDeleted { get; set; }
         public DateTime? DeletedOn { get; set; }
     }

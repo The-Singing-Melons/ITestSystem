@@ -25,15 +25,25 @@ namespace ITest.Services.Data
             IMappingProvider mapper, IDataRepository<Category> categoryRepo,
             IDataRepository<UserTest> userTestRepo)
         {
-            this.userRepo = userRepo;
-            this.testRepo = testRepo;
-            this.userTestRepo = userTestRepo;
-            this.dataSaver = dataSaver;
-            this.mapper = mapper;
+            this.userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
+            this.testRepo = testRepo ?? throw new ArgumentNullException(nameof(testRepo));
+            this.userTestRepo = userTestRepo ?? throw new ArgumentNullException(nameof(userTestRepo));
+            this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public void AddUserToTest(string testId, string userId)
         {
+            if (string.IsNullOrEmpty(testId))
+            {
+                throw new ArgumentNullException("Test Id cannot be null!");
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("User Id cannot be null!");
+            }
+
             var userToTestObject = new UserTest
             {
                 TestId = Guid.Parse(testId),
@@ -48,6 +58,16 @@ namespace ITest.Services.Data
 
         public DateTime GetStartingTimeForUserTest(string userId, string testId)
         {
+            if (string.IsNullOrEmpty(testId))
+            {
+                throw new ArgumentNullException("Test Id cannot be null!");
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("User Id cannot be null!");
+            }
+
             var currentTest = this.userTestRepo.All
                 .Where(x => x.UserId == userId && x.TestId.ToString() == testId)
                 .FirstOrDefault();
@@ -57,6 +77,16 @@ namespace ITest.Services.Data
 
         public bool UserStartedTest(string testId, string userId)
         {
+            if (string.IsNullOrEmpty(testId))
+            {
+                throw new ArgumentNullException("Test Id cannot be null!");
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("User Id cannot be null!");
+            }
+
             var userStartedTest = false;
 
             userStartedTest = this.userTestRepo.All
@@ -67,6 +97,12 @@ namespace ITest.Services.Data
 
         public IEnumerable<UserTest> GetAllTestsDoneByUser(string userId)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("User Id cannot be null!");
+            }
+
+            // must project to dto..
             var testsTakenByUser = this.userTestRepo.All
                         .Where(x => x.UserId.ToString() == userId)
                         .Include(t => t.Test)
@@ -78,6 +114,16 @@ namespace ITest.Services.Data
 
         public bool CheckForCompletedUserTestInCategory(string userId, string categoryName, IEnumerable<UserTest> testsTakenByUser)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("User Id cannot be null!");
+            }
+
+            if (string.IsNullOrEmpty(categoryName))
+            {
+                throw new ArgumentNullException("CategoryName cannot be null!");
+            }
+
             var isTestTaken = testsTakenByUser
                 .Any(x => x.Test.Category.Name == categoryName
                                                     && x.IsSubmited == true);
@@ -87,6 +133,17 @@ namespace ITest.Services.Data
 
         public void SubmitUserTest(string testId, string userId, bool isPassed)
         {
+            if (string.IsNullOrEmpty(testId))
+            {
+                throw new ArgumentNullException("Test Id cannot be null!");
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("User Id cannot be null!");
+            }
+
+
             var currentTest = this.userTestRepo.All
               .Where(x => x.UserId == userId && x.TestId.ToString() == testId)
               .FirstOrDefault();
@@ -111,6 +168,15 @@ namespace ITest.Services.Data
 
         public UserTestDto CheckForTestInProgress(string userId)
         {
+            // if you throw exception that is not handled would not this cause
+            // the whole program to crash? Handle with Try/Catch block?
+            // redirect to 302?
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("User not found!");
+            }
+
             var result = this.userTestRepo.All
                 .Where(ut => ut.UserId == userId && ut.IsSubmited == null)
                 .Include(ut => ut.Test)

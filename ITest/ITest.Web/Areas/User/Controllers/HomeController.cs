@@ -30,13 +30,13 @@ namespace ITest.Web.Areas.User.Controllers
             ICategoryService categoryService, IUserTestService userTestService,
             IUserAnswerService answerService)
         {
-            this.mapper = mapper;
-            this.testService = testService;
-            this.userManager = userManager;
-            this.questionService = questionService;
-            this.categoryService = categoryService;
-            this.userTestService = userTestService;
-            this.answerService = answerService;
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            this.testService = testService ?? throw new ArgumentNullException(nameof(testService));
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            this.questionService = questionService ?? throw new ArgumentNullException(nameof(questionService));
+            this.categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
+            this.userTestService = userTestService ?? throw new ArgumentNullException(nameof(userTestService));
+            this.answerService = answerService ?? throw new ArgumentNullException(nameof(answerService));
         }
 
         public IActionResult Index()
@@ -63,11 +63,12 @@ namespace ITest.Web.Areas.User.Controllers
             }
 
             var allCategories = this.categoryService.GetAllCategories();
-            var categoriesViewModel = this.mapper.EnumerableProjectTo
-                                        <CategoryDto, CategoryViewModel>(allCategories).ToList();
+            var categoriesViewModel = this.mapper
+                .EnumerableProjectTo<CategoryDto, CategoryViewModel>(allCategories)
+                .ToList();
 
             var allTestsDoneByUser = this.userTestService
-                   .GetAllTestsDoneByUser(userId);
+                                                .GetAllTestsDoneByUser(userId);
 
             for (int i = 0; i < allCategories.Count; i++)
             {

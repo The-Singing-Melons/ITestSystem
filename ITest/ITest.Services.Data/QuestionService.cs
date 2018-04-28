@@ -20,13 +20,17 @@ namespace ITest.Services.Data
 
         public QuestionService(IDataRepository<Question> questionRepo, IDataSaver dataSaver, IMappingProvider mapper)
         {
-            this.questionRepo = questionRepo;
-            this.dataSaver = dataSaver;
-            this.mapper = mapper;
+            this.questionRepo = questionRepo ?? throw new ArgumentNullException(nameof(questionRepo));
+            this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public IEnumerable<AnswerDto> GetAnswersForQuestion(string questionId)
         {
+            if (string.IsNullOrEmpty(questionId))
+            {
+                throw new ArgumentNullException("cannot be null!");
+            }
 
             var answersForQuestion = this.questionRepo.All.
                                         Include(q => q.Answers)

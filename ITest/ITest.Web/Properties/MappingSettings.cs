@@ -103,6 +103,21 @@ namespace ITest.Web.Properties
             this.CreateMap<UserTestResultDto, TestResultViewModel>(MemberList.Destination);
 
             this.CreateMap<UserTestDto, UserTest>().ReverseMap();
+
+            this.CreateMap<UserAnswer, UserAnswerDto>(MemberList.Source)
+                .ReverseMap();
+
+            this.CreateMap<UserAnswerDto, TestScoreUserAnswerViewModel>()
+                .ForMember(vm => vm.UserName, o => o.MapFrom(dto =>
+                    dto.User.UserName))
+                .ForMember(vm => vm.AnswerContent, o => o.MapFrom(dto =>
+                    dto.Answer.Content))
+                .ForMember(vm => vm.QuestionContent, o => o.MapFrom(dto =>
+                    dto.Answer.Question.Body))
+                .ForMember(vm => vm.TestName, o => o.MapFrom(dto =>
+                    dto.Answer.Question.Test.Name))
+                .ForMember(vm => vm.TestCategory, o => o.MapFrom(dto =>
+                    dto.Answer.Question.Test.Category.Name));
         }
     }
 }
