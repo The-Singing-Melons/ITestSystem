@@ -195,11 +195,15 @@
 
                                             @if (result.IsPassed)
                                             {
-                                                <td>Passed</td>
+                                                <td>
+                                                    <a class="btn btn-success" asp-action="TestScore" asp-route-userId="@result.UserId" asp-route-testId="@result.TestId">Passed</a>
+                                                </td>
                                             }
                                             else
                                             {
-                                                <td>Failed</td>
+                                                <td>
+                                                    <a class="btn btn-danger" asp-action="TestScore" asp-route-userId="@result.UserId" asp-route-testId="@result.TestId">Failed</a>
+                                                </td>
                                             }
                                         </tr>
                                     }

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Itest.Data.Models;
 using ITest.Data.Repository;
 using ITest.Data.UnitOfWork;
+using ITest.DTO;
 using ITest.DTO.TakeTest;
 using ITest.Infrastructure.Providers.Contracts;
 using ITest.Services.Data.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace ITest.Services.Data
 {
@@ -39,6 +42,28 @@ namespace ITest.Services.Data
 
             this.dataSaver.SaveChanges();
 
+        }
+
+        public IEnumerable<UserAnswerDto> GetAnswersForTestDoneByUser(string userId, string testId)
+        {
+            var answers = this.userAnswerRepo.All
+                .Where(x => x.UserId == userId)
+                .AsNoTracking();
+            // if no .Include all the related data is loaded( ie Eager loading)
+            // ASK!!
+            //.Include(ua => ua.Answer);
+            //.ThenInclude(a => a.Question)
+            //.ThenInclude(q => q.Test);
+
+            // the data here is null and below the DTO is fully populated 
+            // with every property..?? How..
+
+            var answersForTest = answers
+                .Where(ua => ua.Answer.Question.Test.Id.ToString() == testId);
+
+            var answersForTestDto = this.mapper.ProjectTo<UserAnswerDto>(answersForTest);
+
+            return answersForTestDto;
         }
     }
 }

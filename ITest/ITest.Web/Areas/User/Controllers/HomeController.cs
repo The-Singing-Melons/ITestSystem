@@ -63,8 +63,9 @@ namespace ITest.Web.Areas.User.Controllers
             }
 
             var allCategories = this.categoryService.GetAllCategories();
-            var categoriesViewModel = this.mapper.EnumerableProjectTo
-                                        <CategoryDto, CategoryViewModel>(allCategories).ToList();
+            var categoriesViewModel = this.mapper
+                .EnumerableProjectTo<CategoryDto, CategoryViewModel>(allCategories)
+                .ToList();
 
             var allTestsDoneByUser = this.userTestService
                    .GetAllTestsDoneByUser(userId);

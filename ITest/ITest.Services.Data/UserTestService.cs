@@ -67,6 +67,7 @@ namespace ITest.Services.Data
 
         public IEnumerable<UserTest> GetAllTestsDoneByUser(string userId)
         {
+            // must project to dto..
             var testsTakenByUser = this.userTestRepo.All
                         .Where(x => x.UserId.ToString() == userId)
                         .Include(t => t.Test)

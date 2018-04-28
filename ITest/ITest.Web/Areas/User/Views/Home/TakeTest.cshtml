@@ -23,36 +23,36 @@
         <input asp-for="@Model.Questions[i].Id"
                value="@Model.Questions[i].Id"
                type="hidden" />
-            <br />
-            <div class="well well-sm">@(nameCounter + 1) @Html.DisplayFor(x => Model.Questions[i].Body)</div>
-            <div id="timer"></div>
+        <br />
+        <div class="well well-sm">@(nameCounter + 1) @Html.DisplayFor(x => Model.Questions[i].Body)</div>
+        <div id="timer"></div>
 
-            @for (int j = 0; j < Model.Questions[i].Answers.Count; j++)
-            {
-                <div class="funkyradio">
-                    <div class="funkyradio-primary">
-                        @{ var answer = Model.Questions[i].Answers[j];}
+        @for (int j = 0; j < Model.Questions[i].Answers.Count; j++)
+        {
+            <div class="funkyradio">
+                <div class="funkyradio-primary">
+                    @{ var answer = Model.Questions[i].Answers[j];}
 
-                        <input asp-for="@Model.Questions[i].Answers" type="radio"
-                               value="@answer.Id" id="@answer.Id">
-                        <label for="@answer.Id">
-                            @answer.Content
-                        </label>
-                        @*<input asp-for="@Model.Questions[i].Answers[j].Id"
-                               value="@Model.Questions[i].Answers[j].Id" type="hidden" />
-                            <input asp-for="@Model.Questions[i].Answers[j].SelectedAnswerId"
-                                   type="radio"
-                                   class="radio-btn-to-change"
-                                   value="@Model.Questions[i].Answers[j].Id"
-                                   name="@Model.Questions[i].Id"
-                                   id="radio-@idCounter" />
-                            <label for="radio-@idCounter">@Model.Questions[i].Answers[j].Content</label>*@
-                    </div>
+                    <input asp-for="@Model.Questions[i].Answers" type="radio"
+                           value="@answer.Id" id="@answer.Id">
+                    <label for="@answer.Id">
+                        @answer.Content
+                    </label>
+                    @*<input asp-for="@Model.Questions[i].Answers[j].Id"
+                           value="@Model.Questions[i].Answers[j].Id" type="hidden" />
+                        <input asp-for="@Model.Questions[i].Answers[j].SelectedAnswerId"
+                               type="radio"
+                               class="radio-btn-to-change"
+                               value="@Model.Questions[i].Answers[j].Id"
+                               name="@Model.Questions[i].Id"
+                               id="radio-@idCounter" />
+                        <label for="radio-@idCounter">@Model.Questions[i].Answers[j].Content</label>*@
                 </div>
-                                idCounter++;
-                            }
-                                nameCounter++;
-                            }
+            </div>
+            idCounter++;
+        }
+        nameCounter++;
+    }
     <button type="button" id="test-submit-btn" class="btn" data-toggle="modal" data-target="#test-submit-modal">Submit Test</button>
 
     <div class="modal fade" id="test-submit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

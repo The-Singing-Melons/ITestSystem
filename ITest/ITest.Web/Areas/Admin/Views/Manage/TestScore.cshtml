@@ -1,0 +1,26 @@
+﻿@model IEnumerable<TestScoreUserAnswerViewModel>
+@{
+    ViewData["Title"] = "Test Score";
+}
+@{ var UserAnswer = Model.FirstOrDefault();}
+<h1 class="text-info">
+    Test results for user @UserAnswer.UserName
+</h1>
+<h2 class="text-info">Test Category: @UserAnswer.TestCategory</h2>
+<h3 class="text-info">Test Name: @UserAnswer.TestName</h3>
+<hr class="dashboard-breaker">
+
+@{var counter = 1; }
+@foreach (var testScore in Model)
+{
+    <div class="well well">
+        <h5 class="text-info">Question @(counter):</h5>
+        <h4 class="text-success"> @Html.DisplayFor(x => testScore.QuestionContent)</h4>
+    </div>
+    <div class="well well-sm">
+        <h5 class="text-info">Answer:</h5>
+        <h4 class="text-primary">@Html.DisplayFor(x => testScore.AnswerContent)</h4>
+    </div>
+    <br>
+    counter++;
+}

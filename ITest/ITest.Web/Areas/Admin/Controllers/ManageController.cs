@@ -19,14 +19,22 @@ namespace ITest.Web.Areas.Admin.Controllers
         private readonly ITestService testService;
         private readonly ICategoryService categoryService;
         private readonly IUserTestService userTestService;
+        private readonly IUserAnswerService userAnswerService;
         private readonly IMappingProvider mapper;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ManageController(ITestService testService, ICategoryService categoryService, IUserTestService userTestService, UserManager<ApplicationUser> userManager, IMappingProvider mapper)
+        public ManageController(
+            ITestService testService,
+            ICategoryService categoryService,
+            IUserTestService userTestService,
+            IUserAnswerService userAnswerService,
+            UserManager<ApplicationUser> userManager,
+            IMappingProvider mapper)
         {
             this.testService = testService ?? throw new ArgumentNullException(nameof(testService));
             this.categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
             this.userTestService = userTestService ?? throw new ArgumentNullException(nameof(userTestService));
+            this.userAnswerService = userAnswerService ?? throw new ArgumentNullException(nameof(userTestService));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
@@ -44,6 +52,18 @@ namespace ITest.Web.Areas.Admin.Controllers
             model.TestResults = resultTestViewModels.ToList();
 
             return View(model);
+        }
+
+        public IActionResult TestScore(string userId, string testId)
+        {
+            var answersForTestDto = this.userAnswerService
+                                       .GetAnswersForTestDoneByUser(userId, testId);
+
+            var answersForTestViewModel = this.mapper
+                .EnumerableProjectTo<UserAnswerDto, TestScoreUserAnswerViewModel>
+                (answersForTestDto);
+
+            return View(answersForTestViewModel);
         }
 
         [HttpGet]
@@ -104,7 +124,8 @@ namespace ITest.Web.Areas.Admin.Controllers
             var testDto = this.testService.GetTestByNameAndCategory(testName, categoryName);
 
             var testViewModel = this.mapper.MapTo<ManageTestViewModel>(testDto);
-            testViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
+            testViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames()
+                                                                             .ToList();
 
             return this.View(testViewModel);
         }

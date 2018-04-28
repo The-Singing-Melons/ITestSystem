@@ -144,7 +144,7 @@ namespace ITest.Services.Data
                     continue;
                 }
 
-                if (correctAnswer.Id == correctAnswer.Id)
+                if (correctAnswer.Id == selectedAnswer)
                 {
                     totalCorrectQuestions++;
                 }
