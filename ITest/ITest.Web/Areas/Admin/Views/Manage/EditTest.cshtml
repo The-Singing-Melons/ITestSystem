@@ -47,6 +47,7 @@
                 <div class="row">
                     <h4>Add questions to your Test</h4>
                     <button id="add-question" class="btn btn-default pull-right" type="button">Add Question</button>
+                    <button id="collapse-questions" class="btn btn-default pull-right" type="button">Collapse All</button>
                 </div>
 
                 <div class="row">
@@ -56,69 +57,69 @@
                             {
                                 for (int q = 0; q < Model.Questions.Count; q++)
                                 {
-                        <div id="question-@q" class="question-container panel panel-default">
-                            <button class="delete-question btn btn-danger btn-xs pull-right" type="button">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </button>
-                            <a href="#collapse-@q" data-toggle="collapse" data-parent="#accordion">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Question @string.Format("{0}", q + 1)</h4>
-                                </div>
-                            </a>
-                            <div id="collapse-@q" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <div class="question-description">
-                                        <h3>Description</h3>
-                                        <input type="text" id="@string.Format("Questions_{0}__Body", q)" name="Questions[@q].Body" class="summernote form-control" value="@Model.Questions[q].Body" />
-                                        <span asp-validation-for="Questions[q].Body" class="text-danger"></span>
-                                    </div>
-                                    <div class="answers-container">
-                                        @if (Model.Questions[q].Answers != null)
+                                    <div id="question-@q" class="question-container panel panel-default">
+                                        <button class="delete-question btn btn-danger btn-xs pull-right" type="button">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                        <a href="#collapse-@q" data-toggle="collapse" data-parent="#accordion">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">Question @string.Format("{0}", q + 1)</h4>
+                                            </div>
+                                        </a>
+                                        <div id="collapse-@q" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                <div class="question-description">
+                                                    <h3>Description</h3>
+                                                    <textarea id="@string.Format("Questions_{0}__Body", q)" name="Questions[@q].Body" class="summernote form-control">@Model.Questions[q].Body</textarea>
+                                                    <span asp-validation-for="Questions[q].Body" class="text-danger"></span>
+                                                </div>
+                                                <div class="answers-container">
+                                                    @if (Model.Questions[q].Answers != null)
                                                     {
                                                         for (int a = 0; a < Model.Questions[q].Answers.Count; a++)
                                                         {
-                                                    <div id="question-@q-answer-@a" class="answer-container">
-                                                        <h3 class="form-inline">Answer @string.Format("{0}", a + 1)</h3>
-                                                        <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
-                                                            <span class="glyphicon glyphicon-remove"></span>
-                                                        </button>
-                                                        <label class="btn btn-success pull-right">
-                                                            @if (Model.Questions[q].Answers[a].IsCorrect)
+                                                            <div id="question-@q-answer-@a" class="answer-container">
+                                                                <h3 class="form-inline">Answer @string.Format("{0}", a + 1)</h3>
+                                                                <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
+                                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                                </button>
+                                                                <label class="btn btn-success pull-right">
+                                                                    @if (Model.Questions[q].Answers[a].IsCorrect)
                                                                     {
-                                                                    <input id="@string.Format("Questions_{0}__Answers_{1}__IsCorrect", q, a)" name="radio-@q" class="answer-is-correct" type="radio" value="true" autocomplete="off" checked>
+                                                                        <input id="@string.Format("Questions_{0}__Answers_{1}__IsCorrect", q, a)" name="radio-@q" class="answer-is-correct" type="radio" value="true" autocomplete="off" checked>
                                                                     }
                                                                     else
                                                                     {
-                                                                    <input id="@string.Format("Questions_{0}__Answers_{1}__IsCorrect", q, a)" name="radio-@q" class="answer-is-correct" type="radio" value="true" autocomplete="off">
+                                                                        <input id="@string.Format("Questions_{0}__Answers_{1}__IsCorrect", q, a)" name="radio-@q" class="answer-is-correct" type="radio" value="true" autocomplete="off">
                                                                     }
-                                                            <span class="glyphicon glyphicon-ok"></span>
-                                                        </label>
-                                                        <input id="@string.Format("Questions_{0}__Answers_{1}__Content", q, a)" name="Questions[@q].Answers[@a].Content" class="answer-content summernote form-control" value="@Model.Questions[q].Answers[a].Content" />
-                                                        <span asp-validation-for="Questions[q].Answers[a].Content" class="text-danger"></span>
-                                                    </div>
+                                                                    <span class="glyphicon glyphicon-ok"></span>
+                                                                </label>
+                                                                <textarea id="@string.Format("Questions_{0}__Answers_{1}__Content", q, a)" name="Questions[@q].Answers[@a].Content" class="answer-content summernote form-control">@Model.Questions[q].Answers[a].Content</textarea>
+                                                                <span asp-validation-for="Questions[q].Answers[a].Content" class="text-danger"></span>
+                                                            </div>
                                                         }
                                                     }
                                                     else
                                                     {
-                                                    <div class="no-answers">
-                                                        <h4 class="w-100 p-3">You need to add Answers to your Question</h4>
-                                                    </div>
+                                                        <div class="no-answers">
+                                                            <h4 class="w-100 p-3">You need to add Answers to your Question</h4>
+                                                        </div>
                                                     }
+                                                </div>
+                                                <span asp-validation-for="Questions[q].Answers" class="text-danger"></span>
+                                            </div>
+                                            <div class="panel-body">
+                                                <button class="add-answer btn btn-default pull-right" name="collapse-@q" type="button">Add Answer</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <span asp-validation-for="Questions[q].Answers" class="text-danger"></span>
-                                </div>
-                                <div class="panel-body">
-                                    <button class="add-answer btn btn-default pull-right" name="collapse-@q" type="button">Add Answer</button>
-                                </div>
-                            </div>
-                        </div>
                                 }
                             }
                             else
                             {
-                        <div>
-                            <h4 class="w-100 p-3">You need to add Questions to your Test</h4>
-                        </div>
+                                <div>
+                                    <h4 class="w-100 p-3">You need to add Questions to your Test</h4>
+                                </div>
                             }
                         }
                     </div>
@@ -127,18 +128,14 @@
             </div>
         </div>
 
-        @for (int c = 0; c < Model.CategoryNames.Count; c++)
-        {
-            <input asp-for="CategoryNames[c]" type="hidden" value="@Model.CategoryNames[c]" />
-        }
         <input asp-for="Id" type="hidden" value="@Model.Id" />
 
-        <button id="IsPublished" name="IsPublished" class="create-test btn btn-default" type="submit" value="false">Save as Draft</button>
-        <button id="IsPublished" name="IsPublished" class="create-test btn btn-default" type="submit" value="true">Publish</button>
+        <button name="IsPublished" class="create-test btn btn-default" type="submit" value="false">Save as Draft</button>
+        <button name="IsPublished" class="create-test btn btn-default" type="submit" value="true">Publish</button>
     </form>
 </div>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
-    <script src="~/js/createTestAsyncOperations.js"></script>
+    <script src="~/js/manage-test-async-operations.js"></script>
 }
