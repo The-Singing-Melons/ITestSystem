@@ -27,15 +27,20 @@ namespace ITest.Services.Data
             IDataRepository<Test> testRepo, IDataSaver dataSaver,
             IMappingProvider mapper, IDataRepository<Category> categoryRepo)
         {
-            this.userRepo = userRepo;
-            this.testRepo = testRepo;
-            this.dataSaver = dataSaver;
-            this.mapper = mapper;
-            this.categoryRepo = categoryRepo;
+            this.userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
+            this.testRepo = testRepo ?? throw new ArgumentNullException(nameof(testRepo));
+            this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            this.categoryRepo = categoryRepo ?? throw new ArgumentNullException(nameof(categoryRepo));
         }
 
         public IEnumerable<TestDto> GetUserTests(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentNullException("User Id cannot be null!");
+            }
+
             IQueryable<Test> userTests = userRepo.All
                 .Include(u => u.Tests)
                 .Where(u => u.Id == id)
@@ -48,6 +53,11 @@ namespace ITest.Services.Data
 
         public TestDto GetTestById(string testId)
         {
+            if (string.IsNullOrEmpty(testId))
+            {
+                throw new ArgumentNullException("Test Id cannot be null!");
+            }
+
             var test = testRepo.All
                 .Where(t => t.Id.ToString() == testId)
                 .FirstOrDefault();
@@ -64,6 +74,10 @@ namespace ITest.Services.Data
 
         public TestDto GetRandomTest(string categoryName)
         {
+            if (string.IsNullOrEmpty(categoryName))
+            {
+                throw new ArgumentNullException("Category name cannot be null!");
+            }
 
             var random = new Random();
             var allTestsFromCategory = testRepo.All
@@ -82,6 +96,10 @@ namespace ITest.Services.Data
 
         public TestDto GetTestQuestionsWithAnswers(string testId)
         {
+            if (string.IsNullOrEmpty(testId))
+            {
+                throw new ArgumentNullException("Test Id cannot be null!");
+            }
 
             var testWithQuestionsAndAnswers = testRepo.All
                                         .Where(t => t.Id.ToString() == testId)
@@ -114,6 +132,16 @@ namespace ITest.Services.Data
 
         private bool IsTestPassed(int testQuestionsCount, int totalCorrectQuestions)
         {
+            if (testQuestionsCount <= 0)
+            {
+                throw new ArgumentException("Test questions count cannot be less or equal to zero");
+            }
+
+            if (totalCorrectQuestions < 0)
+            {
+                throw new ArgumentException("Test questions count cannot be less then zero");
+            }
+
             var isPassed = false;
             var resultPercentage = (totalCorrectQuestions / testQuestionsCount) * 100;
             if (resultPercentage >= 80D)
@@ -127,6 +155,16 @@ namespace ITest.Services.Data
 
         public bool IsTestPassed(string testId, TestRequestViewModelDto submitedTest)
         {
+            if (string.IsNullOrEmpty(testId))
+            {
+                throw new ArgumentNullException("Test Id cannot be null!");
+            }
+
+            if (submitedTest == null)
+            {
+                throw new ArgumentNullException(nameof(submitedTest));
+            }
+
             var testWithQuestions = this.GetTestQuestionsWithAnswers(testId);
             var totalCorrectQuestions = 0;
 
@@ -162,6 +200,16 @@ namespace ITest.Services.Data
 
         public ManageTestDto GetTestByNameAndCategory(string name, string category)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("Name cannot be null!");
+            }
+
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new ArgumentNullException("Category cannot be null!");
+            }
+
             var test = this.testRepo.All
                 .Where(t => t.Name == name && t.Category.Name == category)
                 .Include(t => t.Category)
@@ -194,6 +242,16 @@ namespace ITest.Services.Data
 
         public bool PublishTest(string name, string category)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("Name cannot be null!");
+            }
+
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new ArgumentNullException("Category  cannot be null!");
+            }
+
             var test = this.testRepo.All
                 .Include(t => t.Category)
                 .Where(t => t.Name == name && t.Category.Name == category)
@@ -214,6 +272,16 @@ namespace ITest.Services.Data
 
         public bool DeleteTest(string name, string category)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("Name cannot be null!");
+            }
+
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new ArgumentNullException("Category cannot be null!");
+            }
+
             var test = this.testRepo.All
                 .Include(t => t.Category)
                 .Where(t => t.Name == name && t.Category.Name == category)

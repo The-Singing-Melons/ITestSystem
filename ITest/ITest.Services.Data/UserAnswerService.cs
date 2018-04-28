@@ -21,13 +21,23 @@ namespace ITest.Services.Data
         public UserAnswerService(IDataRepository<UserAnswer> userAnswerRepo,
             IDataSaver dataSaver, IMappingProvider mapper)
         {
-            this.userAnswerRepo = userAnswerRepo;
-            this.dataSaver = dataSaver;
-            this.mapper = mapper;
+            this.userAnswerRepo = userAnswerRepo ?? throw new ArgumentNullException(nameof(userAnswerRepo));
+            this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public void AddAnswersToUser(string userId, IList<QuestionResponseViewModelDto> questions)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("User Id cannot be null!");
+            }
+
+            if (questions == null)
+            {
+                throw new ArgumentNullException(nameof(questions));
+            }
+
             foreach (var answer in questions)
             {
                 var userAnswer = new UserAnswer
@@ -46,6 +56,16 @@ namespace ITest.Services.Data
 
         public IEnumerable<UserAnswerDto> GetAnswersForTestDoneByUser(string userId, string testId)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("Test Id cannot be null!");
+            }
+
+            if (string.IsNullOrEmpty(testId))
+            {
+                throw new ArgumentNullException("Test Id cannot be null!");
+            }
+
             var answers = this.userAnswerRepo.All
                 .Where(x => x.UserId == userId)
                 .AsNoTracking();

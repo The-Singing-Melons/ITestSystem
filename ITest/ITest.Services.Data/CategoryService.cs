@@ -19,9 +19,9 @@ namespace ITest.Services.Data
 
         public CategoryService(IDataRepository<Category> categoryRepo, IDataSaver dataSaver, IMappingProvider mapper)
         {
-            this.categoryRepo = categoryRepo;
-            this.dataSaver = dataSaver;
-            this.mapper = mapper;
+            this.categoryRepo = categoryRepo ?? throw new ArgumentNullException(nameof(categoryRepo));
+            this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public IList<CategoryDto> GetAllCategories()
