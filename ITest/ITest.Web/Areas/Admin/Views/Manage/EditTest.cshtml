@@ -70,6 +70,8 @@
                                             <div class="panel-body">
                                                 <div class="question-description">
                                                     <h3>Description</h3>
+
+                                                    <input type="hidden" id="@string.Format("Questions_{0}__BodyPlaintext", q)" name="Questions[@q].BodyPlaintext" value="" />
                                                     <textarea id="@string.Format("Questions_{0}__Body", q)" name="Questions[@q].Body" class="summernote form-control">@Model.Questions[q].Body</textarea>
                                                     <span asp-validation-for="Questions[q].Body" class="text-danger"></span>
                                                 </div>
@@ -79,21 +81,31 @@
                                                         for (int a = 0; a < Model.Questions[q].Answers.Count; a++)
                                                         {
                                                             <div id="question-@q-answer-@a" class="answer-container">
-                                                                <h3 class="form-inline">Answer @string.Format("{0}", a + 1)</h3>
-                                                                <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
-                                                                    <span class="glyphicon glyphicon-remove"></span>
-                                                                </button>
-                                                                <label class="btn btn-success pull-right">
-                                                                    @if (Model.Questions[q].Answers[a].IsCorrect)
-                                                                    {
-                                                                        <input id="@string.Format("Questions_{0}__Answers_{1}__IsCorrect", q, a)" name="radio-@q" class="answer-is-correct" type="radio" value="true" autocomplete="off" checked>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <input id="@string.Format("Questions_{0}__Answers_{1}__IsCorrect", q, a)" name="radio-@q" class="answer-is-correct" type="radio" value="true" autocomplete="off">
-                                                                    }
-                                                                    <span class="glyphicon glyphicon-ok"></span>
-                                                                </label>
+                                                                <div class="row answer-header">
+                                                                    <div class="col">
+                                                                        <h3>Answer @string.Format("{0}", a + 1)</h3>
+                                                                    </div>
+
+                                                                    <div class="col">
+                                                                        <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
+                                                                            <span class="glyphicon glyphicon-remove"></span>
+                                                                        </button>
+
+                                                                        <label class="btn btn-success pull-right">
+                                                                            @if (Model.Questions[q].Answers[a].IsCorrect)
+                                                                            {
+                                                                                <input id="@string.Format("Questions_{0}__Answers_{1}__IsCorrect", q, a)" name="radio-@q" class="answer-is-correct" type="radio" value="true" autocomplete="off" checked>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <input id="@string.Format("Questions_{0}__Answers_{1}__IsCorrect", q, a)" name="radio-@q" class="answer-is-correct" type="radio" value="true" autocomplete="off">
+                                                                            }
+                                                                            <span class="glyphicon glyphicon-ok"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <input type="hidden" id="@string.Format("Questions_{0}__Answers_{1}__ContentPlaintext", q, a)" name="Questions[@q].Answers[@a].ContentPlaintext" value="" />
                                                                 <textarea id="@string.Format("Questions_{0}__Answers_{1}__Content", q, a)" name="Questions[@q].Answers[@a].Content" class="answer-content summernote form-control">@Model.Questions[q].Answers[a].Content</textarea>
                                                                 <span asp-validation-for="Questions[q].Answers[a].Content" class="text-danger"></span>
                                                             </div>
