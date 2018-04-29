@@ -15,43 +15,73 @@
                 <div class="panel-body">
                     <div class="question-description">
                         <h3>Description</h3>
+
+                        <input type="hidden" id="Questions_{{q_id}}__BodyPlaintext" name="Questions[{{q_id}}].BodyPlaintext" value=""/>
                         <textarea id="Questions_{{q_id}}__Body" name="Questions[{{q_id}}].Body" class="summernote form-control" ></textarea>
                     </div>
                     <div class="answers-container">
                         
-                        <div id="question-{{q_id}}-answer-0" class="answer-container">
-                            <h3 class="form-inline">Answer 1</h3>
-                            <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </button>
-                            <label class="btn btn-success pull-right">
-                                <input id="Questions_{{q_id}}__Answers_0__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off" checked/>
-                                <span class="glyphicon glyphicon-ok"></span>
-                            </label>
+                        <div id="question-{{q_id}}-answer-0" class="answer-container">                            
+                            <div class="row answer-header">
+                                <div class="col">
+                                    <h3>Answer 1</h3>
+
+                                    <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+
+                                    <label class="btn btn-success pull-right">
+                                        <input id="Questions_{{q_id}}__Answers_0__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off" checked/>
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <input type="hidden" id="Questions_{{q_id}}__Answers_0__ContentPlaintext" name="Questions[{{q_id}}].Answers[0].ContentPlaintext" value=""/>
                             <textarea id="Questions_{{q_id}}__Answers_0__Content" name="Questions[{{q_id}}].Answers[0].Content" class="answer-content summernote form-control"></textarea>
                         </div>
 
                         <div id="question-{{q_id}}-answer-1" class="answer-container">
-                            <h3 class="form-inline">Answer 2</h3>
-                            <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </button>
-                            <label class="btn btn-success pull-right">
-                                <input id="Questions_{{q_id}}__Answers_1__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off"/>
-                                <span class="glyphicon glyphicon-ok"></span>
-                            </label>
+                            <div class="row answer-header">
+                                <div class="col">
+                                    <h3>Answer 2</h3>
+                                </div>
+
+                                <div class="col">
+                                    <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+
+                                    <label class="btn btn-success pull-right">
+                                        <input id="Questions_{{q_id}}__Answers_1__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off"/>
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <input type="hidden" id="Questions_{{q_id}}__Answers_1__ContentPlaintext" name="Questions[{{q_id}}].Answers[1].ContentPlaintext" value=""/>
                             <textarea id="Questions_{{q_id}}__Answers_1__Content" name="Questions[{{q_id}}].Answers[1].Content" class="answer-content summernote form-control"></textarea>
                         </div>
 
                         <div id="question-{{q_id}}-answer-2" class="answer-container">
-                            <h3 class="form-inline">Answer 3</h3>
-                            <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </button>
-                            <label class="btn btn-success pull-right">
-                                <input id="Questions_{{q_id}}__Answers_2__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off"/>
-                                <span class="glyphicon glyphicon-ok"></span>
-                            </label>
+                            <div class="row answer-header">
+                                <div class="col">
+                                    <h3>Answer 3</h3>
+                                </div>
+
+                                <div class="col">
+                                    <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+
+                                    <label class="btn btn-success pull-right">
+                                        <input id="Questions_{{q_id}}__Answers_2__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off"/>
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <input type="hidden" id="Questions_{{q_id}}__Answers_2__ContentPlaintext" name="Questions[{{q_id}}].Answers[2].ContentPlaintext" value=""/>
                             <texarea id="Questions_{{q_id}}__Answers_2__Content" name="Questions[{{q_id}}].Answers[2].Content" class="answer-content summernote form-control"></textarea>
                         </div>
 
@@ -65,14 +95,24 @@
 
     var answerFrame =
         `<div id="question-{{q_id}}-answer-{{a_id}}" class="answer-container">
-            <h3 class="form-inline">Answer {{a_number}}</h3>
-            <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
-                <span class="glyphicon glyphicon-remove"></span>
-            </button>
-            <label class="btn btn-success pull-right">
-                <input id="Questions_{{q_id}}__Answers_{{a_id}}__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off"/>
-                <span class="glyphicon glyphicon-ok"></span>
-            </label>
+            <div class="row answer-header">
+                <div class="col">
+                    <h3>Answer {{a_number}}</h3>
+                </div>
+
+                <div class="col">
+                    <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+
+                    <label class="btn btn-success pull-right">
+                        <input id="Questions_{{q_id}}__Answers_{{a_id}}__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off"/>
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </label>
+                </div>
+            </div>
+
+            <input type="hidden" id="Questions_{{q_id}}__Answers_{{a_id}}__ContentPlaintext" name="Questions[{{q_id}}].Answers[{{a_id}}].ContentPlaintext" value=""/>
             <textarea id="Questions_{{q_id}}__Answers_{{a_id}}__Content" name="Questions[{{q_id}}].Answers[{{a_id}}].Content" class="answer-content summernote form-control"></textarea>
         </div>`;
 
@@ -109,6 +149,7 @@
         disableResizeEditor: true
     };
 
+    //functions
     var initializeSummernote = function () {
         $('.summernote')
             .toArray()
@@ -146,6 +187,7 @@
             .click();
     }
 
+    //event listeners
     var collapseQuestionsClickEvent = $('#questions-container #collapse-questions').on('click', collapseQuestions);
 
     var addQuestionClickEvent = $('#questions-container #add-question').on('click', function () {
@@ -156,18 +198,19 @@
             .replace(/\{\{\q_id\}\}/g, newQuestionId)
             .replace(/\{\{\q_number\}\}/g, newQuestionId + 1);
 
+        var question = $(questionHtml);
+        question.find(`#Questions_${newQuestionId}__Body`).summernote(questionSummernoteConfig);
+        question.find(`.answer-content`).summernote(answerSummernoteConfig);
+        $('.note-statusbar').hide();
+
         if (newQuestionId === 0) {
             $('#questions-container #questions-body')
-                .html(questionHtml);
+                .html(question);
         }
         else {
             $('#questions-container #questions-body')
-                .append(questionHtml);
+                .append(question);
         }
-
-        $(`#Questions_${newQuestionId}__Body`).summernote(questionSummernoteConfig);
-        $(`#question-${newQuestionId} .answer-content`).summernote(answerSummernoteConfig);
-        $('.note-statusbar').hide();
 
         $(`#questions-container #questions-body #question-${newQuestionId} a`).click();
     });
@@ -226,25 +269,26 @@
             .replace(/\{\{\a_id\}\}/g, newAnswerNumber)
             .replace(/\{\{\a_number\}\}/g, newAnswerNumber + 1);
 
+        var answer = $(answerHtml);
+        answer.find(`#Questions_${questionId}__Answers_${newAnswerNumber}__Content`).summernote(answerSummernoteConfig);
+
         if (newAnswerNumber === 0) {
             $(`#question-${questionId} .answers-container`)
-                .html(answerHtml);
+                .html(answer);
         }
         else {
             $(`#question-${questionId} .answers-container`)
-                .append(answerHtml);
+                .append(answer);
         }
-
-        $(`#Questions_${questionId}__Answers_${newAnswerNumber}__Content`).summernote(answerSummernoteConfig);
 
         radioButtonClick(questionId);
     });
     var deleteAnswerClickEvent = $('#questions-container #questions-body').on('click', '.delete-answer', function () {
-        var params = this.parentNode.id.split('-');
+        var params = $(this).closest('.answer-container')[0].id.split('-');
         var questionId = parseInt(params[1]);
         var answerNumber = parseInt(params[3]);
 
-        $(this.parentNode).remove();
+        $(this).closest('.answer-container').remove();
 
         var nextAnswers = $(`#questions-body #question-${questionId} .answer-container`)
             .filter(function () {
@@ -280,6 +324,17 @@
                 var answerNumber = params[3];
 
                 $(rButton).attr('name', `Questions[${questionId}].Answers[${answerNumber}].IsCorrect`);
+            });
+
+        $('#questions-container .summernote')
+            .toArray()
+            .forEach(function (formatedTextarea) {
+                var plainText = $(formatedTextarea)
+                    .summernote('code')
+                    .replace(/<\/?[^>]+(>|$)/g, "");
+
+                $(formatedTextarea)
+                    .siblings('input').val(plainText);
             });
     });
 
