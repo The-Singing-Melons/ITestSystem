@@ -89,10 +89,22 @@ namespace ITest.Web.Areas.User.Controllers
                 throw new ArgumentNullException();
             }
 
-            var randomTest = this.testService.GetRandomTest(id);
-            var randomTestViewModel = this.mapper.MapTo<TestViewModel>(randomTest);
-
-            return Json(Url.Action("TakeTest/" + randomTestViewModel.Id));
+            try
+            {
+                var randomTest = this.testService.GetRandomTest(id);
+                var randomTestViewModel = this.mapper.MapTo<TestViewModel>(randomTest);
+                return Json(Url.Action("TakeTest/" + randomTestViewModel.Id));
+            }
+            catch (ArgumentNullException)
+            {
+                TempData["Error"] = "No such category name!";
+                return RedirectToAction("Index");
+            }
+            catch (ArgumentException)
+            {
+                TempData["NoTestInCategory"] = "No tests in this category!";
+                return RedirectToAction("Index");
+            }
         }
 
         public IActionResult TakeTest(string id)

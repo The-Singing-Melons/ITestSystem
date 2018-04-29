@@ -46,7 +46,7 @@ $(function () {
                 alert("1 minute left. When the time is up the test will be automatically submited!")
             }
             if (total === 0) {
-                $('#test-submit-btn').click();
+                $('#modal-submit-btn').click();
             }
         }
         );

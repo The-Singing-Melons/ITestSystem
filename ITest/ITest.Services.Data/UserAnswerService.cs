@@ -15,13 +15,15 @@ namespace ITest.Services.Data
     public class UserAnswerService : IUserAnswerService
     {
         private readonly IDataRepository<UserAnswer> userAnswerRepo;
+        private readonly IDataRepository<Answer> answerRepo;
         private readonly IDataSaver dataSaver;
         private readonly IMappingProvider mapper;
 
         public UserAnswerService(IDataRepository<UserAnswer> userAnswerRepo,
-            IDataSaver dataSaver, IMappingProvider mapper)
+            IDataSaver dataSaver, IMappingProvider mapper, IDataRepository<Answer> answerRepo)
         {
             this.userAnswerRepo = userAnswerRepo ?? throw new ArgumentNullException(nameof(userAnswerRepo));
+            this.answerRepo = answerRepo ?? throw new ArgumentNullException(nameof(answerRepo));
             this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
@@ -38,16 +40,28 @@ namespace ITest.Services.Data
                 throw new ArgumentNullException(nameof(questions));
             }
 
-            foreach (var answer in questions)
+            for (int i = 0; i < questions.Count; i++)
             {
+
+                // need to addo Test-question-answer seed..
+                // haha..
+                if (questions[i].Answers == null)
+                {
+                    var defaultAnswer = this.answerRepo.All
+                        .Where(a => a.Content == "No question selected")
+                        .FirstOrDefault();
+                    questions[i].Answers = defaultAnswer.Id.ToString();
+                }
+
                 var userAnswer = new UserAnswer
                 {
-                    AnswerId = Guid.Parse(answer.Answers),
+                    AnswerId = Guid.Parse(questions[i].Answers),
                     UserId = userId,
                     IsDeleted = false
                 };
 
                 this.userAnswerRepo.Add(userAnswer);
+
             }
 
             this.dataSaver.SaveChanges();
@@ -78,6 +92,9 @@ namespace ITest.Services.Data
             // the data here is null and below the DTO is fully populated 
             // with every property..?? How..
 
+            // if its a Querably(i.e the query is not materialized with ToList())
+            // and you call Where with the check nested 
+            // it will automatically make the joins until it reaches its target
             var answersForTest = answers
                 .Where(ua => ua.Answer.Question.Test.Id.ToString() == testId);
 

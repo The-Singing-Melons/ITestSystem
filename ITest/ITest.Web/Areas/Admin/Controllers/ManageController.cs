@@ -126,7 +126,8 @@ namespace ITest.Web.Areas.Admin.Controllers
 
             var testViewModel = this.mapper.MapTo<ManageTestViewModel>(testDto);
             testViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames()
-                                                                             .ToList();
+
+                .ToList();
 
             return this.View(testViewModel);
         }

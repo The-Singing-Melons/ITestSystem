@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "Take Test";
 }
-
-<div class="timer" id="timer-id" style="height:150px" data-timer="@(Model.TimeRemaining)"></div>
+@*data-timer="@(Model.TimeRemaining)*@
+<div class="timer" id="timer-id" style="height:150px" data-timer="10"></div>
 <div class="p-3 mb-2 bg-danger text-white" id="warning-text"> Warning: If you refresh or leave the page your test will be automatically submited!</div>
 <form asp-area="User" asp-controller="Home" asp-action="TakeTest" method="post">
 
@@ -23,7 +23,7 @@
                value="@Model.Questions[i].Id"
                type="hidden" />
         <br />
-        <div class="well well-sm">@(nameCounter + 1) @Html.DisplayFor(x => Model.Questions[i].Body)</div>
+        <div class="well well-sm">@(nameCounter + 1) @Html.Raw(Model.Questions[i].Body)</div>
         <div id="timer"></div>
 
         @for (int j = 0; j < Model.Questions[i].Answers.Count; j++)
@@ -35,7 +35,7 @@
                     <input asp-for="@Model.Questions[i].Answers" type="radio"
                            value="@answer.Id" id="@answer.Id">
                     <label for="@answer.Id">
-                        @answer.Content
+                        @Html.Raw(answer.Content);
                     </label>
                     @*<input asp-for="@Model.Questions[i].Answers[j].Id"
                            value="@Model.Questions[i].Answers[j].Id" type="hidden" />
@@ -68,7 +68,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
-                    <button type="submit" class="btn btn-primary">Yes</button>
+                    <button type="submit" id="modal-submit-btn" class="btn btn-primary">Yes</button>
                 </div>
             </div>
         </div>
