@@ -45,6 +45,8 @@ $(function () {
             if (total === 60) {
                 alert("1 minute left. When the time is up the test will be automatically submited!")
             }
+            // If time is 0 - when the submit btn is clicked the modal pops up and ask 
+            // for confirmation - fix..
             if (total === 0) {
                 $('#test-submit-btn').click();
             }
