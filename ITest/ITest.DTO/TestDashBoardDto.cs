@@ -7,5 +7,7 @@
         public string CategoryName { get; set; }
 
         public bool IsPublished { get; set; }
+
+        public bool IsDisabled { get; set; }
     }
 }
