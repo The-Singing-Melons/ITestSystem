@@ -106,8 +106,9 @@ namespace ITest.Services.Data
             var testsTakenByUser = this.userTestRepo.All
                         .Where(x => x.UserId.ToString() == userId)
                         .Include(t => t.Test)
-                        .ThenInclude(t => t.Category)
-                        .ToList();
+                        .ThenInclude(t => t.Category);
+
+            var userTestDtos = this.mapper.ProjectTo<UserTestDto>(testsTakenByUser);
 
             return testsTakenByUser;
         }
@@ -145,8 +146,8 @@ namespace ITest.Services.Data
 
 
             var currentTest = this.userTestRepo.All
-              .Where(x => x.UserId == userId && x.TestId.ToString() == testId)
-              .FirstOrDefault();
+                .Where(x => x.UserId == userId && x.TestId.ToString() == testId)
+                .FirstOrDefault();
 
             currentTest.IsPassed = isPassed;
             currentTest.IsSubmited = true;

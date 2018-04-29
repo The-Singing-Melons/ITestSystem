@@ -1,4 +1,19 @@
-﻿body {
+﻿/* navbar */
+.logo {
+    position: relative;
+    background: url(../images/endava_log.png) no-repeat 6px center;
+    width: 200px;
+    height: 50px;
+    left: 15px;
+    background-size: contain;
+}
+
+.navbar navbar-default navbar-fixed-top {
+    background-color: #FF7F50;
+    border-color: #E7E7E7;
+}
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -38,8 +53,6 @@ hr.dashboard-breaker {
 .input-group-addon.beautiful input[type="radio"] {
     display: none;
 }
-
-@import('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css') .funkyradio div
 
 {
     clear: both;

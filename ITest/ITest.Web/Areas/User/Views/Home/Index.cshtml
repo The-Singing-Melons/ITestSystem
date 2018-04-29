@@ -5,10 +5,9 @@
 }
 
 <h1> Dashboard </h1>
+<p>@TempData["NoTestInCategory"]</p>
 <hr class="dashboard-breaker">
 <br>
-<h2>    Welcome User! Lorem Ipsum...</h2>
-
 <div class="container index">
     <div class="row">
         <div class="col-md-6">
@@ -18,8 +17,8 @@
                         @{ var x = 0; }
                         @foreach (var c in Model)
                         {
-                            //var className = c.Name == "JAVA" ? "active" : "";
 
+                            // the first loaded class must be selected..
                             <li class="">
                                 <a href="#tab@(x++)default"
                                    id="#category-tab"

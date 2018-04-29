@@ -85,7 +85,11 @@ namespace ITest.Services.Data
                             t.IsPublished)
                 .ToList();
 
-            // To-do: Add a try-catch block if there is no test in the category
+            if (allTestsFromCategory.Count == 0)
+            {
+                throw new ArgumentException("No created Test in this Category");
+            }
+
             int r = random.Next(allTestsFromCategory.Count);
             var randomTest = allTestsFromCategory[r];
 
