@@ -4,7 +4,7 @@ using ITest.Models;
 
 namespace Itest.Data.Models
 {
-    public class UserAnswer : IDeletable
+    public class UserAnswer : DataModel
     {
         public ApplicationUser User { get; set; }
         public string UserId { get; set; }
@@ -12,7 +12,5 @@ namespace Itest.Data.Models
         public Answer Answer { get; set; }
         public Guid AnswerId { get; set; }
 
-        public bool IsDeleted { get; set; }
-        public DateTime? DeletedOn { get; set; }
     }
 }

@@ -80,12 +80,12 @@ namespace ITest.Web.Controllers
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
+                    return View(nameof(AccountController.Authorize), model);
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return View(nameof(AccountController.Authorize), model);
         }
 
         [HttpGet]
@@ -204,7 +204,7 @@ namespace ITest.Web.Controllers
         {
             return View();
         }
-        
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -231,7 +231,7 @@ namespace ITest.Web.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return View(nameof(AccountController.Authorize), model);
         }
 
         [HttpPost]

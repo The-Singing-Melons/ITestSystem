@@ -240,7 +240,7 @@ namespace ITest.Services.Data
             this.dataSaver.SaveChanges();
         }
 
-        public bool PublishTest(string name, string category)
+        public void PublishTest(string name, string category)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -257,20 +257,16 @@ namespace ITest.Services.Data
                 .Where(t => t.Name == name && t.Category.Name == category)
                 .FirstOrDefault();
 
-            if (test.IsPublished)
+            if (!test.IsPublished)
             {
-                return true;
+                test.IsPublished = true;
+
+                this.testRepo.Update(test);
+                this.dataSaver.SaveChanges();
             }
-
-            test.IsPublished = true;
-
-            this.testRepo.Update(test);
-            this.dataSaver.SaveChanges();
-
-            return true;
         }
 
-        public bool DeleteTest(string name, string category)
+        public void DeleteTest(string name, string category)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -287,17 +283,39 @@ namespace ITest.Services.Data
                 .Where(t => t.Name == name && t.Category.Name == category)
                 .FirstOrDefault();
 
-            if (test.IsDeleted)
+            if (!test.IsDeleted)
             {
-                return true;
+                test.IsDeleted = true;
+
+                this.testRepo.Delete(test);
+                this.dataSaver.SaveChanges();
+            }
+        }
+
+        public void DisableTest(string name, string category)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("Name cannot be null!");
             }
 
-            test.IsDeleted = true;
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new ArgumentNullException("Category cannot be null!");
+            }
 
-            this.testRepo.Delete(test);
-            this.dataSaver.SaveChanges();
+            var test = this.testRepo.All
+                .Include(t => t.Category)
+                .Where(t => t.Name == name && t.Category.Name == category)
+                .FirstOrDefault();
 
-            return true;
+            if (test.IsPublished)
+            {
+                test.IsPublished = false;
+
+                this.testRepo.Update(test);
+                this.dataSaver.SaveChanges();
+            }
         }
     }
 }

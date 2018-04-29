@@ -82,7 +82,7 @@
                             </div>
 
                             <input type="hidden" id="Questions_{{q_id}}__Answers_2__ContentPlaintext" name="Questions[{{q_id}}].Answers[2].ContentPlaintext" value=""/>
-                            <texarea id="Questions_{{q_id}}__Answers_2__Content" name="Questions[{{q_id}}].Answers[2].Content" class="answer-content summernote form-control"></textarea>
+                            <textarea id="Questions_{{q_id}}__Answers_2__Content" name="Questions[{{q_id}}].Answers[2].Content" class="answer-content summernote form-control"></textarea>
                         </div>
 
                     </div>
@@ -127,7 +127,6 @@
         </div>`;
 
     var questionSummernoteConfig = {
-        placeholder: 'Add your description here...',
         height: 200,
         toolbar: [
             ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -135,7 +134,9 @@
             ['fontsize', ['fontsize']],
             ['para', ['ul', 'ol', 'paragraph']]
         ],
-        disableResizeEditor: true
+        disableResizeEditor: true,
+        disableDragAndDrop: true,
+        placeholder: 'Add your description here...'
     };
 
     var answerSummernoteConfig = {
@@ -146,7 +147,8 @@
             ['fontsize', ['fontsize']],
             ['para', ['ul', 'ol', 'paragraph']]
         ],
-        disableResizeEditor: true
+        disableResizeEditor: true,
+        disableDragAndDrop: true
     };
 
     //functions

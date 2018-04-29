@@ -165,17 +165,16 @@ namespace ITest.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult PublishTest(string testName, string categoryName)
         {
             if (string.IsNullOrEmpty(testName))
             {
-                return this.View();
+                return this.Json(new JsonResult(new { isPublished = false }));
             }
 
             if (string.IsNullOrEmpty(categoryName))
             {
-                return this.View();
+                return this.Json(new JsonResult(new { isPublished = false }));
             }
 
             //validate rights
@@ -186,10 +185,10 @@ namespace ITest.Web.Areas.Admin.Controllers
             }
             catch (Exception)
             {
-                return this.Json(false);
+                return this.Json(new JsonResult(new { isPublished = false }));
             }
 
-            return this.Json(true);
+            return this.Json(new JsonResult(new { isPublished = true }));
         }
 
         [HttpPost]
@@ -198,12 +197,12 @@ namespace ITest.Web.Areas.Admin.Controllers
         {
             if (string.IsNullOrEmpty(testName))
             {
-                return this.View();
+                return this.Json(false);
             }
 
             if (string.IsNullOrEmpty(categoryName))
             {
-                return this.View();
+                return this.Json(false);
             }
 
             //validate rights
@@ -219,6 +218,31 @@ namespace ITest.Web.Areas.Admin.Controllers
 
 
             return this.Json(true);
+        }
+
+        [HttpPost]
+        public IActionResult DisableTest(string testName, string categoryName)
+        {
+            if (string.IsNullOrEmpty(testName))
+            {
+                return this.Json(new JsonResult(new { isDisabled = false }));
+            }
+
+            if (categoryName == null)
+            {
+                return this.Json(new JsonResult(new { isDisabled = false }));
+            }
+
+            try
+            {
+                this.testService.DisableTest(testName, categoryName);
+            }
+            catch (Exception)
+            {
+                return this.Json(new JsonResult(new { isDisabled = false }));
+            }
+
+            return this.Json(new JsonResult(new { isDisabled = true }));
         }
     }
 }

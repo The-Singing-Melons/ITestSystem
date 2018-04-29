@@ -1,4 +1,6 @@
 ﻿$(function () {
+    $('.panel-heading ul li a').first().click();
+
     $('.test-start-btn').on('click', function (event) {
         event.preventDefault();
 

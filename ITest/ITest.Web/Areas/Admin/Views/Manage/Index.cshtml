@@ -36,7 +36,7 @@
                                             <td>@test.TestName</td>
                                             <td>@test.CategoryName</td>
 
-                                            @if (test.IsPublished)
+                                            @if (test.IsPublished && !test.IsDisabled)
                                             {
                                                 <td class="is-published">Publlished</td>
                                                 <td class="text-center">
@@ -75,25 +75,41 @@
                                                         </button>
                                                     </form>
 
-                                                    <form asp-area="Admin" asp-controller="Manage" asp-action="EditTest" method="get">
-                                                        <input id="testName" name="testName" type="hidden" value="@test.TestName" />
-                                                        <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
-
-                                                        <button type="submit" class='btn btn-warning btn-xs'>
+                                                    @if (test.IsDisabled)
+                                                    {
+                                                        <a class='btn btn-warning btn-xs disabled'>
                                                             <span class="glyphicon glyphicon-edit"></span>
                                                             Edit
-                                                        </button>
-                                                    </form>
+                                                        </a>
 
-                                                    <form asp-area="Admin" asp-controller="Manage" asp-action="DeleteTest" method="post" class="delete-test">
-                                                        <input id="testName" name="testName" type="hidden" value="@test.TestName" />
-                                                        <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
-
-                                                        <button type="submit" class="btn btn-danger btn-xs">
+                                                        <a class='btn btn-danger btn-xs disabled'>
                                                             <span class="glyphicon glyphicon-remove"></span>
-                                                            Delete
-                                                        </button>
-                                                    </form>
+                                                            Disabled
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <form asp-area="Admin" asp-controller="Manage" asp-action="EditTest" method="get">
+                                                            <input id="testName" name="testName" type="hidden" value="@test.TestName" />
+                                                            <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
+
+                                                            <button type="submit" class='btn btn-warning btn-xs'>
+                                                                <span class="glyphicon glyphicon-edit"></span>
+                                                                Edit
+                                                            </button>
+                                                        </form>
+
+                                                        <form asp-area="Admin" asp-controller="Manage" asp-action="DeleteTest" method="post" class="delete-test">
+                                                            <input id="testName" name="testName" type="hidden" value="@test.TestName" />
+                                                            <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
+
+                                                            <button type="submit" class="btn btn-danger btn-xs">
+                                                                <span class="glyphicon glyphicon-remove"></span>
+                                                                Delete
+                                                            </button>
+                                                        </form>
+                                                    }
+
                                                 </td>
                                             }
                                         </tr>

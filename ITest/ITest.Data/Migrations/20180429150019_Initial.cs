@@ -57,8 +57,10 @@ namespace ITest.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -179,10 +181,12 @@ namespace ITest.Data.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false),
                     CreatedByUserId = table.Column<string>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Duration = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     IsPublished = table.Column<bool>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -208,8 +212,10 @@ namespace ITest.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Body = table.Column<string>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     TestId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -229,16 +235,20 @@ namespace ITest.Data.Migrations
                 {
                     UserId = table.Column<string>(nullable: false),
                     TestId = table.Column<Guid>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
-                    ExecutionTime = table.Column<float>(nullable: false),
+                    ExecutionTime = table.Column<double>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     IsPassed = table.Column<bool>(nullable: true),
                     IsSubmited = table.Column<bool>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     StartedOn = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserTests", x => new { x.UserId, x.TestId });
+                    table.UniqueConstraint("AK_UserTests_Id", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserTests_Tests_TestId",
                         column: x => x.TestId,
@@ -259,9 +269,11 @@ namespace ITest.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Content = table.Column<string>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     IsCorrect = table.Column<bool>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     QuestionId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -271,6 +283,36 @@ namespace ITest.Data.Migrations
                         name: "FK_Answers_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserAnswers",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(nullable: false),
+                    AnswerId = table.Column<Guid>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserAnswers", x => new { x.UserId, x.AnswerId });
+                    table.UniqueConstraint("AK_UserAnswers_Id", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserAnswers_Answers_AnswerId",
+                        column: x => x.AnswerId,
+                        principalTable: "Answers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserAnswers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -335,6 +377,11 @@ namespace ITest.Data.Migrations
                 column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserAnswers_AnswerId",
+                table: "UserAnswers",
+                column: "AnswerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserTests_TestId",
                 table: "UserTests",
                 column: "TestId");
@@ -342,9 +389,6 @@ namespace ITest.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Answers");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -361,13 +405,19 @@ namespace ITest.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "UserAnswers");
+
+            migrationBuilder.DropTable(
                 name: "UserTests");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "Answers");
+
+            migrationBuilder.DropTable(
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Tests");

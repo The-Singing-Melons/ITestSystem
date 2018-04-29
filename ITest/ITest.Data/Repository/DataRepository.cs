@@ -7,7 +7,7 @@ using System.Linq;
 namespace ITest.Data.Repository
 {
     public class DataRepository<T> : IDataRepository<T>
-        where T : class, IDeletable
+        where T : class, IDeletable, IEditable
     {
         private readonly ITestDbContext context;
 
@@ -34,6 +34,8 @@ namespace ITest.Data.Repository
 
         public void Add(T entity)
         {
+            entity.CreatedOn = DateTime.Now;
+
             EntityEntry entry = this.context.Entry(entity);
 
             if (entry.State != EntityState.Detached)
@@ -57,6 +59,8 @@ namespace ITest.Data.Repository
 
         public void Update(T entity)
         {
+            entity.ModifiedOn = DateTime.Now;
+
             EntityEntry entry = this.context.Entry(entity);
             if (entry.State == EntityState.Detached)
             {

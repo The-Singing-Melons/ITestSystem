@@ -17,7 +17,6 @@ namespace Itest.Data.Models
         public Guid QuestionId { get; set; }
         public string Content { get; set; }
         public bool IsCorrect { get; set; }
-        public ApplicationUser User { get; set; }
         public ICollection<UserAnswer> UserAnswers { get; set; }
 
     }

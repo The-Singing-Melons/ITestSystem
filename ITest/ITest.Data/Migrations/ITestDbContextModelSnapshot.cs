@@ -27,21 +27,21 @@ namespace ITest.Data.Migrations
 
                     b.Property<string>("Content");
 
+                    b.Property<DateTime?>("CreatedOn");
+
                     b.Property<DateTime?>("DeletedOn");
 
                     b.Property<bool>("IsCorrect");
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<Guid>("QuestionId");
+                    b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<string>("UserId");
+                    b.Property<Guid>("QuestionId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Answers");
                 });
@@ -51,9 +51,13 @@ namespace ITest.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime?>("CreatedOn");
+
                     b.Property<DateTime?>("DeletedOn");
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("Name");
 
@@ -69,9 +73,13 @@ namespace ITest.Data.Migrations
 
                     b.Property<string>("Body");
 
+                    b.Property<DateTime?>("CreatedOn");
+
                     b.Property<DateTime?>("DeletedOn");
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<Guid>("TestId");
 
@@ -91,6 +99,8 @@ namespace ITest.Data.Migrations
 
                     b.Property<string>("CreatedByUserId");
 
+                    b.Property<DateTime?>("CreatedOn");
+
                     b.Property<DateTime?>("DeletedOn");
 
                     b.Property<int>("Duration");
@@ -98,6 +108,8 @@ namespace ITest.Data.Migrations
                     b.Property<bool>("IsDeleted");
 
                     b.Property<bool>("IsPublished");
+
+                    b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("Name");
 
@@ -116,11 +128,19 @@ namespace ITest.Data.Migrations
 
                     b.Property<Guid>("AnswerId");
 
+                    b.Property<DateTime?>("CreatedOn");
+
                     b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<Guid>("Id");
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<DateTime?>("ModifiedOn");
+
                     b.HasKey("UserId", "AnswerId");
+
+                    b.HasAlternateKey("Id");
 
                     b.HasIndex("AnswerId");
 
@@ -133,9 +153,13 @@ namespace ITest.Data.Migrations
 
                     b.Property<Guid>("TestId");
 
+                    b.Property<DateTime?>("CreatedOn");
+
                     b.Property<DateTime?>("DeletedOn");
 
                     b.Property<double>("ExecutionTime");
+
+                    b.Property<Guid>("Id");
 
                     b.Property<bool>("IsDeleted");
 
@@ -143,9 +167,13 @@ namespace ITest.Data.Migrations
 
                     b.Property<bool?>("IsSubmited");
 
+                    b.Property<DateTime?>("ModifiedOn");
+
                     b.Property<DateTime>("StartedOn");
 
                     b.HasKey("UserId", "TestId");
+
+                    b.HasAlternateKey("Id");
 
                     b.HasIndex("TestId");
 
@@ -325,10 +353,6 @@ namespace ITest.Data.Migrations
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ITest.Models.ApplicationUser", "User")
-                        .WithMany("Answers")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Itest.Data.Models.Question", b =>
