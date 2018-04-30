@@ -62,6 +62,7 @@ namespace ITest.Web.Areas.User.Controllers
                 }
             }
 
+            // add cache here
             var allCategories = this.categoryService.GetAllCategories();
             var categoriesViewModel = this.mapper
                 .EnumerableProjectTo<CategoryDto, CategoryViewModel>(allCategories)
