@@ -93,17 +93,17 @@ namespace ITest.Web.Areas.User.Controllers
             {
                 var randomTest = this.testService.GetRandomTest(id);
                 var randomTestViewModel = this.mapper.MapTo<TestViewModel>(randomTest);
-                return Json(Url.Action("TakeTest/" + randomTestViewModel.Id));
+                return Json(new { IsSuccessful = true, url = Url.Action("TakeTest/" + randomTestViewModel.Id) });
             }
             catch (ArgumentNullException)
             {
                 TempData["Error"] = "No such category name!";
-                return RedirectToAction("Index");
+                return Json(new { IsSuccessful = false });
             }
             catch (ArgumentException)
             {
                 TempData["NoTestInCategory"] = "No tests in this category!";
-                return RedirectToAction("Index");
+                return Json(new { IsSuccessful = false });
             }
         }
 

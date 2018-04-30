@@ -10,13 +10,13 @@ namespace ITest.Web.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string LoginEmail { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string LoginPassword { get; set; }
 
         [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
+        public bool LoginRememberMe { get; set; }
     }
 }

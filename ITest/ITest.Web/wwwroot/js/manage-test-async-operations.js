@@ -16,8 +16,8 @@
                     <div class="question-description">
                         <h3>Description</h3>
 
-                        <input type="hidden" id="Questions_{{q_id}}__BodyPlaintext" name="Questions[{{q_id}}].BodyPlaintext" value=""/>
-                        <textarea id="Questions_{{q_id}}__Body" name="Questions[{{q_id}}].Body" class="summernote form-control" ></textarea>
+                        <input type="hidden" id="Questions_{{q_id}}__BodyPlaintext" name="Questions[{{q_id}}].BodyPlaintext" class="question-body-plaintext" value=""/>
+                        <textarea id="Questions_{{q_id}}__Body" name="Questions[{{q_id}}].Body" class="question-body summernote form-control" ></textarea>
                     </div>
                     <div class="answers-container">
                         
@@ -37,7 +37,7 @@
                                 </div>
                             </div>
 
-                            <input type="hidden" id="Questions_{{q_id}}__Answers_0__ContentPlaintext" name="Questions[{{q_id}}].Answers[0].ContentPlaintext" value=""/>
+                            <input type="hidden" id="Questions_{{q_id}}__Answers_0__ContentPlaintext" name="Questions[{{q_id}}].Answers[0].ContentPlaintext" class="answer-plaintext" value=""/>
                             <textarea id="Questions_{{q_id}}__Answers_0__Content" name="Questions[{{q_id}}].Answers[0].Content" class="answer-content summernote form-control"></textarea>
                         </div>
 
@@ -59,7 +59,7 @@
                                 </div>
                             </div>
 
-                            <input type="hidden" id="Questions_{{q_id}}__Answers_1__ContentPlaintext" name="Questions[{{q_id}}].Answers[1].ContentPlaintext" value=""/>
+                            <input type="hidden" id="Questions_{{q_id}}__Answers_1__ContentPlaintext" name="Questions[{{q_id}}].Answers[1].ContentPlaintext" class="answer-plaintext" value=""/>
                             <textarea id="Questions_{{q_id}}__Answers_1__Content" name="Questions[{{q_id}}].Answers[1].Content" class="answer-content summernote form-control"></textarea>
                         </div>
 
@@ -81,7 +81,7 @@
                                 </div>
                             </div>
 
-                            <input type="hidden" id="Questions_{{q_id}}__Answers_2__ContentPlaintext" name="Questions[{{q_id}}].Answers[2].ContentPlaintext" value=""/>
+                            <input type="hidden" id="Questions_{{q_id}}__Answers_2__ContentPlaintext" name="Questions[{{q_id}}].Answers[2].ContentPlaintext" class="answer-plaintext" value=""/>
                             <textarea id="Questions_{{q_id}}__Answers_2__Content" name="Questions[{{q_id}}].Answers[2].Content" class="answer-content summernote form-control"></textarea>
                         </div>
 
@@ -112,7 +112,7 @@
                 </div>
             </div>
 
-            <input type="hidden" id="Questions_{{q_id}}__Answers_{{a_id}}__ContentPlaintext" name="Questions[{{q_id}}].Answers[{{a_id}}].ContentPlaintext" value=""/>
+            <input type="hidden" id="Questions_{{q_id}}__Answers_{{a_id}}__ContentPlaintext" name="Questions[{{q_id}}].Answers[{{a_id}}].ContentPlaintext" class="answer-plaintext" value=""/>
             <textarea id="Questions_{{q_id}}__Answers_{{a_id}}__Content" name="Questions[{{q_id}}].Answers[{{a_id}}].Content" class="answer-content summernote form-control"></textarea>
         </div>`;
 
@@ -240,8 +240,11 @@
                 nextQuestion.find('a').attr('href', `#collapse-${newQuestionId}`);
                 nextQuestion.find('h4').text(`Question ${newQuestionId + 1}`);
                 nextQuestion.find('.panel-collapse').attr('id', `collapse-${newQuestionId}`);
-                nextQuestion.find('.question-description input').attr('id', `Questions_${newQuestionId}__Body`);
-                nextQuestion.find('.question-description input').attr('name', `Questions[${newQuestionId}].Body`);
+                nextQuestion.find('.question-description .question-body').attr('id', `Questions_${newQuestionId}__Body`);
+                nextQuestion.find('.question-description .question-body').attr('name', `Questions[${newQuestionId}].Body`);
+
+                nextQuestion.find('.question-description .question-body-plaintext').attr('id', `Questions_${newQuestionId}__BodyPlaintext`);
+                nextQuestion.find('.question-description .question-body-plaintext').attr('name', `Questions[${newQuestionId}].BodyPlaintext`);
 
                 nextQuestion.find('.add-answer').attr('name', `collapse-${newQuestionId}`);
 
@@ -253,14 +256,18 @@
 
                     nextQuestionAnswer.attr('id', `question-${questionId}-answer-${answerId}`)
 
-                    nextQuestionAnswer.find('.answer-is-correct').attr('id', `Questions_${newQuestionId}__Answers_${answerId}__Content`);
+                    nextQuestionAnswer.find('.answer-is-correct').attr('id', `Questions_${newQuestionId}__Answers_${answerId}__IsCorrect`);
 
                     nextQuestionAnswer.find('.answer-content').attr('id', `Questions_${newQuestionId}__Answers_${answerId}__Content`);
                     nextQuestionAnswer.find('.answer-content').attr('name', `Questions[${newQuestionId}].Answers[${answerId}].Content`);
+
+                    nextQuestionAnswer.find('.answer-plaintext').attr('id', `Questions_${questionId}__Answers_${answerId}__ContentPlaintext`);
+                    nextQuestionAnswer.find('.answer-plaintext').attr('name', `Questions[${questionId}].Answers[${answerId}].ContentPlaintext`);
                 });
             });
         }
     });
+
 
     var addAnswerClickEvent = $('#questions-container #questions-body').on('click', '.add-answer', function () {
         var questionId = this.name.split('-')[1];
@@ -309,8 +316,12 @@
                 var nextAnswer = $(answer);
                 nextAnswer.attr('id', `question-${questionId}-answer-${newAnswerNumber}`);
                 nextAnswer.find('h3').text(`Answer ${newAnswerNumber + 1}`);
+
                 nextAnswer.find('.answer-content').attr('id', `Questions_${questionId}__Answers_${newAnswerNumber}__Content`);
                 nextAnswer.find('.answer-content').attr('name', `Questions[${questionId}].Answers[${newAnswerNumber}].Content`);
+
+                nextAnswer.find('.answer-plaintext').attr('id', `Questions_${questionId}__Answers_${newAnswerNumber}__ContentPlaintext`);
+                nextAnswer.find('.answer-plaintext').attr('name', `Questions[${questionId}].Answers[${newAnswerNumber}].ContentPlaintext`);
             });
 
             radioButtonClick(questionId);

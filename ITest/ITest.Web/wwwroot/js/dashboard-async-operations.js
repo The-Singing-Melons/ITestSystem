@@ -59,7 +59,7 @@
             url: url,
             data: data,
             headers: { 'X-CSRF-TOKEN': token },
-            success: function (response) {
+            success: function (response, status, headers) {
                 //token = response.value.token;
 
                 if (response.value.isPublished === true) {
@@ -130,7 +130,7 @@
             url: url,
             data: data,
             headers: { 'X-CSRF-TOKEN': token },
-            success: function (response) {
+            success: function (response, status, headers) {
                 //token = response.value.token;
 
                 if (response.value.isDisabled === true) {

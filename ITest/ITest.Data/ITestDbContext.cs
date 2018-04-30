@@ -2,6 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using ITest.Models;
 using Itest.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System;
+using System.Linq;
 
 namespace ITest.Data
 {
@@ -10,8 +15,8 @@ namespace ITest.Data
         public ITestDbContext(DbContextOptions<ITestDbContext> options)
             : base(options)
         {
+            this.Seed().Wait();
         }
-
 
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -77,6 +82,49 @@ namespace ITest.Data
                 .HasOne(a => a.Question)
                 .WithMany(q => q.Answers)
                 .HasForeignKey(a => a.QuestionId);
+        }
+
+        public async Task Seed()
+        {
+            this.Database.EnsureCreated();
+
+            if (!this.Roles.Any(r => r.Name == "Administrator"))
+            {
+                var adminRole = new IdentityRole("Administrator");
+                this.Roles.Add(adminRole);
+            }
+
+            if (!this.Categories.Any())
+            {
+                var categoriesToAdd = new List<Category>()
+            {
+                new Category()
+                {
+                    Name = "Java"
+                },
+
+                new Category()
+                {
+                    Name = ".NET"
+                },
+
+                new Category()
+                {
+                    Name = "Javascript"
+                },
+
+                new Category()
+                {
+                    Name = "SQL"
+                }
+            };
+
+                categoriesToAdd
+                    .ForEach(c => this.Categories.Add(c));
+
+            }
+
+            await this.SaveChangesAsync();
         }
     }
 }

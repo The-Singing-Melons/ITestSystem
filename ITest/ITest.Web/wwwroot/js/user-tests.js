@@ -12,7 +12,13 @@
             type: "GET",
             url: url,
             success: function (data) {
-                window.location.href = data;
+                if (data.isSuccessful) {
+                    window.location.href = data.url;
+                }
+                else {
+                    alert('Currently there are no Tests for this Category');
+                }
+
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr);

@@ -166,6 +166,7 @@ namespace ITest.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult PublishTest(string testName, string categoryName)
         {
             if (string.IsNullOrEmpty(testName))
@@ -222,6 +223,7 @@ namespace ITest.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult DisableTest(string testName, string categoryName)
         {
             if (string.IsNullOrEmpty(testName))

@@ -71,8 +71,8 @@
                                                 <div class="question-description">
                                                     <h3>Description</h3>
 
-                                                    <input type="hidden" id="@string.Format("Questions_{0}__BodyPlaintext", q)" name="Questions[@q].BodyPlaintext" value="" />
-                                                    <textarea id="@string.Format("Questions_{0}__Body", q)" name="Questions[@q].Body" class="summernote form-control">@Model.Questions[q].Body</textarea>
+                                                    <input type="hidden" id="@string.Format("Questions_{0}__BodyPlaintext", q)" name="Questions[@q].BodyPlaintext" class="question-body-plaintext" value="" />
+                                                    <textarea id="@string.Format("Questions_{0}__Body", q)" name="Questions[@q].Body" class="question-body summernote form-control">@Model.Questions[q].Body</textarea>
                                                     <span asp-validation-for="Questions[q].Body" class="text-danger"></span>
                                                 </div>
                                                 <div class="answers-container">
@@ -105,7 +105,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <input type="hidden" id="@string.Format("Questions_{0}__Answers_{1}__ContentPlaintext", q, a)" name="Questions[@q].Answers[@a].ContentPlaintext" value="" />
+                                                                <input type="hidden" id="@string.Format("Questions_{0}__Answers_{1}__ContentPlaintext", q, a)" name="Questions[@q].Answers[@a].ContentPlaintext" class="answer-plaintext" value="" />
                                                                 <textarea id="@string.Format("Questions_{0}__Answers_{1}__Content", q, a)" name="Questions[@q].Answers[@a].Content" class="answer-content summernote form-control">@Model.Questions[q].Answers[a].Content</textarea>
                                                                 <span asp-validation-for="Questions[q].Answers[a].Content" class="text-danger"></span>
                                                             </div>
