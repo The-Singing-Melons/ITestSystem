@@ -11,7 +11,7 @@ using System;
 namespace ITest.Data.Migrations
 {
     [DbContext(typeof(ITestDbContext))]
-    [Migration("20180429150019_Initial")]
+    [Migration("20180501091603_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,9 +26,10 @@ namespace ITest.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .IsRequired();
 
-                    b.Property<DateTime?>("CreatedOn");
+                    b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -52,7 +53,7 @@ namespace ITest.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime?>("CreatedOn");
+                    b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -60,9 +61,13 @@ namespace ITest.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Categories");
                 });
@@ -72,9 +77,10 @@ namespace ITest.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Body");
+                    b.Property<string>("Body")
+                        .IsRequired();
 
-                    b.Property<DateTime?>("CreatedOn");
+                    b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -98,9 +104,10 @@ namespace ITest.Data.Migrations
 
                     b.Property<Guid>("CategoryId");
 
-                    b.Property<string>("CreatedByUserId");
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired();
 
-                    b.Property<DateTime?>("CreatedOn");
+                    b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -108,17 +115,23 @@ namespace ITest.Data.Migrations
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<bool>("IsDisabled");
+
                     b.Property<bool>("IsPublished");
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Tests");
                 });
@@ -129,19 +142,15 @@ namespace ITest.Data.Migrations
 
                     b.Property<Guid>("AnswerId");
 
-                    b.Property<DateTime?>("CreatedOn");
+                    b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<Guid>("Id");
 
                     b.Property<bool>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.HasKey("UserId", "AnswerId");
-
-                    b.HasAlternateKey("Id");
 
                     b.HasIndex("AnswerId");
 
@@ -154,13 +163,11 @@ namespace ITest.Data.Migrations
 
                     b.Property<Guid>("TestId");
 
-                    b.Property<DateTime?>("CreatedOn");
+                    b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
                     b.Property<double>("ExecutionTime");
-
-                    b.Property<Guid>("Id");
 
                     b.Property<bool>("IsDeleted");
 
@@ -173,8 +180,6 @@ namespace ITest.Data.Migrations
                     b.Property<DateTime>("StartedOn");
 
                     b.HasKey("UserId", "TestId");
-
-                    b.HasAlternateKey("Id");
 
                     b.HasIndex("TestId");
 
@@ -191,7 +196,7 @@ namespace ITest.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<DateTime?>("CreatedOn");
+                    b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
@@ -373,7 +378,8 @@ namespace ITest.Data.Migrations
 
                     b.HasOne("ITest.Models.ApplicationUser", "CreatedByUser")
                         .WithMany("Tests")
-                        .HasForeignKey("CreatedByUserId");
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Itest.Data.Models.UserAnswer", b =>
@@ -386,7 +392,7 @@ namespace ITest.Data.Migrations
                     b.HasOne("ITest.Models.ApplicationUser", "User")
                         .WithMany("UserAnswers")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Itest.Data.Models.UserTest", b =>
@@ -399,7 +405,7 @@ namespace ITest.Data.Migrations
                     b.HasOne("ITest.Models.ApplicationUser", "User")
                         .WithMany("UserTests")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

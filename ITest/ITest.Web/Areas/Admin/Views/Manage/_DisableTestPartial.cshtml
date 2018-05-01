@@ -1,0 +1,21 @@
+﻿@model DisableTestViewModel
+
+<form asp-area="Admin" asp-controller="Manage" asp-action="PublishTest" method="post" class="publish-test">
+    <input id="testName" name="testName" type="hidden" value="@Model.TestName" />
+    <input id="categoryName" name="categoryName" type="hidden" value="@Model.CategoryName" />
+
+    <button type="submit" class="btn btn-success btn-xs">
+        <span class="glyphicon glyphicon-ok"></span>
+        Publish
+    </button>
+</form>
+
+<a class='btn btn-warning btn-xs disabled'>
+    <span class="glyphicon glyphicon-edit"></span>
+    Edit
+</a>
+
+<a class='btn btn-danger btn-xs disabled'>
+    <span class="glyphicon glyphicon-remove"></span>
+    Delete
+</a>

@@ -45,14 +45,13 @@ namespace ITest.Web.Properties
             //From Test to Dto
             this.CreateMap<Test, TestDashBoardDto>()
                 .ForMember(t => t.CategoryName, o => o.MapFrom(t => t.Category.Name))
-                .ForMember(t => t.TestName, o => o.MapFrom(t => t.Name))
-                .ForMember(t => t.IsDisabled, o => o.MapFrom(t => !t.IsPublished && t.ModifiedOn != null));
+                .ForMember(t => t.TestName, o => o.MapFrom(t => t.Name));
 
             //From Dto to ViewModel
             this.CreateMap<TestDashBoardDto, CreatedTestViewModel>(MemberList.Destination);
 
 
-            this.CreateMap<TestDto, Areas.User.Models.TestViewModel>()
+            this.CreateMap<TestDto, TestViewModel>()
                 .ForMember(t => t.Name, o => o.MapFrom(x => x.Name))
                 .ForMember(t => t.CategoryName, o => o.MapFrom(x => x.Category.Name))
                 //.ForMember(t => t.Id, o => o.MapFrom(x => x.Id))

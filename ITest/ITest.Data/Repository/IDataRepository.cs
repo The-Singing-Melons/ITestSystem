@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ITest.Data.Repository
 {
-    public interface IDataRepository<T> where T : class, IDeletable
+    public interface IDataRepository<T> where T : class, IEditable, IDeletable
     {
         IQueryable<T> All { get; }
         IQueryable<T> AllAndDeleted { get; }

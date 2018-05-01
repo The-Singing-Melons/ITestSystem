@@ -264,6 +264,7 @@ namespace ITest.Services.Data
             if (!test.IsPublished)
             {
                 test.IsPublished = true;
+                test.IsDisabled = false;
 
                 this.testRepo.Update(test);
                 this.dataSaver.SaveChanges();
@@ -316,6 +317,7 @@ namespace ITest.Services.Data
             if (test.IsPublished)
             {
                 test.IsPublished = false;
+                test.IsDisabled = true;
 
                 this.testRepo.Update(test);
                 this.dataSaver.SaveChanges();

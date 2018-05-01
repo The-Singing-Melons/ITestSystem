@@ -167,14 +167,9 @@ namespace ITest.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult PublishTest(string testName, string categoryName)
+        public IActionResult PublishTest(PublishTestViewModel model)
         {
-            if (string.IsNullOrEmpty(testName))
-            {
-                return this.Json(new JsonResult(new { isPublished = false }));
-            }
-
-            if (string.IsNullOrEmpty(categoryName))
+            if (model == null)
             {
                 return this.Json(new JsonResult(new { isPublished = false }));
             }
@@ -183,7 +178,7 @@ namespace ITest.Web.Areas.Admin.Controllers
 
             try
             {
-                this.testService.PublishTest(testName, categoryName);
+                this.testService.PublishTest(model.TestName, model.CategoryName);
             }
             catch (Exception)
             {
@@ -224,21 +219,16 @@ namespace ITest.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DisableTest(string testName, string categoryName)
+        public IActionResult DisableTest(DisableTestViewModel model)
         {
-            if (string.IsNullOrEmpty(testName))
-            {
-                return this.Json(new JsonResult(new { isDisabled = false }));
-            }
-
-            if (categoryName == null)
+            if (model == null)
             {
                 return this.Json(new JsonResult(new { isDisabled = false }));
             }
 
             try
             {
-                this.testService.DisableTest(testName, categoryName);
+                this.testService.DisableTest(model.TestName, model.CategoryName);
             }
             catch (Exception)
             {
@@ -246,6 +236,26 @@ namespace ITest.Web.Areas.Admin.Controllers
             }
 
             return this.Json(new JsonResult(new { isDisabled = true }));
+        }
+
+        [HttpGet]
+        public IActionResult GetPublishedTestPartial(string testName, string categoryName)
+        {
+            return this.PartialView("_PublishTestPartial", new PublishTestViewModel()
+            {
+                TestName = testName,
+                CategoryName = categoryName
+            });
+        }
+
+        [HttpGet]
+        public IActionResult GetDisabledTestPartial(string testName, string categoryName)
+        {
+            return this.PartialView("_DisableTestPartial", new DisableTestViewModel()
+            {
+                TestName = testName,
+                CategoryName = categoryName
+            });
         }
     }
 }

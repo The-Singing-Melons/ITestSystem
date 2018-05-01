@@ -14,6 +14,8 @@ namespace ITest.DTO
 
         public bool IsPublished { get; set; }
 
+        public bool IsDisabled { get; set; }
+
         public string CreatedByUserId { get; set; }
 
         public ICollection<ManageQuestionDto> Questions { get; set; }

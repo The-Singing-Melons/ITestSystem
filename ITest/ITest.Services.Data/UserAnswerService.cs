@@ -81,24 +81,17 @@ namespace ITest.Services.Data
             }
 
             var answers = this.userAnswerRepo.All
-                .Where(x => x.UserId == userId)
-                .AsNoTracking();
-            // if no .Include all the related data is loaded( ie Eager loading)
-            // ASK!!
-            //.Include(ua => ua.Answer);
-            //.ThenInclude(a => a.Question)
-            //.ThenInclude(q => q.Test);
+                .Where(x => x.UserId == userId);
 
-            // the data here is null and below the DTO is fully populated 
-            // with every property..?? How..
-
-            // if its a Querably(i.e the query is not materialized with ToList())
-            // and you call Where with the check nested 
-            // it will automatically make the joins until it reaches its target
             var answersForTest = answers
                 .Where(ua => ua.Answer.Question.Test.Id.ToString() == testId);
 
             var answersForTestDto = this.mapper.ProjectTo<UserAnswerDto>(answersForTest);
+
+            if (answersForTestDto.Count() == 0)
+            {
+                throw new ArgumentException("No Answers!");
+            }
 
             return answersForTestDto;
         }

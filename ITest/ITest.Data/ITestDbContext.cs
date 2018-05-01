@@ -27,13 +27,12 @@ namespace ITest.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
-
             // Users-To-Answers
             builder.Entity<UserAnswer>()
                 .HasOne(ut => ut.User)
                 .WithMany(u => u.UserAnswers)
-                .HasForeignKey(ua => ua.UserId);
+                .HasForeignKey(ua => ua.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<UserAnswer>()
                 .HasOne(ut => ut.Answer)
@@ -42,6 +41,7 @@ namespace ITest.Data
 
             builder.Entity<UserAnswer>()
                 .HasKey(ua => new { ua.UserId, ua.AnswerId });
+
 
             // Users-To-Tests
             builder.Entity<UserTest>()
@@ -52,11 +52,12 @@ namespace ITest.Data
             builder.Entity<UserTest>()
                 .HasOne(t => t.User)
                 .WithMany(t => t.UserTests)
-                .HasForeignKey(ut => ut.UserId);
+                .HasForeignKey(ut => ut.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // Composite key
             builder.Entity<UserTest>()
                 .HasKey(ut => new { ut.UserId, ut.TestId });
+
 
             // Test-To-Users
             builder.Entity<Test>()
@@ -71,6 +72,10 @@ namespace ITest.Data
                 .WithMany(c => c.Tests)
                 .HasForeignKey(t => t.CategoryId);
 
+            builder.Entity<Test>()
+                .HasIndex(t => t.Name)
+                .IsUnique(true);
+
             // Test-To-Questions
             builder.Entity<Question>()
                 .HasOne(q => q.Test)
@@ -82,9 +87,17 @@ namespace ITest.Data
                 .HasOne(a => a.Question)
                 .WithMany(q => q.Answers)
                 .HasForeignKey(a => a.QuestionId);
+
+
+            builder.Entity<Category>()
+                .HasIndex(c => c.Name)
+                .IsUnique(true);
+
+
+            base.OnModelCreating(builder);
         }
 
-        public async Task Seed()
+        private async Task Seed()
         {
             this.Database.EnsureCreated();
 

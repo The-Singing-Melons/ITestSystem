@@ -1,47 +1,4 @@
 ﻿$(function () {
-    var publishedTestActionsFrame =
-        `<a class='btn btn-success btn-xs disabled'>
-            <span class="glyphicon glyphicon-ok"></span>
-            Published
-        </a>
-        <a class='btn btn-warning btn-xs disabled'>
-            <span class="glyphicon glyphicon-edit"></span>
-            Edit
-        </a>
-
-        <form action="/Admin/Manage/DisableTest" method="post" class="disable-test">
-            <input id="testName" name="testName" type="hidden" value="{{e_name}}" />
-            <input id="categoryName" name="categoryName" type="hidden" value="{{a_name}}" />
-
-            <button type="submit" class="btn btn-danger btn-xs">
-                <span class="glyphicon glyphicon-ban-circle"></span>
-                Disable
-            </button>
-        </form>`
-
-    var disabledTestActionsFrame =
-        `<form action="/Admin/Manage/PublishTest" method="post" class="publish-test">
-            <input id="testName" name="testName" type="hidden" value="{{e_name}}" />
-            <input id="categoryName" name="categoryName" type="hidden" value="{{a_name}}" />
-
-            <button type="submit" class="btn btn-success btn-xs">
-                <span class="glyphicon glyphicon-ok"></span>
-                Publish
-            </button>
-        </form>
-
-        <a class='btn btn-warning btn-xs disabled'>
-            <span class="glyphicon glyphicon-edit"></span>
-            Edit
-        </a>
-
-        <a class='btn btn-danger btn-xs disabled'>
-            <span class="glyphicon glyphicon-remove"></span>
-            Delete
-        </a>`;
-
-    var token = '';
-
     var publishTestSubmitEvent = $('.created-tests-table').on('submit', '.publish-test', function (event) {
         event.preventDefault();
 
@@ -58,18 +15,23 @@
             type: 'POST',
             url: url,
             data: data,
-            headers: { 'X-CSRF-TOKEN': token },
-            success: function (response, status, headers) {
-                //token = response.value.token;
-
+            success: function (response) {
                 if (response.value.isPublished === true) {
-                    isPublishedCol.text('Published');
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Admin/Manage/GetPublishedTestPartial',
+                        data: data,
+                        success: function (partial) {
+                            isPublishedCol.text('Published');
+                            actionsCol.html(partial);
+                        },
 
-                    var actionsHtml = publishedTestActionsFrame
-                        .replace(/\{\{\e_name\}\}/g, testName)
-                        .replace(/\{\{\a_name\}\}/g, categoryName);
-
-                    actionsCol.html(actionsHtml);
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr);
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    });
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -129,20 +91,26 @@
             type: 'POST',
             url: url,
             data: data,
-            headers: { 'X-CSRF-TOKEN': token },
             success: function (response, status, headers) {
-                //token = response.value.token;
-
                 if (response.value.isDisabled === true) {
-                    isPublishedCol.text('Draft');
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Admin/Manage/GetDisabledTestPartial',
+                        data: data,
+                        success: function (partial) {
+                            isPublishedCol.text('Draft');
+                            actionsCol.html(partial);
+                        },
 
-                    var actionsHtml = disabledTestActionsFrame
-                        .replace(/\{\{\e_name\}\}/g, testName)
-                        .replace(/\{\{\a_name\}\}/g, categoryName);
-
-                    actionsCol.html(actionsHtml);
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr);
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    });
                 }
             },
+
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr);
                 alert(xhr.status);

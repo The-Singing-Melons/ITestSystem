@@ -32,7 +32,6 @@
 
                                     <label class="btn btn-success pull-right">
                                         <input id="Questions_{{q_id}}__Answers_0__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off" checked/>
-                                        <span class="glyphicon glyphicon-ok"></span>
                                     </label>
                                 </div>
                             </div>
@@ -54,7 +53,6 @@
 
                                     <label class="btn btn-success pull-right">
                                         <input id="Questions_{{q_id}}__Answers_1__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off"/>
-                                        <span class="glyphicon glyphicon-ok"></span>
                                     </label>
                                 </div>
                             </div>
@@ -76,7 +74,6 @@
 
                                     <label class="btn btn-success pull-right">
                                         <input id="Questions_{{q_id}}__Answers_2__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off"/>
-                                        <span class="glyphicon glyphicon-ok"></span>
                                     </label>
                                 </div>
                             </div>
@@ -107,7 +104,6 @@
 
                     <label class="btn btn-success pull-right">
                         <input id="Questions_{{q_id}}__Answers_{{a_id}}__IsCorrect" name="radio-{{q_id}}" class="answer-is-correct" type="radio" value="true" autocomplete="off"/>
-                        <span class="glyphicon glyphicon-ok"></span>
                     </label>
                 </div>
             </div>

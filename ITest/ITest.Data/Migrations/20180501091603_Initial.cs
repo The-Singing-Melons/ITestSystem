@@ -30,7 +30,7 @@ namespace ITest.Data.Migrations
                     Id = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
@@ -57,11 +57,11 @@ namespace ITest.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,14 +180,15 @@ namespace ITest.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false),
-                    CreatedByUserId = table.Column<string>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    CreatedByUserId = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Duration = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    IsDisabled = table.Column<bool>(nullable: false),
                     IsPublished = table.Column<bool>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -203,7 +204,7 @@ namespace ITest.Data.Migrations
                         column: x => x.CreatedByUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,8 +212,8 @@ namespace ITest.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Body = table.Column<string>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    Body = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
@@ -235,10 +236,9 @@ namespace ITest.Data.Migrations
                 {
                     UserId = table.Column<string>(nullable: false),
                     TestId = table.Column<Guid>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     ExecutionTime = table.Column<double>(nullable: false),
-                    Id = table.Column<Guid>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     IsPassed = table.Column<bool>(nullable: true),
                     IsSubmited = table.Column<bool>(nullable: true),
@@ -248,7 +248,6 @@ namespace ITest.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserTests", x => new { x.UserId, x.TestId });
-                    table.UniqueConstraint("AK_UserTests_Id", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserTests_Tests_TestId",
                         column: x => x.TestId,
@@ -260,7 +259,7 @@ namespace ITest.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -268,8 +267,8 @@ namespace ITest.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Content = table.Column<string>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    Content = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     IsCorrect = table.Column<bool>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
@@ -293,16 +292,14 @@ namespace ITest.Data.Migrations
                 {
                     UserId = table.Column<string>(nullable: false),
                     AnswerId = table.Column<Guid>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
-                    Id = table.Column<Guid>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserAnswers", x => new { x.UserId, x.AnswerId });
-                    table.UniqueConstraint("AK_UserAnswers_Id", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserAnswers_Answers_AnswerId",
                         column: x => x.AnswerId,
@@ -314,7 +311,7 @@ namespace ITest.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -362,6 +359,12 @@ namespace ITest.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categories_Name",
+                table: "Categories",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Questions_TestId",
                 table: "Questions",
                 column: "TestId");
@@ -375,6 +378,12 @@ namespace ITest.Data.Migrations
                 name: "IX_Tests_CreatedByUserId",
                 table: "Tests",
                 column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tests_Name",
+                table: "Tests",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserAnswers_AnswerId",

@@ -7,7 +7,7 @@ using System.Linq;
 namespace ITest.Data.Repository
 {
     public class DataRepository<T> : IDataRepository<T>
-        where T : class, IDeletable, IEditable
+        where T : class, IEditable, IDeletable
     {
         private readonly ITestDbContext context;
 
