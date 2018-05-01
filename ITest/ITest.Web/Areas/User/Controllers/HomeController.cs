@@ -158,8 +158,7 @@ namespace ITest.Web.Areas.User.Controllers
             {
                 var userId = this.userManager.GetUserId(this.HttpContext.User);
                 var testId = takeTestRequestViewModel.Id;
-                var submitedTest = this.mapper.MapTo<TestRequestViewModelDto>
-                    (takeTestRequestViewModel);
+                var submitedTest = this.mapper.MapTo<TestRequestViewModelDto>(takeTestRequestViewModel);
 
 
                 this.answerService.AddAnswersToUser(userId, submitedTest.Questions);

@@ -56,14 +56,41 @@ namespace ITest.Web.Areas.Admin.Controllers
 
         public IActionResult TestScore(string userId, string testId)
         {
-            var answersForTestDto = this.userAnswerService
-                                       .GetAnswersForTestDoneByUser(userId, testId);
+            try
+            {
+                var answersForTestDto = this.userAnswerService
+                            .GetAnswersForTestDoneByUser(userId, testId);
 
-            var answersForTestViewModel = this.mapper
-                .EnumerableProjectTo<UserAnswerDto, TestScoreUserAnswerViewModel>
-                (answersForTestDto);
+                //var answersForTestViewModel = this.mapper
+                //    .MapTo<TestScoreUserAnswerViewModel>
+                //    (answersForTestDto);
 
-            return View(answersForTestViewModel);
+                var answersForTestViewModel = new TestScoreUserAnswerViewModel()
+                {
+                    AnswerForTestViewModels = new List<TestScoreAnswerForTestViewModel>(),
+                    UserDetailsViewModel = new TestScoreUserDetailsViewModel()
+                    {
+                        TestCategory =
+                     }
+                }
+
+                return View(answersForTestViewModel);
+            }
+            catch (ArgumentException ex)
+            {
+                var user = this.userManager.Users
+                    .Where(x => x.Id == userId).FirstOrDefault();
+                var test = this.testService.GetTestById(testId);
+
+                var testScoreNoAnswers = new TestScoreUserAnswerViewModel();
+                testScoreNoAnswers.UserDetailsViewModel.UserName = user.UserName;
+                testScoreNoAnswers.UserDetailsViewModel.TestName = test.Name;
+                testScoreNoAnswers.UserDetailsViewModel.TestCategory = test.Category.Name;
+
+                return View(testScoreNoAnswers);
+            }
+
+
         }
 
         [HttpGet]

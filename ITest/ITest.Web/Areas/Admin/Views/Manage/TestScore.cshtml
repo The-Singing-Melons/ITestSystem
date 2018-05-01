@@ -1,38 +1,54 @@
-﻿@model IEnumerable<TestScoreUserAnswerViewModel>
+﻿@model TestScoreUserAnswerViewModel
 @{
     ViewData["Title"] = "Test Score";
+
+    var counter = 1;
+    var UserAnswer = Model.AnswerForTestViewModels.All(x => x.Id == null);
 }
-@{ var UserAnswer = Model.FirstOrDefault();}
 
-<div class="container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Test Category</th>
-                <th>Test Name</th>
-                <th>User Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>@UserAnswer.TestCategory</td>
-                <td>@UserAnswer.TestName</td>
-                <td>@UserAnswer.UserName</td>
-        </tbody>
-    </table>
-</div>
-
-@{var counter = 1; }
-@foreach (var testScore in Model)
+@if (UserAnswer)
 {
-    <div class="well well">
-        <h5 class="text-primary">Question @(counter):</h5>
-        <h4 class="text-info"> @Html.Raw(testScore.QuestionContent)</h4>
+    <div>
+        <h1>
+            User @Model.UserDetailsViewModel.UserName has not submitted any answers
+            to @Model.UserDetailsViewModel.TestName from @Model.UserDetailsViewModel.TestCategory category!
+        </h1>
     </div>
-    <div class="well well-sm">
-        <h5 class="text-primary">Answer:</h5>
-        <h4 class="text-info">@Html.Raw(testScore.AnswerContent)</h4>
+
+}
+else
+{
+
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Test Category</th>
+                    <th>Test Name</th>
+                    <th>User Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.UserDetailsViewModel.TestCategory</td>
+                    <td>@Model.UserDetailsViewModel.TestName</td>
+                    <td>@Model.UserDetailsViewModel.UserName</td>
+            </tbody>
+        </table>
     </div>
-    <br>
-    counter++;
+
+    @foreach (var testScore in Model.AnswerForTestViewModels)
+    {
+        <div class="well well">
+            <h5 class="text-primary">Question @(counter):</h5>
+            <h4 class="text-info"> @Html.Raw(testScore.QuestionContent)</h4>
+        </div>
+        <div class="well well-sm">
+            <h5 class="text-primary">Answer:</h5>
+            <h4 class="text-info">@Html.Raw(testScore.AnswerContent)</h4>
+        </div>
+        <br>
+        counter++;
+    }
+
 }

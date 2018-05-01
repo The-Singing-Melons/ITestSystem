@@ -43,14 +43,30 @@ namespace ITest.Services.Data
             for (int i = 0; i < questions.Count; i++)
             {
 
-                // need to addo Test-question-answer seed..
-                // haha..
                 if (questions[i].Answers == null)
                 {
-                    var defaultAnswer = this.answerRepo.All
-                        .Where(a => a.Content == "No question selected")
-                        .FirstOrDefault();
-                    questions[i].Answers = defaultAnswer.Id.ToString();
+                    continue;
+
+                    //var defaultAnswerContent = "No question selected";
+                    //var defaultAnswer = this.answerRepo.All
+                    //    .Where(a => a.Content == defaultAnswerContent)
+                    //    .FirstOrDefault();
+
+                    //if (defaultAnswer == null)
+                    //{
+                    //    defaultAnswer = new Answer()
+                    //    {
+                    //        IsDeleted = false,
+                    //        Content = defaultAnswerContent,
+                    //        QuestionId = Guid.Parse(questions[i].Id)
+                    //    };
+
+                    //    this.answerRepo.Add(defaultAnswer);
+
+                    //    this.dataSaver.SaveChanges();
+                    //}
+
+                    //questions[i].Answers = defaultAnswer.Id.ToString();
                 }
 
                 var userAnswer = new UserAnswer
@@ -81,17 +97,20 @@ namespace ITest.Services.Data
             }
 
             var answers = this.userAnswerRepo.All
-                .Where(x => x.UserId == userId);
+                .Where(x => x.UserId == userId)
+                 .Include(ua => ua.Answer)
+                    .ThenInclude(a => a.Question)
+                        .ThenInclude(q => q.Test);
+
+            if (answers.Count() == 0)
+            {
+                throw new ArgumentException("No Answers!");
+            }
 
             var answersForTest = answers
                 .Where(ua => ua.Answer.Question.Test.Id.ToString() == testId);
 
             var answersForTestDto = this.mapper.ProjectTo<UserAnswerDto>(answersForTest);
-
-            if (answersForTestDto.Count() == 0)
-            {
-                throw new ArgumentException("No Answers!");
-            }
 
             return answersForTestDto;
         }

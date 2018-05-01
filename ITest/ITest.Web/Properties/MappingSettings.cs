@@ -107,17 +107,21 @@ namespace ITest.Web.Properties
             this.CreateMap<UserAnswer, UserAnswerDto>(MemberList.Source)
                 .ReverseMap();
 
-            this.CreateMap<UserAnswerDto, TestScoreUserAnswerViewModel>()
-                .ForMember(vm => vm.UserName, o => o.MapFrom(dto =>
+            this.CreateMap<UserAnswerDto, TestScoreUserAnswerViewModel>(
+                MemberList.Destination)
+                .ForPath(vm => vm.UserDetailsViewModel.UserName, o => o.MapFrom(dto =>
                     dto.User.UserName))
-                .ForMember(vm => vm.AnswerContent, o => o.MapFrom(dto =>
+                .ForPath(vm => vm.UserDetailsViewModel.TestName, o => o.MapFrom(dto =>
+                    dto.Answer.Question.Test.Name))
+                .ForPath(vm => vm.UserDetailsViewModel.TestCategory, o => o.MapFrom(dto =>
+                    dto.Answer.Question.Test.Category.Name));
+
+            this.CreateMap<UserAnswerDto, TestScoreAnswerForTestViewModel>
+                (MemberList.Destination)
+                 .ForMember(vm => vm.AnswerContent, o => o.MapFrom(dto =>
                     dto.Answer.Content))
                 .ForMember(vm => vm.QuestionContent, o => o.MapFrom(dto =>
-                    dto.Answer.Question.Body))
-                .ForMember(vm => vm.TestName, o => o.MapFrom(dto =>
-                    dto.Answer.Question.Test.Name))
-                .ForMember(vm => vm.TestCategory, o => o.MapFrom(dto =>
-                    dto.Answer.Question.Test.Category.Name));
+                    dto.Answer.Question.Body));
         }
     }
 }

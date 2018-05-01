@@ -60,6 +60,7 @@ namespace ITest.Services.Data
 
             var test = testRepo.All
                 .Where(t => t.Id.ToString() == testId)
+                .Include(t => t.Category)
                 .FirstOrDefault();
 
             if (test == null)
