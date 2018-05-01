@@ -19,16 +19,20 @@ namespace ITest.Services.Data
     {
         private readonly IDataRepository<ApplicationUser> userRepo;
         private readonly IDataRepository<Test> testRepo;
+        private readonly IDataRepository<Question> questionRepo;
+        private readonly IDataRepository<Answer> answerRepo;
         private readonly IDataRepository<Category> categoryRepo;
         private readonly IDataSaver dataSaver;
         private readonly IMappingProvider mapper;
 
         public TestService(IDataRepository<ApplicationUser> userRepo,
-            IDataRepository<Test> testRepo, IDataSaver dataSaver,
+            IDataRepository<Test> testRepo, IDataRepository<Question> questionRepo, IDataRepository<Answer> answerRepo, IDataSaver dataSaver,
             IMappingProvider mapper, IDataRepository<Category> categoryRepo)
         {
             this.userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
             this.testRepo = testRepo ?? throw new ArgumentNullException(nameof(testRepo));
+            this.questionRepo = questionRepo ?? throw new ArgumentNullException(nameof(questionRepo));
+            this.answerRepo = answerRepo ?? throw new ArgumentNullException(nameof(answerRepo));
             this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.categoryRepo = categoryRepo ?? throw new ArgumentNullException(nameof(categoryRepo));
@@ -287,13 +291,27 @@ namespace ITest.Services.Data
             var test = this.testRepo.All
                 .Include(t => t.Category)
                 .Where(t => t.Name == name && t.Category.Name == category)
+                .Include(t => t.Questions)
+                .ThenInclude(q => q.Answers)
                 .FirstOrDefault();
 
             if (!test.IsDeleted)
             {
                 test.IsDeleted = true;
-
                 this.testRepo.Delete(test);
+
+                foreach (var question in test.Questions)
+                {
+                    question.IsDeleted = true;
+                    this.questionRepo.Delete(question);
+
+                    foreach (var answer in question.Answers)
+                    {
+                        answer.IsDeleted = true;
+                        this.answerRepo.Delete(answer);
+                    }
+                }
+
                 this.dataSaver.SaveChanges();
             }
         }

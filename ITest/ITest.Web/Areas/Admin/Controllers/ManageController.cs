@@ -61,22 +61,23 @@ namespace ITest.Web.Areas.Admin.Controllers
                 var answersForTestDto = this.userAnswerService
                             .GetAnswersForTestDoneByUser(userId, testId);
 
-                //var answersForTestViewModel = this.mapper
-                //    .MapTo<TestScoreUserAnswerViewModel>
-                //    (answersForTestDto);
+                var answersForTestViewModel = this.mapper
+                    .EnumerableProjectTo<UserAnswerDto, TestScoreAnswerForTestViewModel>
+                    (answersForTestDto);
 
-                var answersForTestViewModel = new TestScoreUserAnswerViewModel()
+                var userDetailsViewModel = this.mapper
+                    .MapTo<TestScoreUserDetailsViewModel>
+                    (answersForTestDto.First());
+
+                var testScoreViewModel = new TestScoreUserAnswerViewModel()
                 {
-                    AnswerForTestViewModels = new List<TestScoreAnswerForTestViewModel>(),
-                    UserDetailsViewModel = new TestScoreUserDetailsViewModel()
-                    {
-                        TestCategory =
-                     }
-                }
+                    AnswerForTestViewModels = answersForTestViewModel,
+                    UserDetailsViewModel = userDetailsViewModel
+                };
 
-                return View(answersForTestViewModel);
+                return View(testScoreViewModel);
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 var user = this.userManager.Users
                     .Where(x => x.Id == userId).FirstOrDefault();
