@@ -24,10 +24,13 @@ namespace ITest.Services.Data
         private readonly IDataRepository<Category> categoryRepo;
         private readonly IDataSaver dataSaver;
         private readonly IMappingProvider mapper;
+        private readonly IRandomProvider random;
+        private readonly IShuffleProvider shuffler;
 
         public TestService(IDataRepository<ApplicationUser> userRepo,
             IDataRepository<Test> testRepo, IDataRepository<Question> questionRepo, IDataRepository<Answer> answerRepo, IDataSaver dataSaver,
-            IMappingProvider mapper, IDataRepository<Category> categoryRepo)
+            IMappingProvider mapper, IDataRepository<Category> categoryRepo,
+            IRandomProvider random, IShuffleProvider shuffler)
         {
             this.userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
             this.testRepo = testRepo ?? throw new ArgumentNullException(nameof(testRepo));
@@ -36,6 +39,8 @@ namespace ITest.Services.Data
             this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             this.categoryRepo = categoryRepo ?? throw new ArgumentNullException(nameof(categoryRepo));
+            this.random = random;
+            this.shuffler = shuffler ?? throw new ArgumentNullException(nameof(shuffler));
         }
 
         public IEnumerable<TestDto> GetUserTests(string id)
@@ -84,7 +89,6 @@ namespace ITest.Services.Data
                 throw new ArgumentNullException("Category name cannot be null!");
             }
 
-            var random = new Random();
             var allTestsFromCategory = testRepo.All
                 .Where(t => t.Category.Name == categoryName &&
                             t.IsPublished)
@@ -95,7 +99,7 @@ namespace ITest.Services.Data
                 throw new ArgumentException("No created Test in this Category");
             }
 
-            int r = random.Next(allTestsFromCategory.Count);
+            int r = this.random.Next(allTestsFromCategory.Count);
             var randomTest = allTestsFromCategory[r];
 
             var randomTestDto = this.mapper.MapTo<TestDto>(randomTest);
@@ -119,7 +123,30 @@ namespace ITest.Services.Data
 
             var testWithQuestionsAndAnswersDto = this.mapper.MapTo<TestDto>(testWithQuestionsAndAnswers);
 
+            var shuffledQuestions = this.ShuffleQuestions(testWithQuestionsAndAnswersDto.Questions);
+            testWithQuestionsAndAnswersDto.Questions = shuffledQuestions;
+
+            for (int i = 0; i < testWithQuestionsAndAnswersDto.Questions.Count(); i++)
+            {
+                var shuffledAnswers = this
+                    .shuffler.Shuffle<AnswerDto>(testWithQuestionsAndAnswersDto.Questions[i].Answers);
+
+                testWithQuestionsAndAnswersDto.Questions[i].Answers = shuffledAnswers;
+            }
+
             return testWithQuestionsAndAnswersDto;
+        }
+
+        private IList<QuestionDto> ShuffleQuestions(IList<QuestionDto> questions)
+        {
+            var shuffledQuestions = this.shuffler.Shuffle<QuestionDto>(questions);
+            return shuffledQuestions;
+        }
+
+        private IList<AnswerDto> ShuffleAnswers(IList<AnswerDto> answers)
+        {
+            var shuffledAnswers = this.shuffler.Shuffle<AnswerDto>(answers);
+            return shuffledAnswers;
         }
 
         public void CreateTest(ManageTestDto testDto)
@@ -179,8 +206,11 @@ namespace ITest.Services.Data
 
             for (int i = 0; i < testWithQuestions.Questions.Count; i++)
             {
-                var correctAnswer = testWithQuestions
-                    .Questions[i].Answers
+                var submitedQuestionId = submitedTest.Questions[i].Id;
+                var matchingQuestion = testWithQuestions.Questions
+                        .FirstOrDefault(q => q.Id == submitedQuestionId);
+
+                var correctAnswer = matchingQuestion.Answers
                     .Where(x => x.IsCorrect == true)
                     .FirstOrDefault();
 

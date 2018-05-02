@@ -102,13 +102,14 @@ namespace ITest.Services.Data
                     .ThenInclude(a => a.Question)
                         .ThenInclude(q => q.Test);
 
-            if (answers.Count() == 0)
+            var answersForTest = answers
+                .Where(ua => ua.Answer.Question.Test.Id.ToString() == testId);
+
+
+            if (answersForTest.Count() == 0)
             {
                 throw new ArgumentException("No Answers!");
             }
-
-            var answersForTest = answers
-                .Where(ua => ua.Answer.Question.Test.Id.ToString() == testId);
 
             var answersForTestDto = this.mapper.ProjectTo<UserAnswerDto>(answersForTest);
 

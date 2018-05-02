@@ -61,6 +61,8 @@ namespace ITest.Web
             });
 
             services.AddScoped<IMappingProvider, MappingProvider>();
+            services.AddScoped<IRandomProvider, RandomProvider>();
+            services.AddScoped<IShuffleProvider, ShuffleProvider>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)

@@ -121,12 +121,15 @@ namespace ITest.Web.Areas.User.Controllers
             // VM
             var testWithQuestionsViewModel = this.mapper.MapTo<TestViewModel>(testWithQuestions);
 
+
+
             var userId = this.userManager.GetUserId(this.HttpContext.User);
             var testId = testWithQuestions.Id;
 
             if (this.userTestService.UserStartedTest(testId, userId))
             {
-                var endTime = this.userTestService.GetStartingTimeForUserTest(userId, testId).AddMinutes(testWithQuestions.Duration);
+                var endTime = this.userTestService.GetStartingTimeForUserTest(userId, testId)
+                    .AddMinutes(testWithQuestions.Duration);
 
                 var timeRemaining = Math.Round((endTime - DateTime.Now).TotalSeconds);
 

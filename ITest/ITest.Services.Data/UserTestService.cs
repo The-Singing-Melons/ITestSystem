@@ -102,7 +102,6 @@ namespace ITest.Services.Data
                 throw new ArgumentNullException("User Id cannot be null!");
             }
 
-            // must project to dto..
             var testsTakenByUser = this.userTestRepo.All
                         .Where(x => x.UserId.ToString() == userId)
                         .Include(t => t.Test)
