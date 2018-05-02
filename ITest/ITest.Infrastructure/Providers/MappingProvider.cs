@@ -14,7 +14,7 @@ namespace ITest.Infrastructure.Providers
 
         public MappingProvider(IMapper mapper)
         {
-            this.mapper = mapper;
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public TDestination MapTo<TDestination>(object source)

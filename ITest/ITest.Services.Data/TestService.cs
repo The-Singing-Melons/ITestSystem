@@ -15,6 +15,10 @@ using ITest.DTO.TakeTest;
 
 namespace ITest.Services.Data
 {
+    // routing tests
+    // model tests
+    // return right view
+
     public class TestService : ITestService
     {
         private readonly IDataRepository<ApplicationUser> userRepo;
@@ -41,23 +45,6 @@ namespace ITest.Services.Data
             this.categoryRepo = categoryRepo ?? throw new ArgumentNullException(nameof(categoryRepo));
             this.random = random;
             this.shuffler = shuffler ?? throw new ArgumentNullException(nameof(shuffler));
-        }
-
-        public IEnumerable<TestDto> GetUserTests(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                throw new ArgumentNullException("User Id cannot be null!");
-            }
-
-            IQueryable<Test> userTests = userRepo.All
-                .Include(u => u.Tests)
-                .Where(u => u.Id == id)
-                .SelectMany(x => x.Tests);
-
-            var userTestsDto = mapper.ProjectTo<TestDto>(userTests);
-
-            return userTestsDto.ToList();
         }
 
         public TestDto GetTestById(string testId)

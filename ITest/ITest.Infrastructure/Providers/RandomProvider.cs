@@ -10,9 +10,9 @@ namespace ITest.Infrastructure.Providers
     {
         private readonly Random random;
 
-        public RandomProvider()
+        public RandomProvider(Random random)
         {
-            this.random = new Random();
+            this.random = random ?? throw new ArgumentNullException(nameof(random));
         }
 
         public int Next(int maxValue)

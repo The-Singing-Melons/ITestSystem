@@ -9,7 +9,6 @@ namespace ITest.Services.Data.Contracts
 {
     public interface ITestService
     {
-        IEnumerable<TestDto> GetUserTests(string id);
 
         TestDto GetTestById(string id);
 
