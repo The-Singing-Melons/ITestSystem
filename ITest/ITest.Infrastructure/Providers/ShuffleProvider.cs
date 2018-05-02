@@ -11,7 +11,7 @@ namespace ITest.Infrastructure.Providers
 
         public ShuffleProvider(IRandomProvider random)
         {
-            this.random = random;
+            this.random = random ?? throw new ArgumentNullException(nameof(random));
         }
 
         public IList<T> Shuffle<T>(IList<T> list)
