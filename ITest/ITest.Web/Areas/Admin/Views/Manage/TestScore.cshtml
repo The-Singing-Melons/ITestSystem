@@ -43,10 +43,21 @@ else
             <h5 class="text-primary">Question @(counter):</h5>
             <h4 class="text-info"> @Html.Raw(testScore.QuestionContent)</h4>
         </div>
-        <div class="well well-sm">
-            <h5 class="text-primary">Answer:</h5>
-            <h4 class="text-info">@Html.Raw(testScore.AnswerContent)</h4>
-        </div>
+
+        @if (testScore.IsCorrect)
+        {
+            <div class="well well-sm" style="border-color: lawngreen;">
+                <h5 class="text-primary">Answer:</h5>
+                <h4 class="text-info">@Html.Raw(testScore.AnswerContent)</h4>
+            </div>
+        }
+        else
+        {
+            <div class="well well-sm" style="border-color: coral;">
+                <h5 class="text-primary">Answer:</h5>
+                <h4 class="text-info">@Html.Raw(testScore.AnswerContent)</h4>
+            </div>
+        }
         <br>
         counter++;
     }

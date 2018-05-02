@@ -29,8 +29,6 @@ namespace ITest.Web.Properties
                 .ReverseMap();
 
             this.CreateMap<ManageAnswerViewModel, ManageAnswerDto>()
-                .ForMember(a => a.Content, o => o.MapFrom(a => a.Content))
-                .ForMember(a => a.IsCorrect, o => o.MapFrom(a => a.IsCorrect))
                 .ReverseMap();
 
 
@@ -86,7 +84,8 @@ namespace ITest.Web.Properties
                     dto.Answer.Content))
                 .ForMember(vm => vm.QuestionContent, o => o.MapFrom(dto =>
                     dto.Answer.Question.Body))
-                .ForMember(vm => vm.Id, o => o.MapFrom(dto => dto.AnswerId.ToString()));
+                .ForMember(vm => vm.Id, o => o.MapFrom(dto => dto.AnswerId.ToString()))
+                .ForMember(vm => vm.IsCorrect, o => o.MapFrom(dto => dto.Answer.IsCorrect));
         }
 
         private void DtosAndDataModelsMappings()
@@ -97,14 +96,17 @@ namespace ITest.Web.Properties
                 .ForMember(t => t.Duration, o => o.MapFrom(t => t.RequestedTime))
                 .ForMember(t => t.Questions, o => o.MapFrom(t => t.Questions))
                 .ReverseMap()
+                .ForMember(t => t.Id, o => o.MapFrom(t => t.Id.ToString()))
                 .ForMember(t => t.CategoryName, o => o.MapFrom(t => t.Category.Name));
 
             this.CreateMap<ManageQuestionDto, Question>()
                 .ForMember(q => q.Answers, o => o.MapFrom(q => q.Answers))
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(q => q.Id, o => o.MapFrom(q => q.Id.ToString()));
 
             this.CreateMap<ManageAnswerDto, Answer>()
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(a => a.Id, o => o.MapFrom(a => a.Id.ToString()));
 
 
             //From Test to Dto

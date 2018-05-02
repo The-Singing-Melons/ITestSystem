@@ -109,7 +109,8 @@ namespace ITest.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateTest(ManageTestViewModel createTestViewModel)
         {
-            if (createTestViewModel == null || !this.ModelState.IsValid)
+            if (createTestViewModel == null || !this.ModelState.IsValid
+                || createTestViewModel.Questions.Any(q => q.Answers.All(a => !a.IsCorrect)))
             {
                 createTestViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
                 return this.View(createTestViewModel);
@@ -153,9 +154,12 @@ namespace ITest.Web.Areas.Admin.Controllers
             var testDto = this.testService.GetTestByNameAndCategory(testName, categoryName);
 
             var testViewModel = this.mapper.MapTo<ManageTestViewModel>(testDto);
-            testViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames()
+            testViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
 
-                .ToList();
+            if (testDto.IsDisabled)
+            {
+                return this.View("EditPublishedTest", testViewModel);
+            }
 
             return this.View(testViewModel);
         }
@@ -164,7 +168,42 @@ namespace ITest.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditTest(ManageTestViewModel manageTestViewModel)
         {
-            if (manageTestViewModel == null || !this.ModelState.IsValid)
+            if (manageTestViewModel == null || !this.ModelState.IsValid
+                || manageTestViewModel.Questions.Any(q => q.Answers.All(a => !a.IsCorrect)))
+            {
+                manageTestViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
+                return this.View(manageTestViewModel);
+            }
+
+            var logggedUserId = this.userManager.GetUserId(this.HttpContext.User);
+
+            var editTestDto = this.mapper.MapTo<ManageTestDto>(manageTestViewModel);
+            editTestDto.CreatedByUserId = logggedUserId;
+
+            try
+            {
+                this.testService.EditTest(editTestDto);
+            }
+            catch (Exception)
+            {
+                manageTestViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
+                return this.View(manageTestViewModel);
+            }
+
+            return RedirectToRoute(new
+            {
+                area = "Admin",
+                controller = "Manage",
+                action = "Index"
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditPublishedTest(ManageTestViewModel manageTestViewModel)
+        {
+            if (manageTestViewModel == null || !this.ModelState.IsValid
+                || manageTestViewModel.Questions.Any(q => q.Answers.All(a => !a.IsCorrect)))
             {
                 manageTestViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
                 return this.View(manageTestViewModel);

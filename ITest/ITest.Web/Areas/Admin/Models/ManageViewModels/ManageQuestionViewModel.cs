@@ -9,8 +9,10 @@ namespace ITest.Web.Areas.Admin.Models.ManageViewModels
 {
     public class ManageQuestionViewModel
     {
+        public string Id { get; set; }
+
         [Required(ErrorMessage = "Please enter the Question's description!")]
-        [StringLength(500, ErrorMessage = "Question description's length must be maximum 500 symbols!")]
+        [StringLength(500, MinimumLength = 1, ErrorMessage = "Question description's length must be maximum 500 symbols!")]
         public string BodyPlaintext { get; set; }
 
         [Required]

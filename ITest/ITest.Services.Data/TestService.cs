@@ -267,7 +267,6 @@ namespace ITest.Services.Data
             }
 
             var testToEdit = this.testRepo.All.Where(t => t.Id.ToString() == editedDto.Id).SingleOrDefault();
-
             testToEdit = this.mapper.MapTo(editedDto, testToEdit);
 
             var category = this.categoryRepo.All.SingleOrDefault(c => c.Name == editedDto.CategoryName)
@@ -276,6 +275,35 @@ namespace ITest.Services.Data
             testToEdit.Category = category;
 
             this.testRepo.Update(testToEdit);
+            foreach (var question in testToEdit.Questions)
+            {
+                if (question.Id == null)
+                {
+                    this.questionRepo.Add(question);
+
+                    foreach (var answer in question.Answers)
+                    {
+                        this.answerRepo.Add(answer);
+                    }
+                }
+                else
+                {
+                    this.questionRepo.Update(question);
+
+                    foreach (var answer in question.Answers)
+                    {
+                        if (answer.Id == null)
+                        {
+                            this.answerRepo.Add(answer);
+                        }
+                        else
+                        {
+                            this.answerRepo.Update(answer);
+                        }
+                    }
+                }
+            }
+
             this.dataSaver.SaveChanges();
         }
 

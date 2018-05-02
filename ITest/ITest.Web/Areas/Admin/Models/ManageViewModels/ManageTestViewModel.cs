@@ -23,6 +23,8 @@ namespace ITest.Web.Areas.Admin.Models.ManageViewModels
 
         public bool IsPublished { get; set; }
 
+        public bool IsDisabled { get; set; }
+
         [Required(ErrorMessage = "Please add Questions to your Test!")]
         [CollectionLegth(1, ErrorMessage = "Please add atleast one Question to your Test!")]
         public IList<ManageQuestionViewModel> Questions { get; set; }
