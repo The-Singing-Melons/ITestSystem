@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TestServiceTests\" />
+    <Folder Include="QuestionServiceTests\" />
   </ItemGroup>
 
 </Project>
