@@ -117,6 +117,7 @@ namespace ITest.Web.Areas.User.Controllers
 
             // DTO
             var testWithQuestions = this.testService.GetTestQuestionsWithAnswers(id);
+            this.testService.ShuffleTest(testWithQuestions);
 
             // VM
             var testWithQuestionsViewModel = this.mapper.MapTo<TestViewModel>(testWithQuestions);
@@ -157,6 +158,7 @@ namespace ITest.Web.Areas.User.Controllers
         [HttpPost]
         public IActionResult TakeTest(TestRequestViewModel takeTestRequestViewModel)
         {
+            // refactor TO-DO : Check for null answer in the requestVM and pass valid data to DB
             if (ModelState.IsValid)
             {
                 var userId = this.userManager.GetUserId(this.HttpContext.User);

@@ -31,5 +31,7 @@ namespace ITest.Services.Data.Contracts
         void DeleteTest(string name, string category);
 
         void DisableTest(string testName, string categoryName);
+
+        void ShuffleTest(TestDto testToShuffle);
     }
 }

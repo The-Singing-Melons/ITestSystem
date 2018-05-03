@@ -79,8 +79,10 @@ namespace ITest.Web.Areas.Admin.Controllers
             }
             catch (ArgumentException)
             {
+
                 var user = this.userManager.Users
-                    .Where(x => x.Id == userId).FirstOrDefault();
+                                .Where(x => x.Id == userId).FirstOrDefault();
+
                 var test = this.testService.GetTestById(testId);
 
                 var testScoreNoAnswers = new TestScoreUserAnswerViewModel();
@@ -89,8 +91,8 @@ namespace ITest.Web.Areas.Admin.Controllers
                 testScoreNoAnswers.UserDetailsViewModel.TestCategory = test.Category.Name;
 
                 return View(testScoreNoAnswers);
-            }
 
+            }
 
         }
 
