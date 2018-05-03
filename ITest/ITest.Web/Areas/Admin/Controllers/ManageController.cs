@@ -156,11 +156,6 @@ namespace ITest.Web.Areas.Admin.Controllers
             var testViewModel = this.mapper.MapTo<ManageTestViewModel>(testDto);
             testViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
 
-            if (testDto.IsDisabled)
-            {
-                return this.View("EditPublishedTest", testViewModel);
-            }
-
             return this.View(testViewModel);
         }
 
@@ -268,8 +263,6 @@ namespace ITest.Web.Areas.Admin.Controllers
             {
                 return this.Json(false);
             }
-
-            //validate rights
 
             try
             {

@@ -77,15 +77,10 @@
 
                                                     @if (test.IsDisabled)
                                                     {
-                                                        <form asp-area="Admin" asp-controller="Manage" asp-action="EditTest" method="get">
-                                                            <input id="testName" name="testName" type="hidden" value="@test.TestName" />
-                                                            <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
-
-                                                            <button type="submit" class='btn btn-warning btn-xs'>
-                                                                <span class="glyphicon glyphicon-edit"></span>
-                                                                Edit
-                                                            </button>
-                                                        </form>
+                                                        <a class='btn btn-warning btn-xs disabled'>
+                                                            <span class="glyphicon glyphicon-edit"></span>
+                                                            Edit
+                                                        </a>
 
                                                         <a class='btn btn-danger btn-xs disabled'>
                                                             <span class="glyphicon glyphicon-remove"></span>
