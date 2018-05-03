@@ -61,15 +61,31 @@ namespace ITest.Services.Data.Tests.TestServiceTests
             this.mapperMock.Setup(x => x.MapTo<TestDto>(It.IsAny<Test>()))
                 .Returns(testDtoToReturn);
 
-            // Act
+
             var sut = new TestService(userRepoMock.Object, testRepoMock.Object, questionRepoMock.Object,
                 answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
                 randomMock.Object, shufflerMock.Object);
 
+            // Act
             var actualResult = sut.GetTestById(testId.ToString());
 
             // Assert
             Assert.AreEqual(actualResult.Id, testDtoToReturn.Id);
+        }
+
+        [TestMethod]
+        public void ThrowWhenInvokedWithInvalidParameters()
+        {
+            // Arrange
+            var sut = new TestService(userRepoMock.Object, testRepoMock.Object, questionRepoMock.Object,
+                answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
+                randomMock.Object, shufflerMock.Object);
+
+
+            //Act & Assert
+
+            Assert.ThrowsException<ArgumentNullException>(
+                () => sut.GetTestById(null));
         }
     }
 }
