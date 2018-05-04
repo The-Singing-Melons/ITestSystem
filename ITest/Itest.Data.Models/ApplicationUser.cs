@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 namespace ITest.Models
 {
     // Add profile data for application users by adding properties to the ApplicationUser class
-    public class ApplicationUser : IdentityUser, IEditable, IDeletable
+    public class ApplicationUser : IdentityUser
     {
         public ApplicationUser()
         {
@@ -17,20 +17,9 @@ namespace ITest.Models
         }
 
         public ICollection<Test> Tests { get; set; }
-        
+
         public ICollection<UserTest> UserTests { get; set; }
 
         public ICollection<UserAnswer> UserAnswers { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        [DataType(DataType.DateTime)]
-        public DateTime? DeletedOn { get; set; }
-
-        [DataType(DataType.DateTime)]
-        public DateTime? CreatedOn { get; set; }
-
-        [DataType(DataType.DateTime)]
-        public DateTime? ModifiedOn { get; set; }
     }
 }
