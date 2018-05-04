@@ -3,6 +3,7 @@ using AutoMapper;
 using Itest.Data.Models;
 using ITest.DTO;
 using ITest.DTO.TakeTest;
+using ITest.DTO.UserHome.Index;
 using ITest.Web.Areas.Admin.Models.ManageViewModels;
 using ITest.Web.Areas.User.Models;
 
@@ -47,10 +48,13 @@ namespace ITest.Web.Properties
 
 
             // TakeTestDto to TakeTestViewModels
-            this.CreateMap<TestRequestViewModelDto, TestRequestViewModel>()
+            this.CreateMap<TestRequestDto, TestRequestViewModel>()
                 .ForMember(x => x.Questions, o => o.MapFrom(x => x.Questions));
 
-            this.CreateMap<QuestionResponseViewModelDto, QuestionResponseModel>();
+            this.CreateMap<QuestionResponseDto, QuestionResponseModel>();
+
+            // CategoryIndexDto to CategoryView 
+            this.CreateMap<CategoryIndexDto, CategoryViewModel>();
 
 
             this.CreateMap<QuestionDto, QuestionViewModel>()

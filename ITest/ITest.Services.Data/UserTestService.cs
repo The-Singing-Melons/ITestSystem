@@ -95,44 +95,17 @@ namespace ITest.Services.Data
             return userStartedTest;
         }
 
-        public IEnumerable<UserTest> GetAllTestsDoneByUser(string userId)
+        public bool UserHasCompletedTest(string userId, string testId)
         {
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentNullException("User Id cannot be null!");
-            }
-
-            var testsTakenByUser = this.userTestRepo.All
-                        .Where(x => x.UserId.ToString() == userId)
-                        .Include(t => t.Test)
-                        .ThenInclude(t => t.Category);
-
-            var userTestDtos = this.mapper.ProjectTo<UserTestDto>(testsTakenByUser);
-
-            return testsTakenByUser;
-        }
-
-        public bool CheckForCompletedUserTestInCategory(string userId, string categoryName, IEnumerable<UserTest> testsTakenByUser)
-        {
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentNullException("User Id cannot be null!");
-            }
-
-            if (string.IsNullOrEmpty(categoryName))
-            {
-                throw new ArgumentNullException("CategoryName cannot be null!");
-            }
-
-            var isTestTaken = testsTakenByUser
-                .Any(x => x.Test.Category.Name == categoryName
-                                                    && x.IsSubmited == true);
+            var isTestTaken = this.userTestRepo.All
+                .Any(x => x.UserId == userId && x.TestId.ToString() == testId);
 
             return isTestTaken;
         }
 
         public void SubmitUserTest(string testId, string userId, bool isPassed)
         {
+            // add check if the user has manipulated the javascript clock time and submited late
             if (string.IsNullOrEmpty(testId))
             {
                 throw new ArgumentNullException("Test Id cannot be null!");

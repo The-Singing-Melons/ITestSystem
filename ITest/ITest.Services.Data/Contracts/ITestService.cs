@@ -17,7 +17,7 @@ namespace ITest.Services.Data.Contracts
         TestDto GetRandomTest(string categoryName);
 
         void CreateTest(ManageTestDto testToAdd);
-        bool IsTestPassed(string userId, TestRequestViewModelDto submitedTest);
+        bool IsTestPassed(string userId, TestRequestDto submitedTest);
 
 
         IEnumerable<TestDashBoardDto> GetTestsDashboardInfo();

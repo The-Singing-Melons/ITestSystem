@@ -6,6 +6,7 @@ using Itest.Data.Models;
 using ITest.Data.Repository;
 using ITest.Data.UnitOfWork;
 using ITest.DTO;
+using ITest.DTO.UserHome.Index;
 using ITest.Infrastructure.Providers.Contracts;
 using ITest.Services.Data.Contracts;
 
@@ -24,12 +25,18 @@ namespace ITest.Services.Data
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public IList<CategoryDto> GetAllCategories()
+        public IEnumerable<CategoryIndexDto> GetAllCategories(string userId)
         {
-            var allCategoriesDto = this.mapper.ProjectTo<CategoryDto>(
-                this.categoryRepo.All);
 
-            return allCategoriesDto.ToList();
+            var categoryIndexDto = this.categoryRepo.All.Select(c => new CategoryIndexDto()
+            {
+                Name = c.Name,
+                HasUserTakenTestForThisCategory = c.Tests
+                        .SelectMany(t => t.UserTests)
+                        .Any(ut => ut.UserId == userId)
+            });
+
+            return categoryIndexDto;
         }
 
         public IEnumerable<string> GetAllCategoriesNames()

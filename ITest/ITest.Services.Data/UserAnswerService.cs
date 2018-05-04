@@ -28,7 +28,7 @@ namespace ITest.Services.Data
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public void AddAnswersToUser(string userId, IList<QuestionResponseViewModelDto> questions)
+        public void AddAnswersToUser(string userId, IList<QuestionResponseDto> questions)
         {
             if (string.IsNullOrEmpty(userId))
             {

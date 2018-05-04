@@ -176,7 +176,7 @@ namespace ITest.Services.Data
         }
 
 
-        public bool IsTestPassed(string testId, TestRequestViewModelDto submitedTest)
+        public bool IsTestPassed(string testId, TestRequestDto submitedTest)
         {
             if (string.IsNullOrEmpty(testId))
             {

@@ -17,11 +17,10 @@ namespace ITest.Services.Data.Contracts
 
         void SubmitUserTest(string testId, string userId, bool isPassed);
 
-        bool CheckForCompletedUserTestInCategory(string userId, string categoryName, IEnumerable<UserTest> testsTakenByUser);
-
-        IEnumerable<UserTest> GetAllTestsDoneByUser(string userId);
-
         IEnumerable<UserTestResultDto> GetUserTestResults();
+
         UserTestDto CheckForTestInProgress(string userId);
+
+        bool UserHasCompletedTest(string userId, string testId);
     }
 }

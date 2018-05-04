@@ -2,6 +2,7 @@
 using System.Linq;
 using ITest.DTO;
 using ITest.DTO.TakeTest;
+using ITest.DTO.UserHome.Index;
 using ITest.Infrastructure.Providers.Contracts;
 using ITest.Models;
 using ITest.Services.Data.Contracts;
@@ -39,11 +40,13 @@ namespace ITest.Web.Areas.User.Controllers
             this.answerService = answerService ?? throw new ArgumentNullException(nameof(answerService));
         }
 
+        // TO-DO : Refactor controller and get most of the bussines logic outside of it
+
         public IActionResult Index()
         {
-
             var userId = this.userManager.GetUserId(this.HttpContext.User);
 
+            // remove below lines from controller and extract to service
             var testInProgress = this.userTestService
                 .CheckForTestInProgress(userId);
 
@@ -63,21 +66,11 @@ namespace ITest.Web.Areas.User.Controllers
             }
 
             // add cache here
-            var allCategories = this.categoryService.GetAllCategories();
+            var allCategories = this.categoryService.GetAllCategories(userId);
+
             var categoriesViewModel = this.mapper
-                .EnumerableProjectTo<CategoryDto, CategoryViewModel>(allCategories)
+                .EnumerableProjectTo<CategoryIndexDto, CategoryViewModel>(allCategories)
                 .ToList();
-
-            var allTestsDoneByUser = this.userTestService
-                                                .GetAllTestsDoneByUser(userId);
-
-            for (int i = 0; i < allCategories.Count; i++)
-            {
-                var result = this.userTestService
-                    .CheckForCompletedUserTestInCategory(userId, allCategories[i].Name, allTestsDoneByUser);
-
-                categoriesViewModel[i].HasUserTakenTestForThisCategory = result;
-            }
 
             return View(categoriesViewModel);
         }
@@ -115,17 +108,22 @@ namespace ITest.Web.Areas.User.Controllers
                 throw new ArgumentNullException("Id cannot be null or empty");
             }
 
+
             // DTO
             var testWithQuestions = this.testService.GetTestQuestionsWithAnswers(id);
+
+            var testId = testWithQuestions.Id;
+            var userId = this.userManager.GetUserId(this.HttpContext.User);
+
+            if (this.userTestService.UserHasCompletedTest(userId, testId))
+            {
+                return RedirectToAction("Index");
+            }
+
             this.testService.ShuffleTest(testWithQuestions);
 
             // VM
             var testWithQuestionsViewModel = this.mapper.MapTo<TestViewModel>(testWithQuestions);
-
-
-
-            var userId = this.userManager.GetUserId(this.HttpContext.User);
-            var testId = testWithQuestions.Id;
 
             if (this.userTestService.UserStartedTest(testId, userId))
             {
@@ -163,7 +161,7 @@ namespace ITest.Web.Areas.User.Controllers
             {
                 var userId = this.userManager.GetUserId(this.HttpContext.User);
                 var testId = takeTestRequestViewModel.Id;
-                var submitedTest = this.mapper.MapTo<TestRequestViewModelDto>(takeTestRequestViewModel);
+                var submitedTest = this.mapper.MapTo<TestRequestDto>(takeTestRequestViewModel);
 
 
                 this.answerService.AddAnswersToUser(userId, submitedTest.Questions);

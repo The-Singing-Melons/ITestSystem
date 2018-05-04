@@ -62,6 +62,7 @@ namespace ITest.Web
 
             services.AddScoped<IMappingProvider, MappingProvider>();
             services.AddScoped<IRandomProvider, RandomProvider>();
+            services.AddScoped<Random>();
             services.AddScoped<IShuffleProvider, ShuffleProvider>();
         }
 
