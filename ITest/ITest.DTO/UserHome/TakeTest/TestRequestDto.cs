@@ -2,12 +2,12 @@
 
 namespace ITest.DTO.TakeTest
 {
-    public class TestRequestViewModelDto
+    public class TestRequestDto
     {
         public string Id { get; set; }
 
         public string CategoryName { get; set; }
 
-        public IList<QuestionResponseViewModelDto> Questions { get; set; }
+        public IList<QuestionResponseDto> Questions { get; set; }
     }
 }

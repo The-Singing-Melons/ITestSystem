@@ -54,7 +54,7 @@ namespace ITest.Services.Data
             this.dataSaver.SaveChanges();
         }
 
-        public DateTime GetStartingTimeForUserTest(string userId, string testId)
+        public double GetTimeRemainingForUserTest(string userId, string testId, double testDuration)
         {
             if (string.IsNullOrEmpty(testId))
             {
@@ -66,71 +66,35 @@ namespace ITest.Services.Data
                 throw new ArgumentNullException("User Id cannot be null!");
             }
 
-            var currentTest = this.userTestRepo.All
+            var currentUserTest = this.userTestRepo.All
                 .Where(x => x.UserId == userId && x.TestId.ToString() == testId)
                 .FirstOrDefault();
 
-            return currentTest.StartedOn;
+            if (currentUserTest == null)
+            {
+                throw new ArgumentNullException("currentUserTest not found!");
+            }
+
+            var endTime = currentUserTest.StartedOn.AddMinutes(testDuration);
+            var timeRemaining = Math.Round((endTime - DateTime.Now).TotalSeconds);
+
+            return timeRemaining;
+
         }
 
-        public bool UserStartedTest(string testId, string userId)
+        public bool UserHasCompletedTest(string userId, string testId)
         {
-            if (string.IsNullOrEmpty(testId))
-            {
-                throw new ArgumentNullException("Test Id cannot be null!");
-            }
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentNullException("User Id cannot be null!");
-            }
-
-            var userStartedTest = false;
-
-            userStartedTest = this.userTestRepo.All
-                .Any(ut => ut.UserId == userId & ut.TestId.ToString() == testId);
-
-            return userStartedTest;
-        }
-
-        public IEnumerable<UserTest> GetAllTestsDoneByUser(string userId)
-        {
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentNullException("User Id cannot be null!");
-            }
-
-            var testsTakenByUser = this.userTestRepo.All
-                        .Where(x => x.UserId.ToString() == userId)
-                        .Include(t => t.Test)
-                        .ThenInclude(t => t.Category);
-
-            var userTestDtos = this.mapper.ProjectTo<UserTestDto>(testsTakenByUser);
-
-            return testsTakenByUser;
-        }
-
-        public bool CheckForCompletedUserTestInCategory(string userId, string categoryName, IEnumerable<UserTest> testsTakenByUser)
-        {
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentNullException("User Id cannot be null!");
-            }
-
-            if (string.IsNullOrEmpty(categoryName))
-            {
-                throw new ArgumentNullException("CategoryName cannot be null!");
-            }
-
-            var isTestTaken = testsTakenByUser
-                .Any(x => x.Test.Category.Name == categoryName
-                                                    && x.IsSubmited == true);
+            var isTestTaken = this.userTestRepo.All
+                .Any(x => x.UserId == userId &&
+                          x.TestId.ToString() == testId &&
+                          x.IsSubmited == true);
 
             return isTestTaken;
         }
 
         public void SubmitUserTest(string testId, string userId, bool isPassed)
         {
+            // add check if the user has manipulated the javascript clock time and submited late
             if (string.IsNullOrEmpty(testId))
             {
                 throw new ArgumentNullException("Test Id cannot be null!");
@@ -140,7 +104,6 @@ namespace ITest.Services.Data
             {
                 throw new ArgumentNullException("User Id cannot be null!");
             }
-
 
             var currentTest = this.userTestRepo.All
                 .Where(x => x.UserId == userId && x.TestId.ToString() == testId)
@@ -164,11 +127,9 @@ namespace ITest.Services.Data
             return this.mapper.ProjectTo<UserTestResultDto>(results).ToList();
         }
 
-        public UserTestDto CheckForTestInProgress(string userId)
+        public bool CheckForOverdueTestInProgress(string userId)
         {
-            // if you throw exception that is not handled would not this cause
-            // the whole program to crash? Handle with Try/Catch block?
-            // redirect to 302?
+            var isOverdue = false;
 
             if (string.IsNullOrEmpty(userId))
             {
@@ -180,9 +141,28 @@ namespace ITest.Services.Data
                 .Include(ut => ut.Test)
                 .FirstOrDefault();
 
-            var userTestDto = this.mapper.MapTo<UserTestDto>(result);
-            return userTestDto;
+            if (result != null)
+            {
+                isOverdue = this.CheckForOverdueTestInProgress(result, isOverdue);
+            }
 
+            return isOverdue;
+        }
+
+        private bool CheckForOverdueTestInProgress(UserTest result, bool isOverdue)
+        {
+            var endTime = result.StartedOn
+                  .AddMinutes(result.Test.Duration);
+
+            var timeRemaining = Math.Round((endTime - DateTime.Now).TotalSeconds);
+
+            if (timeRemaining == 0)
+            {
+                this.SubmitUserTest(result.Test.Id.ToString(), result.UserId, false);
+                return true;
+            }
+
+            return false;
         }
     }
 }

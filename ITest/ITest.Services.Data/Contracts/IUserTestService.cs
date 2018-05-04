@@ -10,18 +10,14 @@ namespace ITest.Services.Data.Contracts
     {
         void AddUserToTest(string testId, string userId);
 
-
-        bool UserStartedTest(string testId, string userId);
-
-        DateTime GetStartingTimeForUserTest(string userId, string testId);
+        double GetTimeRemainingForUserTest(string userId, string testId, double testDuration);
 
         void SubmitUserTest(string testId, string userId, bool isPassed);
 
-        bool CheckForCompletedUserTestInCategory(string userId, string categoryName, IEnumerable<UserTest> testsTakenByUser);
-
-        IEnumerable<UserTest> GetAllTestsDoneByUser(string userId);
-
         IEnumerable<UserTestResultDto> GetUserTestResults();
-        UserTestDto CheckForTestInProgress(string userId);
+
+        bool CheckForOverdueTestInProgress(string userId);
+
+        bool UserHasCompletedTest(string userId, string testId);
     }
 }

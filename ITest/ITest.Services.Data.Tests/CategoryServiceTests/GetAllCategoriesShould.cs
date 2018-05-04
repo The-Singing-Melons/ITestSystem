@@ -6,6 +6,7 @@ using Itest.Data.Models;
 using ITest.Data.Repository;
 using ITest.Data.UnitOfWork;
 using ITest.DTO;
+using ITest.DTO.UserHome.Index;
 using ITest.Infrastructure.Providers.Contracts;
 using ITest.Services.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -38,37 +39,29 @@ namespace ITest.Services.Data.Tests.CategoryServiceTests
             {
                 new Category()
                 {
-                    Name = "C# .NET"
+                    Name = "C# .NET",
+                    Tests = new List<Test>()
                 },
 
                 new Category()
                 {
-                    Name = "SQL"
+                    Name = "SQL",
+                    Tests = new List<Test>()
                 }
-            };
-
-            var allCategoriesDto = new List<CategoryDto>()
-            {
-                new CategoryDto(),
-
-                new CategoryDto()
             };
 
 
             this.categoryRepoMock.Setup(x => x.All)
                 .Returns(allCategoriesDomain.AsQueryable);
 
-            this.mapperMock.Setup(x => x.ProjectTo<CategoryDto>(It.IsAny<IQueryable<Category>>()))
-                .Returns(allCategoriesDto.AsQueryable());
-
             var sut = new CategoryService(categoryRepoMock.Object, dataSaverMock.Object, mapperMock.Object);
 
-            // Act
+            //Act
 
-            var allCategories = sut.GetAllCategories();
+            var allCategories = sut.GetAllCategories("test");
 
             // Assert
-            Assert.AreEqual(2, allCategories.Count);
+            Assert.AreEqual(2, allCategories.Count());
         }
 
     }

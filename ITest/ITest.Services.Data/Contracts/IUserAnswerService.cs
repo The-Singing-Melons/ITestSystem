@@ -8,7 +8,7 @@ namespace ITest.Services.Data.Contracts
 {
     public interface IUserAnswerService
     {
-        void AddAnswersToUser(string userId, IList<QuestionResponseViewModelDto> questions);
+        void AddAnswersToUser(string userId, IList<QuestionResponseDto> questions);
 
         IEnumerable<UserAnswerDto> GetAnswersForTestDoneByUser(string userId, string testId);
     }

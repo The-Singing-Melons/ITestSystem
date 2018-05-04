@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ITest.DTO.TakeTest
 {
-    public class QuestionResponseViewModelDto
+    public class QuestionResponseDto
     {
         public string Id { get; set; }
 

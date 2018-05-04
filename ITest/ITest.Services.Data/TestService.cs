@@ -103,35 +103,36 @@ namespace ITest.Services.Data
                                         .Where(t => t.Id.ToString() == testId)
                                         .Include(t => t.Category)
                                         .Include(t => t.Questions)
-                                        .ThenInclude(q => q.Answers)
+                                            .ThenInclude(q => q.Answers)
                                         .SingleOrDefault();
 
-            var testWithQuestionsAndAnswersDto = this.mapper.MapTo<TestDto>(testWithQuestionsAndAnswers);
-
-            var shuffledQuestions = this.ShuffleQuestions(testWithQuestionsAndAnswersDto.Questions);
-            testWithQuestionsAndAnswersDto.Questions = shuffledQuestions;
-
-            for (int i = 0; i < testWithQuestionsAndAnswersDto.Questions.Count(); i++)
+            if (testWithQuestionsAndAnswers == null)
             {
-                var shuffledAnswers = this
-                    .shuffler.Shuffle<AnswerDto>(testWithQuestionsAndAnswersDto.Questions[i].Answers);
-
-                testWithQuestionsAndAnswersDto.Questions[i].Answers = shuffledAnswers;
+                throw new ArgumentNullException("Test not found!");
             }
+
+            var testWithQuestionsAndAnswersDto = this.mapper.MapTo<TestDto>(testWithQuestionsAndAnswers);
 
             return testWithQuestionsAndAnswersDto;
         }
 
-        private IList<QuestionDto> ShuffleQuestions(IList<QuestionDto> questions)
+        public void ShuffleTest(TestDto testToShuffle)
         {
-            var shuffledQuestions = this.shuffler.Shuffle<QuestionDto>(questions);
-            return shuffledQuestions;
-        }
+            if (testToShuffle == null)
+            {
+                throw new ArgumentNullException(nameof(testToShuffle));
+            }
 
-        private IList<AnswerDto> ShuffleAnswers(IList<AnswerDto> answers)
-        {
-            var shuffledAnswers = this.shuffler.Shuffle<AnswerDto>(answers);
-            return shuffledAnswers;
+            var shuffledQuestions = this.shuffler.Shuffle<QuestionDto>(testToShuffle.Questions);
+            testToShuffle.Questions = shuffledQuestions;
+
+            for (int i = 0; i < testToShuffle.Questions.Count(); i++)
+            {
+                var shuffledAnswers = this
+                    .shuffler.Shuffle<AnswerDto>(testToShuffle.Questions[i].Answers);
+
+                testToShuffle.Questions[i].Answers = shuffledAnswers;
+            }
         }
 
         public void CreateTest(ManageTestDto testDto)
@@ -171,11 +172,12 @@ namespace ITest.Services.Data
                 isPassed = true;
             }
 
+            // return isPassed, resultPercentange, totalQuestionsCount, totalCorrectQuestions
             return isPassed;
         }
 
 
-        public bool IsTestPassed(string testId, TestRequestViewModelDto submitedTest)
+        public bool IsTestPassed(string testId, TestRequestDto submitedTest)
         {
             if (string.IsNullOrEmpty(testId))
             {

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Take Test";
 }
 
-<div class="timer" id="timer-id" style="height:150px" data-timer="@(Model.TimeRemaining)"></div>
+<div class="timer" id="timer-id" style="height:150px" data-timer="@Model.TimeRemaining"></div>
 <form asp-area="User" asp-controller="Home" asp-action="TakeTest" method="post">
 
     <h3>@Model.Name</h3>
