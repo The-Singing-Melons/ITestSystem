@@ -14,18 +14,16 @@ namespace ITest.Services.Data
 {
     public class UserTestService : IUserTestService
     {
-        private readonly IDataRepository<ApplicationUser> userRepo;
         private readonly IDataRepository<Test> testRepo;
         private readonly IDataRepository<UserTest> userTestRepo;
         private readonly IDataSaver dataSaver;
         private readonly IMappingProvider mapper;
 
-        public UserTestService(IDataRepository<ApplicationUser> userRepo,
+        public UserTestService(
             IDataRepository<Test> testRepo, IDataSaver dataSaver,
             IMappingProvider mapper, IDataRepository<Category> categoryRepo,
             IDataRepository<UserTest> userTestRepo)
         {
-            this.userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
             this.testRepo = testRepo ?? throw new ArgumentNullException(nameof(testRepo));
             this.userTestRepo = userTestRepo ?? throw new ArgumentNullException(nameof(userTestRepo));
             this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));

@@ -16,7 +16,7 @@
                     <div class="question-description">
                         <h3>Description</h3>
 
-                        <input type="hidden" id="Questions_{{q_id}}__BodyPlaintext" name="Questions[{{q_id}}].BodyPlaintext" class="question-body-plaintext" value=""/>
+                        <input type="hidden" id="Questions_{{q_id}}__BodyPlaintext" name="Questions[{{q_id}}].BodyPlaintext" class="question-body-plaintext plaintext" value=""/>
                         <textarea id="Questions_{{q_id}}__Body" name="Questions[{{q_id}}].Body" class="question-body summernote form-control" ></textarea>
                     </div>
                     <div class="answers-container">
@@ -36,7 +36,7 @@
                                 </div>
                             </div>
 
-                            <input type="hidden" id="Questions_{{q_id}}__Answers_0__ContentPlaintext" name="Questions[{{q_id}}].Answers[0].ContentPlaintext" class="answer-plaintext" value=""/>
+                            <input type="hidden" id="Questions_{{q_id}}__Answers_0__ContentPlaintext" name="Questions[{{q_id}}].Answers[0].ContentPlaintext" class="answer-plaintext plaintext" value=""/>
                             <textarea id="Questions_{{q_id}}__Answers_0__Content" name="Questions[{{q_id}}].Answers[0].Content" class="answer-content summernote form-control"></textarea>
                         </div>
 
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
 
-                            <input type="hidden" id="Questions_{{q_id}}__Answers_1__ContentPlaintext" name="Questions[{{q_id}}].Answers[1].ContentPlaintext" class="answer-plaintext" value=""/>
+                            <input type="hidden" id="Questions_{{q_id}}__Answers_1__ContentPlaintext" name="Questions[{{q_id}}].Answers[1].ContentPlaintext" class="answer-plaintext plaintext" value=""/>
                             <textarea id="Questions_{{q_id}}__Answers_1__Content" name="Questions[{{q_id}}].Answers[1].Content" class="answer-content summernote form-control"></textarea>
                         </div>
 
@@ -78,7 +78,7 @@
                                 </div>
                             </div>
 
-                            <input type="hidden" id="Questions_{{q_id}}__Answers_2__ContentPlaintext" name="Questions[{{q_id}}].Answers[2].ContentPlaintext" class="answer-plaintext" value=""/>
+                            <input type="hidden" id="Questions_{{q_id}}__Answers_2__ContentPlaintext" name="Questions[{{q_id}}].Answers[2].ContentPlaintext" class="answer-plaintext plaintext" value=""/>
                             <textarea id="Questions_{{q_id}}__Answers_2__Content" name="Questions[{{q_id}}].Answers[2].Content" class="answer-content summernote form-control"></textarea>
                         </div>
 
@@ -108,7 +108,7 @@
                 </div>
             </div>
 
-            <input type="hidden" id="Questions_{{q_id}}__Answers_{{a_id}}__ContentPlaintext" name="Questions[{{q_id}}].Answers[{{a_id}}].ContentPlaintext" class="answer-plaintext" value=""/>
+            <input type="hidden" id="Questions_{{q_id}}__Answers_{{a_id}}__ContentPlaintext" name="Questions[{{q_id}}].Answers[{{a_id}}].ContentPlaintext" class="answer-plaintext plaintext" value=""/>
             <textarea id="Questions_{{q_id}}__Answers_{{a_id}}__Content" name="Questions[{{q_id}}].Answers[{{a_id}}].Content" class="answer-content summernote form-control"></textarea>
         </div>`;
 
@@ -244,6 +244,9 @@
 
                 nextQuestion.find('.add-answer').attr('name', `collapse-${newQuestionId}`);
 
+                nextQuestion.find('.question-id').attr('id', `Questions_${newQuestionId}__Id`);
+                nextQuestion.find('.question-id').attr('name', `Questions[${newQuestionId}].Id`);
+
                 var answers = nextQuestion.find('.answer-container').toArray();
 
                 answers.forEach(function (answer) {
@@ -257,8 +260,11 @@
                     nextQuestionAnswer.find('.answer-content').attr('id', `Questions_${newQuestionId}__Answers_${answerId}__Content`);
                     nextQuestionAnswer.find('.answer-content').attr('name', `Questions[${newQuestionId}].Answers[${answerId}].Content`);
 
-                    nextQuestionAnswer.find('.answer-plaintext').attr('id', `Questions_${questionId}__Answers_${answerId}__ContentPlaintext`);
-                    nextQuestionAnswer.find('.answer-plaintext').attr('name', `Questions[${questionId}].Answers[${answerId}].ContentPlaintext`);
+                    nextQuestionAnswer.find('.answer-plaintext').attr('id', `Questions_${newQuestionId}__Answers_${answerId}__ContentPlaintext`);
+                    nextQuestionAnswer.find('.answer-plaintext').attr('name', `Questions[${newQuestionId}].Answers[${answerId}].ContentPlaintext`);
+
+                    nextQuestionAnswer.find('.answer-id').attr('id', `Questions_${newQuestionId}__Answers_${answerId}__Id`);
+                    nextQuestionAnswer.find('.answer-id').attr('name', `Questions[${newQuestionId}].Answers[${answerId}].Id`);
                 });
             });
         }
@@ -318,6 +324,9 @@
 
                 nextAnswer.find('.answer-plaintext').attr('id', `Questions_${questionId}__Answers_${newAnswerNumber}__ContentPlaintext`);
                 nextAnswer.find('.answer-plaintext').attr('name', `Questions[${questionId}].Answers[${newAnswerNumber}].ContentPlaintext`);
+
+                nextAnswer.find('.answer-id').attr('id', `Questions_${questionId}__Answers_${newAnswerNumber}__Id`);
+                nextAnswer.find('.answer-id').attr('name', `Questions[${questionId}].Answers[${newAnswerNumber}].Id`);
             });
 
             radioButtonClick(questionId);
@@ -343,7 +352,7 @@
                     .replace(/<\/?[^>]+(>|$)/g, "");
 
                 $(formatedTextarea)
-                    .siblings('input').val(plainText);
+                    .siblings('.plaintext').val(plainText);
             });
     });
 

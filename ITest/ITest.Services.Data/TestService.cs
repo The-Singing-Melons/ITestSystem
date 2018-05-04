@@ -21,7 +21,6 @@ namespace ITest.Services.Data
 
     public class TestService : ITestService
     {
-        private readonly IDataRepository<ApplicationUser> userRepo;
         private readonly IDataRepository<Test> testRepo;
         private readonly IDataRepository<Question> questionRepo;
         private readonly IDataRepository<Answer> answerRepo;
@@ -31,12 +30,11 @@ namespace ITest.Services.Data
         private readonly IRandomProvider random;
         private readonly IShuffleProvider shuffler;
 
-        public TestService(IDataRepository<ApplicationUser> userRepo,
+        public TestService(
             IDataRepository<Test> testRepo, IDataRepository<Question> questionRepo, IDataRepository<Answer> answerRepo, IDataSaver dataSaver,
             IMappingProvider mapper, IDataRepository<Category> categoryRepo,
             IRandomProvider random, IShuffleProvider shuffler)
         {
-            this.userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
             this.testRepo = testRepo ?? throw new ArgumentNullException(nameof(testRepo));
             this.questionRepo = questionRepo ?? throw new ArgumentNullException(nameof(questionRepo));
             this.answerRepo = answerRepo ?? throw new ArgumentNullException(nameof(answerRepo));
@@ -150,6 +148,7 @@ namespace ITest.Services.Data
             testToAdd.Category = category;
 
             this.testRepo.Add(testToAdd);
+
             this.dataSaver.SaveChanges();
         }
 
@@ -243,26 +242,114 @@ namespace ITest.Services.Data
                 .ThenInclude(q => q.Answers)
                 .SingleOrDefault();
 
+            test.Questions = test.Questions.Where(q => !q.IsDeleted).ToList();
+            foreach (var question in test.Questions)
+            {
+                question.Answers = question.Answers.Where(a => !a.IsDeleted).ToList();
+            }
+            
             return this.mapper.MapTo<ManageTestDto>(test);
         }
 
-        public void EditTest(ManageTestDto editedDto)
+        public void EditTest(ManageTestDto updatedTest)
         {
-            if (editedDto == null)
+            if (updatedTest == null)
             {
-                throw new ArgumentNullException(nameof(editedDto));
+                throw new ArgumentNullException(nameof(updatedTest));
             }
 
-            var testToEdit = this.testRepo.All.Where(t => t.Id.ToString() == editedDto.Id).SingleOrDefault();
-            testToEdit = this.mapper.MapTo(editedDto, testToEdit);
+            var existingTest = this.testRepo.All
+                .Where(t => t.Id.ToString() == updatedTest.Id)
+                .Include(t => t.Questions)
+                .ThenInclude(q => q.Answers)
+                .SingleOrDefault();
 
-            var category = this.categoryRepo.All.SingleOrDefault(c => c.Name == editedDto.CategoryName)
-                ?? throw new ArgumentException($"Category {editedDto.CategoryName} does not exists!");
+            this.EditTest(updatedTest, existingTest);
 
-            testToEdit.Category = category;
+            var category = this.categoryRepo.All.SingleOrDefault(c => c.Name == updatedTest.CategoryName)
+                ?? throw new ArgumentException($"Category {updatedTest.CategoryName} does not exists!");
 
-            this.testRepo.Update(testToEdit);
+            existingTest.Category = category;
+
             this.dataSaver.SaveChanges();
+        }
+
+        private void EditTest(ManageTestDto updatedTest, Test existingTest)
+        {
+            existingTest.Name = updatedTest.TestName;
+            existingTest.Duration = updatedTest.RequestedTime;
+            existingTest.IsPublished = updatedTest.IsPublished;
+
+            var existingQuestionsIds = existingTest.Questions.Select(eq => eq.Id.ToString()).ToHashSet();
+
+            foreach (var updatedQuestion in updatedTest.Questions)
+            {
+                if (existingQuestionsIds.Contains(updatedQuestion.Id))
+                {
+                    //update
+                    var existingQuestion = existingTest.Questions.SingleOrDefault(q => q.Id.ToString() == updatedQuestion.Id);
+                    this.EditQuestion(existingQuestion, updatedQuestion);
+                    existingQuestionsIds.Remove(updatedQuestion.Id);
+                }
+                else
+                {
+                    //add
+                    var questiontoAdd = this.mapper.MapTo<Question>(updatedQuestion);
+                    existingTest.Questions.Add(questiontoAdd);
+                    this.questionRepo.Add(questiontoAdd);
+                }
+            }
+
+            foreach (var questionToDeleteId in existingQuestionsIds)
+            {
+                //delete
+                var questionToDelete = existingTest.Questions.SingleOrDefault(q => q.Id.ToString() == questionToDeleteId);
+                this.DeleteQuestion(questionToDelete);
+            }
+
+            this.testRepo.Update(existingTest);
+        }
+
+        private void EditQuestion(Question existingQuestion, ManageQuestionDto updatedQuestion)
+        {
+            existingQuestion.Body = updatedQuestion.Body;
+
+            var existingAnswersIds = existingQuestion.Answers.Select(ea => ea.Id.ToString()).ToHashSet();
+
+            foreach (var updatedAnswer in updatedQuestion.Answers)
+            {
+                if (existingAnswersIds.Contains(updatedAnswer.Id))
+                {
+                    //update
+                    var existingAnswer = existingQuestion.Answers.SingleOrDefault(q => q.Id.ToString() == updatedAnswer.Id);
+                    this.EditAnswer(existingAnswer, updatedAnswer);
+                    existingAnswersIds.Remove(updatedAnswer.Id);
+                }
+                else
+                {
+                    //add
+                    var answerToAdd = this.mapper.MapTo<Answer>(updatedAnswer);
+                    existingQuestion.Answers.Add(answerToAdd);
+                    this.answerRepo.Add(answerToAdd);
+                }
+            }
+
+            foreach (var answerToDeleteId in existingAnswersIds)
+            {
+                //delete
+                var answerToDelete = existingQuestion.Answers.SingleOrDefault(q => q.Id.ToString() == answerToDeleteId);
+                this.answerRepo.Delete(answerToDelete);
+            }
+
+            this.questionRepo.Update(existingQuestion);
+        }
+
+        private void EditAnswer(Answer existingAnswer, ManageAnswerDto updatedAnswer)
+        {
+            existingAnswer.Content = updatedAnswer.Content;
+            existingAnswer.IsCorrect = updatedAnswer.IsCorrect;
+
+            this.answerRepo.Update(existingAnswer);
         }
 
         public void PublishTest(string name, string category)
@@ -313,22 +400,29 @@ namespace ITest.Services.Data
 
             if (!test.IsDeleted)
             {
-                test.IsDeleted = true;
-                this.testRepo.Delete(test);
-
-                foreach (var question in test.Questions)
-                {
-                    question.IsDeleted = true;
-                    this.questionRepo.Delete(question);
-
-                    foreach (var answer in question.Answers)
-                    {
-                        answer.IsDeleted = true;
-                        this.answerRepo.Delete(answer);
-                    }
-                }
+                this.DeleteTest(test);
 
                 this.dataSaver.SaveChanges();
+            }
+        }
+
+        private void DeleteTest(Test test)
+        {
+            this.testRepo.Delete(test);
+
+            foreach (var question in test.Questions)
+            {
+                this.DeleteQuestion(question);
+            }
+        }
+
+        private void DeleteQuestion(Question question)
+        {
+            this.questionRepo.Delete(question);
+
+            foreach (var answer in question.Answers)
+            {
+                this.answerRepo.Delete(answer);
             }
         }
 

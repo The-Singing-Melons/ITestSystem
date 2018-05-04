@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ITest.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class TestNamesAreNotUnique : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,14 +30,10 @@ namespace ITest.Data.Migrations
                     Id = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
@@ -57,7 +53,7 @@ namespace ITest.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
@@ -181,7 +177,7 @@ namespace ITest.Data.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false),
                     CreatedByUserId = table.Column<string>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Duration = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
@@ -213,7 +209,7 @@ namespace ITest.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Body = table.Column<string>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
@@ -236,7 +232,7 @@ namespace ITest.Data.Migrations
                 {
                     UserId = table.Column<string>(nullable: false),
                     TestId = table.Column<Guid>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     ExecutionTime = table.Column<double>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
@@ -268,7 +264,7 @@ namespace ITest.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Content = table.Column<string>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     IsCorrect = table.Column<bool>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
@@ -292,7 +288,7 @@ namespace ITest.Data.Migrations
                 {
                     UserId = table.Column<string>(nullable: false),
                     AnswerId = table.Column<Guid>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true)
@@ -378,12 +374,6 @@ namespace ITest.Data.Migrations
                 name: "IX_Tests_CreatedByUserId",
                 table: "Tests",
                 column: "CreatedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tests_Name",
-                table: "Tests",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserAnswers_AnswerId",

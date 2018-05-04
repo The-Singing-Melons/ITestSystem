@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using Itest.Data.Models.Abstracts;
 
 namespace ITest.Data
 {
@@ -15,7 +16,7 @@ namespace ITest.Data
         public ITestDbContext(DbContextOptions<ITestDbContext> options)
             : base(options)
         {
-            this.Seed().Wait();
+            //this.Seed().Wait();
         }
 
         public DbSet<Answer> Answers { get; set; }
@@ -72,9 +73,7 @@ namespace ITest.Data
                 .WithMany(c => c.Tests)
                 .HasForeignKey(t => t.CategoryId);
 
-            builder.Entity<Test>()
-                .HasIndex(t => t.Name)
-                .IsUnique(true);
+            builder.Entity<Test>();
 
             // Test-To-Questions
             builder.Entity<Question>()
@@ -138,6 +137,32 @@ namespace ITest.Data
             }
 
             await this.SaveChangesAsync();
+        }
+
+        public override int SaveChanges()
+        {
+            this.ApplyEditInfoRules();
+            return base.SaveChanges();
+        }
+
+        private void ApplyEditInfoRules()
+        {
+            var newlyCreatedEntities = this.ChangeTracker.Entries()
+                .Where(e => e.Entity is IEditable && ((e.State == EntityState.Added) || (e.State == EntityState.Modified)));
+
+            foreach (var entry in newlyCreatedEntities)
+            {
+                var entity = (IEditable)entry.Entity;
+
+                if (entry.State == EntityState.Added && entity.CreatedOn == null)
+                {
+                    entity.CreatedOn = DateTime.Now;
+                }
+                else
+                {
+                    entity.ModifiedOn = DateTime.Now;
+                }
+            }
         }
     }
 }

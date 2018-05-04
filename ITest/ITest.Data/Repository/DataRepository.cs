@@ -34,8 +34,6 @@ namespace ITest.Data.Repository
 
         public void Add(T entity)
         {
-            entity.CreatedOn = DateTime.Now;
-
             EntityEntry entry = this.context.Entry(entity);
 
             if (entry.State != EntityState.Detached)
@@ -59,8 +57,6 @@ namespace ITest.Data.Repository
 
         public void Update(T entity)
         {
-            entity.ModifiedOn = DateTime.Now;
-
             EntityEntry entry = this.context.Entry(entity);
             if (entry.State == EntityState.Detached)
             {

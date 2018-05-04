@@ -32,6 +32,8 @@
             </div>
             <span asp-validation-for="CategoryName" class="text-danger"></span>
         </div>
+
+        <input asp-for="Id" type="hidden" value="@Model.Id" />
     </div>
 </div>
 
@@ -64,7 +66,7 @@
                                         <div class="question-description">
                                             <h3>Description</h3>
 
-                                            <input type="hidden" id="@string.Format("Questions_{0}__BodyPlaintext", q)" name="Questions[@q].BodyPlaintext" class="question-body-plaintext" value="" />
+                                            <input type="hidden" id="@string.Format("Questions_{0}__BodyPlaintext", q)" name="Questions[@q].BodyPlaintext" class="question-body-plaintext plaintext" value="" />
                                             <textarea id="@string.Format("Questions_{0}__Body", q)" name="Questions[@q].Body" class="question-body summernote form-control">@Model.Questions[q].Body</textarea>
                                             <span asp-validation-for="Questions[q].Body" class="text-danger"></span>
                                         </div>
@@ -97,9 +99,11 @@
                                                             </div>
                                                         </div>
 
-                                                        <input type="hidden" id="@string.Format("Questions_{0}__Answers_{1}__ContentPlaintext", q, a)" name="Questions[@q].Answers[@a].ContentPlaintext" class="answer-plaintext" value="" />
+                                                        <input type="hidden" id="@string.Format("Questions_{0}__Answers_{1}__ContentPlaintext", q, a)" name="Questions[@q].Answers[@a].ContentPlaintext" class="answer-plaintext plaintext" value="" />
                                                         <textarea id="@string.Format("Questions_{0}__Answers_{1}__Content", q, a)" name="Questions[@q].Answers[@a].Content" class="answer-content summernote form-control">@Model.Questions[q].Answers[a].Content</textarea>
                                                         <span asp-validation-for="Questions[q].Answers[a].Content" class="text-danger"></span>
+
+                                                        <input asp-for="Questions[q].Answers[a].Id" type="hidden" value="@Model.Questions[q].Answers[a].Id" class="answer-id"/>
                                                     </div>
                                                 }
                                             }
@@ -116,6 +120,8 @@
                                         <button class="add-answer btn btn-default pull-right" name="collapse-@q" type="button">Add Answer</button>
                                     </div>
                                 </div>
+
+                                <input asp-for="Questions[q].Id" type="hidden" value="@Model.Questions[q].Id"  class="question-id"/>
                             </div>
                         }
                     }

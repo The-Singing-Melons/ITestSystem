@@ -39,6 +39,7 @@ namespace ITest.Web.Areas.Admin.Controllers
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             var model = new IndexViewModel();
@@ -54,6 +55,7 @@ namespace ITest.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public IActionResult TestScore(string userId, string testId)
         {
             try
@@ -162,40 +164,6 @@ namespace ITest.Web.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditTest(ManageTestViewModel manageTestViewModel)
-        {
-            if (manageTestViewModel == null || !this.ModelState.IsValid
-                || manageTestViewModel.Questions.Any(q => q.Answers.All(a => !a.IsCorrect)))
-            {
-                manageTestViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
-                return this.View(manageTestViewModel);
-            }
-
-            var logggedUserId = this.userManager.GetUserId(this.HttpContext.User);
-
-            var editTestDto = this.mapper.MapTo<ManageTestDto>(manageTestViewModel);
-            editTestDto.CreatedByUserId = logggedUserId;
-
-            try
-            {
-                this.testService.EditTest(editTestDto);
-            }
-            catch (Exception)
-            {
-                manageTestViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();
-                return this.View(manageTestViewModel);
-            }
-
-            return RedirectToRoute(new
-            {
-                area = "Admin",
-                controller = "Manage",
-                action = "Index"
-            });
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditPublishedTest(ManageTestViewModel manageTestViewModel)
         {
             if (manageTestViewModel == null || !this.ModelState.IsValid
                 || manageTestViewModel.Questions.Any(q => q.Answers.All(a => !a.IsCorrect)))

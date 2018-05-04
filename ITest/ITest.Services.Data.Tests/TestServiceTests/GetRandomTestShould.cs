@@ -14,7 +14,6 @@ namespace ITest.Services.Data.Tests.TestServiceTests
     [TestClass]
     public class GetRandomTestShould
     {
-        private Mock<IDataRepository<ApplicationUser>> userRepoMock;
         private Mock<IDataRepository<Test>> testRepoMock;
         private Mock<IDataRepository<Question>> questionRepoMock;
         private Mock<IDataRepository<Answer>> answerRepoMock;
@@ -27,7 +26,6 @@ namespace ITest.Services.Data.Tests.TestServiceTests
         [TestInitialize]
         public void TestInitialize()
         {
-            this.userRepoMock = new Mock<IDataRepository<ApplicationUser>>();
             this.testRepoMock = new Mock<IDataRepository<Test>>();
             this.questionRepoMock = new Mock<IDataRepository<Question>>();
             this.answerRepoMock = new Mock<IDataRepository<Answer>>();
@@ -70,7 +68,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
 
 
             // Act
-            var sut = new TestService(userRepoMock.Object, testRepoMock.Object, questionRepoMock.Object,
+            var sut = new TestService(testRepoMock.Object, questionRepoMock.Object,
                answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
                randomMock.Object, shufflerMock.Object);
 
@@ -110,7 +108,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
                 .Returns(testsDomain.AsQueryable());
 
 
-            var sut = new TestService(userRepoMock.Object, testRepoMock.Object, questionRepoMock.Object,
+            var sut = new TestService(testRepoMock.Object, questionRepoMock.Object,
                answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
                randomMock.Object, shufflerMock.Object);
 
@@ -122,7 +120,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
         public void ThrowWhenCalledWithInvalidParameters()
         {
             // Arrange
-            var sut = new TestService(userRepoMock.Object, testRepoMock.Object, questionRepoMock.Object,
+            var sut = new TestService(testRepoMock.Object, questionRepoMock.Object,
              answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
              randomMock.Object, shufflerMock.Object);
 
@@ -157,7 +155,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
 
 
 
-            var sut = new TestService(userRepoMock.Object, testRepoMock.Object, questionRepoMock.Object,
+            var sut = new TestService(testRepoMock.Object, questionRepoMock.Object,
                answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
                randomMock.Object, shufflerMock.Object);
 
@@ -199,7 +197,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
                .Returns(testDtoToReturn);
 
 
-            var sut = new TestService(userRepoMock.Object, testRepoMock.Object, questionRepoMock.Object,
+            var sut = new TestService(testRepoMock.Object, questionRepoMock.Object,
                answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
                randomMock.Object, shufflerMock.Object);
 
