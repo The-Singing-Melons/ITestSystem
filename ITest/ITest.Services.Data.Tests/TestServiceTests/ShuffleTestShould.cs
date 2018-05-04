@@ -163,5 +163,18 @@ namespace ITest.Services.Data.Tests.TestServiceTests
             // Assert
             Assert.AreNotEqual(testQuestionsDto, testDto.Questions);
         }
+
+        [TestMethod]
+        public void ThrowArgumentNull_WhenCalledWithInvalidParameter()
+        {
+            // Arrange
+            var sut = new TestService(userRepoMock.Object, testRepoMock.Object, questionRepoMock.Object,
+            answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
+            randomMock.Object, shufflerMock.Object);
+
+            // Act & Assert
+            Assert.ThrowsException<ArgumentNullException>(() => sut.ShuffleTest(null));
+        }
+
     }
 }
