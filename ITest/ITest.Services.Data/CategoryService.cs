@@ -27,6 +27,10 @@ namespace ITest.Services.Data
 
         public IEnumerable<CategoryIndexDto> GetAllCategories(string userId)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException("userId cannot be null or empty", nameof(userId));
+            }
 
             var categoryIndexDto = this.categoryRepo.All.Select(c => new CategoryIndexDto()
             {

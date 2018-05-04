@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using ITest.DTO;
 using ITest.DTO.TakeTest;
 using ITest.DTO.UserHome.Index;
 using ITest.Infrastructure.Providers.Contracts;
@@ -40,7 +39,6 @@ namespace ITest.Web.Areas.User.Controllers
             this.answerService = answerService ?? throw new ArgumentNullException(nameof(answerService));
         }
 
-        // TO-DO : Refactor controller and get most of the bussines logic outside of it
 
         public IActionResult Index()
         {
@@ -140,7 +138,6 @@ namespace ITest.Web.Areas.User.Controllers
 
                 this.answerService.AddAnswersToUser(userId, submitedTest.Questions);
 
-                // move to private inside submit user test
                 var isPassed = this.testService
                     .IsTestPassed(testId, submitedTest);
 

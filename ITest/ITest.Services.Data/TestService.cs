@@ -120,8 +120,10 @@ namespace ITest.Services.Data
 
         public void ShuffleTest(TestDto testToShuffle)
         {
-            // testToShuffle - has changed state
-            // check if shuffler methods were called with correct params
+            if (testToShuffle == null)
+            {
+                throw new ArgumentNullException(nameof(testToShuffle));
+            }
 
             var shuffledQuestions = this.shuffler.Shuffle<QuestionDto>(testToShuffle.Questions);
             testToShuffle.Questions = shuffledQuestions;
@@ -133,7 +135,6 @@ namespace ITest.Services.Data
 
                 testToShuffle.Questions[i].Answers = shuffledAnswers;
             }
-
         }
 
         public void CreateTest(ManageTestDto testDto)
@@ -172,6 +173,7 @@ namespace ITest.Services.Data
                 isPassed = true;
             }
 
+            // return isPassed, resultPercentange, totalQuestionsCount, totalCorrectQuestions
             return isPassed;
         }
 

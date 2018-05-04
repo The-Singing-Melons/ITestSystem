@@ -64,18 +64,45 @@ namespace ITest.Services.Data.Tests.TestServiceTests
             this.shufflerMock.Verify(x => x.Shuffle<QuestionDto>(testDto.Questions), Times.Once);
         }
 
-        //[TestMethod]
-        // how exactly to assert model has changed state?
-        public void ChangeParameterState_WhenCalledWithValidArgument()
+        [TestMethod]
+        public void CallShufflerShuffleAnswers_WithCorrectParameter()
         {
             // Arrange
-            var testId = new Guid().ToString();
-
-            var testCategory = new CategoryDto()
+            var answersDto = new List<AnswerDto>();
+            var questionsDto = new List<QuestionDto>()
             {
-                Name = "JAVA"
+                new QuestionDto()
+                {
+                    Answers = answersDto
+                }
             };
 
+            var testDto = new TestDto()
+            {
+                Questions = questionsDto
+            };
+
+            this.shufflerMock.Setup(x => x.Shuffle<QuestionDto>(It.IsAny<List<QuestionDto>>()))
+                 .Returns(questionsDto);
+
+            this.shufflerMock.Setup(x => x.Shuffle<AnswerDto>(It.IsAny<List<AnswerDto>>()))
+                    .Returns(answersDto);
+
+            var sut = new TestService(userRepoMock.Object, testRepoMock.Object, questionRepoMock.Object,
+               answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
+               randomMock.Object, shufflerMock.Object);
+
+            // act
+            sut.ShuffleTest(testDto);
+
+            // Assert
+            this.shufflerMock.Verify(x => x.Shuffle<AnswerDto>(testDto.Questions[0].Answers), Times.Once);
+        }
+
+        [TestMethod]
+        public void ChangeTestAnswerState_WhenCalledWithValidArgument()
+        {
+            // Arrange
             var testQuestionAnswersDto = new List<AnswerDto>()
             {
                 new AnswerDto()
@@ -88,18 +115,53 @@ namespace ITest.Services.Data.Tests.TestServiceTests
 
             var testDto = new TestDto()
             {
-                Id = testId,
-                IsPublished = true,
-                Category = testCategory,
                 Questions = testQuestionsDto
             };
 
             var testsDomainDto = new List<TestDto>() { testDto };
 
+            this.shufflerMock.Setup(x => x.Shuffle<QuestionDto>(It.IsAny<List<QuestionDto>>()))
+                .Returns(testQuestionsDto);
+
+            this.shufflerMock.Setup(x => x.Shuffle<AnswerDto>(It.IsAny<List<AnswerDto>>()))
+                    .Returns(new List<AnswerDto>());
+
             var sut = new TestService(userRepoMock.Object, testRepoMock.Object, questionRepoMock.Object,
                answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
                randomMock.Object, shufflerMock.Object);
 
+            // Act
+            sut.ShuffleTest(testDto);
+
+            // Assert
+            Assert.AreNotEqual(testQuestionAnswersDto, testDto.Questions[0].Answers);
+        }
+
+        [TestMethod]
+        public void ChangeTestQuestionState_WhenCalledWithValidArgument()
+        {
+            // Arrange
+            var testQuestionsDto = new List<QuestionDto>();
+
+            var testDto = new TestDto()
+            {
+                Questions = testQuestionsDto
+            };
+
+            var testsDomainDto = new List<TestDto>() { testDto };
+
+            this.shufflerMock.Setup(x => x.Shuffle<QuestionDto>(It.IsAny<List<QuestionDto>>()))
+                .Returns(new List<QuestionDto>());
+
+            var sut = new TestService(userRepoMock.Object, testRepoMock.Object, questionRepoMock.Object,
+               answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
+               randomMock.Object, shufflerMock.Object);
+
+            // Act
+            sut.ShuffleTest(testDto);
+
+            // Assert
+            Assert.AreNotEqual(testQuestionsDto, testDto.Questions);
         }
     }
 }
