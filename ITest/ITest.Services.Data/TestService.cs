@@ -182,7 +182,6 @@ namespace ITest.Services.Data
             return isPassed;
         }
 
-
         public bool IsTestPassed(string testId, TestRequestDto submitedTest)
         {
             if (string.IsNullOrEmpty(testId))
@@ -195,6 +194,8 @@ namespace ITest.Services.Data
                 throw new ArgumentNullException(nameof(submitedTest));
             }
 
+            // how to mock something coming out of sut?
+            // pass it as dependency in the paramater(ie full test)
             var testWithQuestions = this.GetTestQuestionsWithAnswers(testId);
             var totalCorrectQuestions = 0;
 
@@ -255,7 +256,7 @@ namespace ITest.Services.Data
             {
                 question.Answers = question.Answers.Where(a => !a.IsDeleted).ToList();
             }
-            
+
             return this.mapper.MapTo<ManageTestDto>(test);
         }
 
