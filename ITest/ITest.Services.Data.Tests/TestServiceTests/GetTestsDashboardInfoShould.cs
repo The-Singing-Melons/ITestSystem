@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Itest.Data.Models;
 using ITest.Data.Repository;
 using ITest.Data.UnitOfWork;
 using ITest.DTO;
-using ITest.DTO.TakeTest;
 using ITest.Infrastructure.Providers.Contracts;
+using ITest.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 namespace ITest.Services.Data.Tests.TestServiceTests
 {
     [TestClass]
-    public class IsTestPassedShould
+    public class GetTestDashboardInfoShould
     {
         private Mock<IDataRepository<Test>> testRepoMock;
         private Mock<IDataRepository<Question>> questionRepoMock;
@@ -35,27 +37,31 @@ namespace ITest.Services.Data.Tests.TestServiceTests
         }
 
         [TestMethod]
-        public void ThrowArgumentNull_WhenCalledWithInvalidFirstParameter()
+        public void SucessfullyReturnCorrectData_WhenCalled()
         {
+            var testsStub = new List<Test>()
+            {
+                new Test()
+            };
+
+            var testDtoStubToReturn = new List<TestDashBoardDto>()
+            {
+                new TestDashBoardDto()
+            };
+
+
+            this.testRepoMock.Setup(x => x.All).Returns(testsStub.AsQueryable());
+            this.mapperMock
+                .Setup(x => x.EnumerableProjectTo<Test, TestDashBoardDto>(testsStub))
+                .Returns(testDtoStubToReturn);
+
             var sut = new TestService(
-            testRepoMock.Object, questionRepoMock.Object, answerRepoMock.Object, dataSaverMock.Object,
-            mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object);
+                testRepoMock.Object, questionRepoMock.Object, answerRepoMock.Object, dataSaverMock.Object,
+                mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object);
 
-            Assert.ThrowsException<ArgumentNullException>(()
-                                        => sut
-                                        .IsTestPassed(null, new TestRequestDto(), new TestDto()));
-        }
+            var result = sut.GetTestsDashboardInfo();
 
-        [TestMethod]
-        public void ThrowArgumentNull_WhenCalledWithInvalidSecondParameter()
-        {
-            var sut = new TestService(
-            testRepoMock.Object, questionRepoMock.Object, answerRepoMock.Object, dataSaverMock.Object,
-            mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object);
-
-            Assert.ThrowsException<ArgumentNullException>(()
-                                         => sut
-                                         .IsTestPassed(null, new TestRequestDto(), new TestDto()));
+            Assert.AreEqual(result.Count(), 1);
         }
     }
 }

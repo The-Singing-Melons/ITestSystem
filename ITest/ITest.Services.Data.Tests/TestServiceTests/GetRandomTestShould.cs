@@ -78,12 +78,6 @@ namespace ITest.Services.Data.Tests.TestServiceTests
             Assert.AreEqual(testDtoToReturn.Id, result.Id);
         }
 
-        [TestMethod]
-        public void ReturnsDifferentTestsFromDifferentCalls()
-        {
-            // How to structure this test?
-            Assert.AreEqual(0, 1);
-        }
 
         [TestMethod]
         public void ThrowWhenNoTestInCategoryFound()

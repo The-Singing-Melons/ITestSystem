@@ -188,10 +188,14 @@ namespace ITest.Services.Data.Tests.TestServiceTests
             this.testRepoMock.Setup(x => x.All)
                 .Returns(testsDomain.AsQueryable());
 
+            this.mapperMock.Setup(x => x.MapTo<TestDto>(It.IsAny<Test>()))
+                .Returns(testDtoToReturn);
+
+            //this.mapperMock.Verify(x => x.MapTo<TestDto>(test), Times.Once);
+
             var sut = new TestService(testRepoMock.Object, questionRepoMock.Object,
                answerRepoMock.Object, dataSaverMock.Object, mapperMock.Object, categoryRepoMock.Object,
                randomMock.Object, shufflerMock.Object);
-
 
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(() => sut.GetTestQuestionsWithAnswers("invalid id"));

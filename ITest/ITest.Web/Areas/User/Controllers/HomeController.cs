@@ -139,7 +139,8 @@ namespace ITest.Web.Areas.User.Controllers
                 this.answerService.AddAnswersToUser(userId, submitedTest.Questions);
 
                 var isPassed = this.testService
-                    .IsTestPassed(testId, submitedTest);
+                    .IsTestPassed(testId, submitedTest,
+                                  this.testService.GetTestQuestionsWithAnswers(testId));
 
                 this.userTestService.SubmitUserTest(testId,
                     userId, isPassed);

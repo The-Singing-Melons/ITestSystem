@@ -106,7 +106,14 @@ namespace ITest.Services.Data
                                             .ThenInclude(q => q.Answers)
                                         .SingleOrDefault();
 
-            testWithQuestionsAndAnswers.Questions = testWithQuestionsAndAnswers.Questions.Where(q => !q.IsDeleted).ToList();
+            if (testWithQuestionsAndAnswers == null)
+            {
+                throw new ArgumentNullException("Test not found!");
+            }
+
+            testWithQuestionsAndAnswers.Questions = testWithQuestionsAndAnswers
+                                                        .Questions.Where(q => !q.IsDeleted).ToList();
+
             foreach (var question in testWithQuestionsAndAnswers.Questions)
             {
                 question.Answers = question.Answers.Where(a => !a.IsDeleted).ToList();
@@ -182,7 +189,7 @@ namespace ITest.Services.Data
             return isPassed;
         }
 
-        public bool IsTestPassed(string testId, TestRequestDto submitedTest)
+        public bool IsTestPassed(string testId, TestRequestDto submitedTest, TestDto testWithQuestions)
         {
             if (string.IsNullOrEmpty(testId))
             {
@@ -194,9 +201,6 @@ namespace ITest.Services.Data
                 throw new ArgumentNullException(nameof(submitedTest));
             }
 
-            // how to mock something coming out of sut?
-            // pass it as dependency in the paramater(ie full test)
-            var testWithQuestions = this.GetTestQuestionsWithAnswers(testId);
             var totalCorrectQuestions = 0;
 
             for (int i = 0; i < testWithQuestions.Questions.Count; i++)
