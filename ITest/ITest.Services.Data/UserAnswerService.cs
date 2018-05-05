@@ -42,31 +42,9 @@ namespace ITest.Services.Data
 
             for (int i = 0; i < questions.Count; i++)
             {
-
                 if (questions[i].Answers == null)
                 {
                     continue;
-
-                    //var defaultAnswerContent = "No question selected";
-                    //var defaultAnswer = this.answerRepo.All
-                    //    .Where(a => a.Content == defaultAnswerContent)
-                    //    .FirstOrDefault();
-
-                    //if (defaultAnswer == null)
-                    //{
-                    //    defaultAnswer = new Answer()
-                    //    {
-                    //        IsDeleted = false,
-                    //        Content = defaultAnswerContent,
-                    //        QuestionId = Guid.Parse(questions[i].Id)
-                    //    };
-
-                    //    this.answerRepo.Add(defaultAnswer);
-
-                    //    this.dataSaver.SaveChanges();
-                    //}
-
-                    //questions[i].Answers = defaultAnswer.Id.ToString();
                 }
 
                 var userAnswer = new UserAnswer
@@ -77,18 +55,16 @@ namespace ITest.Services.Data
                 };
 
                 this.userAnswerRepo.Add(userAnswer);
-
             }
 
             this.dataSaver.SaveChanges();
-
         }
 
         public IEnumerable<UserAnswerDto> GetAnswersForTestDoneByUser(string userId, string testId)
         {
             if (string.IsNullOrEmpty(userId))
             {
-                throw new ArgumentNullException("Test Id cannot be null!");
+                throw new ArgumentNullException("User Id cannot be null!");
             }
 
             if (string.IsNullOrEmpty(testId))
@@ -111,7 +87,7 @@ namespace ITest.Services.Data
                 throw new ArgumentException("No Answers!");
             }
 
-            var answersForTestDto = this.mapper.ProjectTo<UserAnswerDto>(answersForTest);
+            var answersForTestDto = this.mapper.ProjectTo<UserAnswerDto>(answersForTest).ToList();
 
             return answersForTestDto;
         }

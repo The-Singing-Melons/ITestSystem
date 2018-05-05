@@ -99,12 +99,18 @@ namespace ITest.Services.Data
                 throw new ArgumentNullException("Test Id cannot be null!");
             }
 
-            var testWithQuestionsAndAnswers = testRepo.All
+            var testWithQuestionsAndAnswers = this.testRepo.All
                                         .Where(t => t.Id.ToString() == testId)
                                         .Include(t => t.Category)
                                         .Include(t => t.Questions)
                                             .ThenInclude(q => q.Answers)
                                         .SingleOrDefault();
+
+            testWithQuestionsAndAnswers.Questions = testWithQuestionsAndAnswers.Questions.Where(q => !q.IsDeleted).ToList();
+            foreach (var question in testWithQuestionsAndAnswers.Questions)
+            {
+                question.Answers = question.Answers.Where(a => !a.IsDeleted).ToList();
+            }
 
             if (testWithQuestionsAndAnswers == null)
             {

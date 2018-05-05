@@ -84,6 +84,16 @@ namespace ITest.Services.Data
 
         public bool UserHasCompletedTest(string userId, string testId)
         {
+            if (string.IsNullOrEmpty(testId))
+            {
+                throw new ArgumentNullException("Test Id cannot be null!");
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("User Id cannot be null!");
+            }
+
             var isTestTaken = this.userTestRepo.All
                 .Any(x => x.UserId == userId &&
                           x.TestId.ToString() == testId &&
