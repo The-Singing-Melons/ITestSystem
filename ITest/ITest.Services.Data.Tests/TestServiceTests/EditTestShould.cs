@@ -46,19 +46,20 @@ namespace ITest.Services.Data.Tests.TestServiceTests
             Assert.ThrowsException<ArgumentNullException>(() => sut.EditTest(null));
         }
 
-
         [TestMethod]
-        // currently does not pass 
-        public void CallDataSaverSaveChangesSucessfully()
+        public void SucessfullyCallDataSaverSaveChanges_WhenInvokedWithValidParameters()
         {
             // Arrange
+            // Domain
             var testId = new Guid();
+            var questionId = new Guid();
+            var answerId = new Guid();
             var category = new Category() { Name = "JAVA" };
-
             var questionAnswers = new List<Answer>()
             {
                 new Answer()
                 {
+                    Id = answerId,
                     IsDeleted = false
                 }
             };
@@ -67,6 +68,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
             {
                 new Question()
                 {
+                    Id= questionId,
                     Answers = questionAnswers,
                     IsDeleted = false
                 }
@@ -80,14 +82,27 @@ namespace ITest.Services.Data.Tests.TestServiceTests
             };
 
             var testList = new List<Test>() { testStub };
-            var testDtoArgument = new ManageTestDto()
-            { Id = testId.ToString(), CategoryName = category.Name };
 
             this.testRepoMock.Setup(x => x.All)
                 .Returns(testList.AsQueryable());
 
             this.categoryRepoMock.Setup(x => x.All)
                 .Returns(new List<Category>() { category }.AsQueryable());
+
+            // DTO
+
+            var dtoQuestion = new ManageQuestionDto() { Id = questionId.ToString() };
+            var dtoAnswer = new ManageAnswerDto() { Id = answerId.ToString() };
+            var dtoAnswersList = new List<ManageAnswerDto>() { dtoAnswer };
+            dtoQuestion.Answers = dtoAnswersList;
+            var dtoQuestionsList = new List<ManageQuestionDto>() { dtoQuestion };
+
+            var testDtoArgument = new ManageTestDto()
+            {
+                Id = testId.ToString(),
+                CategoryName = category.Name,
+                Questions = dtoQuestionsList
+            };
 
             var sut = new TestService(
               testRepoMock.Object, questionRepoMock.Object, answerRepoMock.Object, dataSaverMock.Object,
@@ -100,6 +115,295 @@ namespace ITest.Services.Data.Tests.TestServiceTests
             // Assert
 
             this.dataSaverMock.Verify(x => x.SaveChanges(), Times.Once);
+        }
+
+        [TestMethod]
+        public void SucessfullyCallQuestionRepoAdd_WhenInvokedWithValidParameters()
+        {
+            // Arrange
+            // Domain
+            var testId = new Guid();
+            var questionId = new Guid();
+            var answerId = new Guid();
+            var category = new Category() { Name = "JAVA" };
+            var questionAnswers = new List<Answer>()
+            {
+                new Answer()
+                {
+                    Id = answerId,
+                    IsDeleted = false
+                }
+            };
+
+            var testQuestions = new List<Question>()
+            {
+                new Question()
+                {
+                    Id= questionId,
+                    Answers = questionAnswers,
+                    IsDeleted = false
+                }
+            };
+
+            var testStub = new Test()
+            {
+                Id = testId,
+                Questions = testQuestions,
+                Category = category
+            };
+
+            var testList = new List<Test>() { testStub };
+
+            this.testRepoMock.Setup(x => x.All)
+                .Returns(testList.AsQueryable());
+
+            this.categoryRepoMock.Setup(x => x.All)
+                .Returns(new List<Category>() { category }.AsQueryable());
+
+            // DTO
+            //var questiontoAdd = this.mapper.MapTo<Question>(updatedQuestion);
+
+            var guidString = "e376ce00-89b0-44f3-bd1c-a248535585b9";
+            var questionDomainToReturn = new Question() { Id = Guid.Parse(guidString) };
+            this.mapperMock.Setup(x => x.MapTo<Question>(It.IsAny<ManageQuestionDto>()))
+                .Returns(questionDomainToReturn);
+            var dtoQuestion = new ManageQuestionDto() { Id = guidString };
+            var dtoAnswer = new ManageAnswerDto() { Id = answerId.ToString() };
+            var dtoAnswersList = new List<ManageAnswerDto>() { dtoAnswer };
+            dtoQuestion.Answers = dtoAnswersList;
+            var dtoQuestionsList = new List<ManageQuestionDto>() { dtoQuestion };
+
+            var testDtoArgument = new ManageTestDto()
+            {
+                Id = testId.ToString(),
+                CategoryName = category.Name,
+                Questions = dtoQuestionsList
+            };
+
+            var sut = new TestService(
+              testRepoMock.Object, questionRepoMock.Object, answerRepoMock.Object, dataSaverMock.Object,
+              mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object);
+
+            // Act
+
+            sut.EditTest(testDtoArgument);
+
+            // Assert
+
+            this.questionRepoMock.Verify(x => x.Add(questionDomainToReturn), Times.Once);
+        }
+
+        [TestMethod]
+        public void SucessfullyCallTestRepoUpdate_WhenInvokedWithValidParameters()
+        {
+            // Arrange
+            // Domain
+            var testId = new Guid();
+            var questionId = new Guid();
+            var answerId = new Guid();
+            var category = new Category() { Name = "JAVA" };
+            var questionAnswers = new List<Answer>()
+            {
+                new Answer()
+                {
+                    Id = answerId,
+                    IsDeleted = false
+                }
+            };
+
+            var testQuestions = new List<Question>()
+            {
+                new Question()
+                {
+                    Id= questionId,
+                    Answers = questionAnswers,
+                    IsDeleted = false
+                }
+            };
+
+            var testStub = new Test()
+            {
+                Id = testId,
+                Questions = testQuestions,
+                Category = category
+            };
+
+            var testList = new List<Test>() { testStub };
+
+            this.testRepoMock.Setup(x => x.All)
+                .Returns(testList.AsQueryable());
+
+            this.categoryRepoMock.Setup(x => x.All)
+                .Returns(new List<Category>() { category }.AsQueryable());
+
+            // DTO
+
+            var dtoQuestion = new ManageQuestionDto() { Id = questionId.ToString() };
+            var dtoAnswer = new ManageAnswerDto() { Id = answerId.ToString() };
+            var dtoAnswersList = new List<ManageAnswerDto>() { dtoAnswer };
+            dtoQuestion.Answers = dtoAnswersList;
+            var dtoQuestionsList = new List<ManageQuestionDto>() { dtoQuestion };
+
+            var testDtoArgument = new ManageTestDto()
+            {
+                Id = testId.ToString(),
+                CategoryName = category.Name,
+                Questions = dtoQuestionsList
+            };
+
+            var sut = new TestService(
+              testRepoMock.Object, questionRepoMock.Object, answerRepoMock.Object, dataSaverMock.Object,
+              mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object);
+
+            // Act
+
+            sut.EditTest(testDtoArgument);
+
+            // Assert
+
+            this.testRepoMock.Verify(x => x.Update(testStub), Times.Once);
+        }
+
+        [TestMethod]
+        public void SucessfullyCallQuestionRepoUpdate_WhenInvokedWithValidParameters()
+        {
+            // Arrange
+            // Domain
+            var testId = new Guid();
+            var questionId = new Guid();
+            var answerId = new Guid();
+            var category = new Category() { Name = "JAVA" };
+            var questionAnswers = new List<Answer>()
+            {
+                new Answer()
+                {
+                    Id = answerId,
+                    IsDeleted = false
+                }
+            };
+
+            var testQuestions = new List<Question>()
+            {
+                new Question()
+                {
+                    Id= questionId,
+                    Answers = questionAnswers,
+                    IsDeleted = false
+                }
+            };
+
+            var testStub = new Test()
+            {
+                Id = testId,
+                Questions = testQuestions,
+                Category = category
+            };
+
+            var testList = new List<Test>() { testStub };
+
+            this.testRepoMock.Setup(x => x.All)
+                .Returns(testList.AsQueryable());
+
+            this.categoryRepoMock.Setup(x => x.All)
+                .Returns(new List<Category>() { category }.AsQueryable());
+
+            // DTO
+
+            var dtoQuestion = new ManageQuestionDto() { Id = questionId.ToString() };
+            var dtoAnswer = new ManageAnswerDto() { Id = answerId.ToString() };
+            var dtoAnswersList = new List<ManageAnswerDto>() { dtoAnswer };
+            dtoQuestion.Answers = dtoAnswersList;
+            var dtoQuestionsList = new List<ManageQuestionDto>() { dtoQuestion };
+
+            var testDtoArgument = new ManageTestDto()
+            {
+                Id = testId.ToString(),
+                CategoryName = category.Name,
+                Questions = dtoQuestionsList
+            };
+
+            var sut = new TestService(
+              testRepoMock.Object, questionRepoMock.Object, answerRepoMock.Object, dataSaverMock.Object,
+              mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object);
+
+            // Act
+
+            sut.EditTest(testDtoArgument);
+
+            // Assert
+
+            this.questionRepoMock.Verify(x => x.Update(testQuestions[0]), Times.Once);
+        }
+
+        [TestMethod]
+        public void SucessfullyCallAnswerRepoUpdate_WhenInvokedWithValidParameters()
+        {
+            // Arrange
+            // Domain
+            var testId = new Guid();
+            var questionId = new Guid();
+            var answerId = new Guid();
+            var category = new Category() { Name = "JAVA" };
+            var questionAnswers = new List<Answer>()
+            {
+                new Answer()
+                {
+                    Id = answerId,
+                    IsDeleted = false
+                }
+            };
+
+            var testQuestions = new List<Question>()
+            {
+                new Question()
+                {
+                    Id= questionId,
+                    Answers = questionAnswers,
+                    IsDeleted = false
+                }
+            };
+
+            var testStub = new Test()
+            {
+                Id = testId,
+                Questions = testQuestions,
+                Category = category
+            };
+
+            var testList = new List<Test>() { testStub };
+
+            this.testRepoMock.Setup(x => x.All)
+                .Returns(testList.AsQueryable());
+
+            this.categoryRepoMock.Setup(x => x.All)
+                .Returns(new List<Category>() { category }.AsQueryable());
+
+            // DTO
+
+            var dtoQuestion = new ManageQuestionDto() { Id = questionId.ToString() };
+            var dtoAnswer = new ManageAnswerDto() { Id = answerId.ToString() };
+            var dtoAnswersList = new List<ManageAnswerDto>() { dtoAnswer };
+            dtoQuestion.Answers = dtoAnswersList;
+            var dtoQuestionsList = new List<ManageQuestionDto>() { dtoQuestion };
+
+            var testDtoArgument = new ManageTestDto()
+            {
+                Id = testId.ToString(),
+                CategoryName = category.Name,
+                Questions = dtoQuestionsList
+            };
+
+            var sut = new TestService(
+              testRepoMock.Object, questionRepoMock.Object, answerRepoMock.Object, dataSaverMock.Object,
+              mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object);
+
+            // Act
+
+            sut.EditTest(testDtoArgument);
+
+            // Assert
+
+            this.answerRepoMock.Verify(x => x.Update(questionAnswers[0]), Times.Once);
         }
     }
 }
