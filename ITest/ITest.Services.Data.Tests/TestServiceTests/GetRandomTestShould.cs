@@ -78,7 +78,6 @@ namespace ITest.Services.Data.Tests.TestServiceTests
             Assert.AreEqual(testDtoToReturn.Id, result.Id);
         }
 
-
         [TestMethod]
         public void ThrowWhenNoTestInCategoryFound()
         {
