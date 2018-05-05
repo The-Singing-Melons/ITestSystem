@@ -39,7 +39,7 @@
                                             @if (test.IsPublished && !test.IsDisabled)
                                             {
                                                 <td class="is-published">Publlished</td>
-                                                <td class="text-center">
+                                                <td class="actions-col text-center">
                                                     <a class='btn btn-success btn-xs disabled'>
                                                         <span class="glyphicon glyphicon-ok"></span>
                                                         Published
@@ -54,25 +54,65 @@
                                                         <input id="testName" name="testName" type="hidden" value="@test.TestName" />
                                                         <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
 
-                                                        <button type="submit" class="btn btn-danger btn-xs">
+                                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target=".test-disable-modal">
                                                             <span class="glyphicon glyphicon-ban-circle"></span>
                                                             Disable
                                                         </button>
+
+                                                        <div class="test-disable-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        Are you sure you want to Disable this Test?
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
+                                                                        <button type="submit" id="modal-submit-btn" class="btn btn-primary">Yes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </form>
                                                 </td>
                                             }
                                             else
                                             {
                                                 <td class="is-published">Draft</td>
-                                                <td class="text-center">
+                                                <td class="actions-col text-center">
                                                     <form asp-area="Admin" asp-controller="Manage" asp-action="PublishTest" method="post" class="publish-test">
                                                         <input id="testName" name="testName" type="hidden" value="@test.TestName" />
                                                         <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
 
-                                                        <button type="submit" class="btn btn-success btn-xs">
+                                                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target=".test-publish-modal">
                                                             <span class="glyphicon glyphicon-ok"></span>
                                                             Publish
                                                         </button>
+
+                                                        <div class="test-publish-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        Are you sure you want to Publish this Test?
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
+                                                                        <button type="submit" id="modal-submit-btn" class="btn btn-primary">Yes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </form>
 
                                                     @if (test.IsDisabled)
@@ -103,10 +143,30 @@
                                                             <input id="testName" name="testName" type="hidden" value="@test.TestName" />
                                                             <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
 
-                                                            <button type="submit" class="btn btn-danger btn-xs">
+                                                            <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target=".test-delete-modal">
                                                                 <span class="glyphicon glyphicon-remove"></span>
                                                                 Delete
                                                             </button>
+
+                                                            <div class="test-delete-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            Are you sure you want to Delete this Test?
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
+                                                                            <button type="submit" id="modal-submit-btn" class="btn btn-primary">Yes</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </form>
                                                     }
 
@@ -114,14 +174,6 @@
                                             }
                                         </tr>
                                     }
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td>
-                                            NO TESTS!!!
-                                        </td>
-                                    </tr>
                                 }
                             </table>
                         </div>
@@ -141,35 +193,27 @@
                                 {
                                     foreach (var result in Model.TestResults)
                                     {
-                                        <tr>
-                                            <td>@result.TestName</td>
-                                            <td>@result.UserName</td>
-                                            <td>@result.CategoryName</td>
-                                            <td>@result.RequestedTime min</td>
-                                            <td>@(TimeSpan.FromMinutes(result.ExecutionTime)) min</td>
+                                <tr>
+                                    <td>@result.TestName</td>
+                                    <td>@result.UserName</td>
+                                    <td>@result.CategoryName</td>
+                                    <td>@result.RequestedTime min</td>
+                                    <td>@(TimeSpan.FromMinutes(result.ExecutionTime)) min</td>
 
-                                            @if (result.IsPassed)
+                                    @if (result.IsPassed)
                                             {
-                                                <td>
-                                                    <a class="btn btn-success" asp-action="TestScore" asp-route-userId="@result.UserId" asp-route-testId="@result.TestId">Passed</a>
-                                                </td>
+                                    <td>
+                                        <a class="btn btn-success" asp-action="TestScore" asp-route-userId="@result.UserId" asp-route-testId="@result.TestId">Passed</a>
+                                    </td>
                                             }
                                             else
                                             {
-                                                <td>
-                                                    <a class="btn btn-danger" asp-action="TestScore" asp-route-userId="@result.UserId" asp-route-testId="@result.TestId">Failed</a>
-                                                </td>
+                                    <td>
+                                        <a class="btn btn-danger" asp-action="TestScore" asp-route-userId="@result.UserId" asp-route-testId="@result.TestId">Failed</a>
+                                    </td>
                                             }
-                                        </tr>
+                                </tr>
                                     }
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td>
-                                            NO USERTESTS!!!
-                                        </td>
-                                    </tr>
                                 }
                             </table>
                         </div>

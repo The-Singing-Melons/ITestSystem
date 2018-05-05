@@ -23,12 +23,11 @@ namespace ITest.Services.Data
 
         public UserTestService(
             IDataRepository<Test> testRepo, IDataSaver dataSaver,
-            IMappingProvider mapper, IDataRepository<Category> categoryRepo,
-            IDataRepository<UserTest> userTestRepo, TimeProvider time)
+            IMappingProvider mapper, IDataRepository<UserTest> userTestRepo, TimeProvider time)
         {
             this.testRepo = testRepo ?? throw new ArgumentNullException(nameof(testRepo));
             this.userTestRepo = userTestRepo ?? throw new ArgumentNullException(nameof(userTestRepo));
-            this.time = time;
+            this.time = time ?? throw new ArgumentNullException(nameof(time));
             this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }

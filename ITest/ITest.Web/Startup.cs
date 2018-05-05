@@ -55,6 +55,8 @@ namespace ITest.Web
         private void RegisterInfrastructure(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddMemoryCache();
+
             services.AddAutoMapper(options =>
             {
                 options.AddProfile<MappingSettings>();

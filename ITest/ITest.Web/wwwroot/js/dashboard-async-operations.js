@@ -2,14 +2,16 @@
     var publishTestSubmitEvent = $('.created-tests-table').on('submit', '.publish-test', function (event) {
         event.preventDefault();
 
-        var testName = $(this).children('#testName').val();
-        var categoryName = $(this).children('#categoryName').val();
+        var form = $(this);
 
-        var isPublishedCol = $(this).closest('tr').children('.is-published');
-        var actionsCol = $(this).closest('td');
+        var testName = form.children('#testName').val();
+        var categoryName = form.children('#categoryName').val();
+
+        var isPublishedCol = form.closest('tr').children('.is-published');
+        var actionsCol = form.closest('.actions-col');
 
         var url = this.action;
-        var data = $(this).serialize();
+        var data = form.serialize();
 
         $.ajax({
             type: 'POST',
@@ -40,20 +42,24 @@
                 alert(thrownError);
             }
         });
+
+        form.find('.test-publish-modal').modal('hide');
     });
 
     var deleteTestSubmitEvent = $('.created-tests-table').on('submit', '.delete-test', function (event) {
         event.preventDefault();
 
-        var table = $(this).closest('.created-tests-table').DataTable();
+        var form = $(this);
 
-        var testName = $(this).children('#testName').val();
-        var categoryName = $(this).children('#categoryName').val();
+        var table = form.closest('.created-tests-table').DataTable();
 
-        var testRow = $(this).closest('tr');
+        var testName = form.children('#testName').val();
+        var categoryName = form.children('#categoryName').val();
+
+        var testRow = form.closest('tr');
 
         var url = this.action;
-        var data = $(this).serialize();
+        var data = form.serialize();
 
         $.ajax({
             type: 'POST',
@@ -73,19 +79,23 @@
                 alert(thrownError);
             }
         });
+
+        form.find('.test-delete-modal').modal('hide');
     });
 
     var disableTestSubmitEvent = $('.created-tests-table').on('submit', '.disable-test', function (event) {
         event.preventDefault();
 
-        var testName = $(this).children('#testName').val();
-        var categoryName = $(this).children('#categoryName').val();
+        var form = $(this);
 
-        var isPublishedCol = $(this).closest('tr').children('.is-published');
-        var actionsCol = $(this).closest('td');
+        var testName = form.children('#testName').val();
+        var categoryName = form.children('#categoryName').val();
+
+        var isPublishedCol = form.closest('tr').children('.is-published');
+        var actionsCol = form.closest('.actions-col');
 
         var url = this.action;
-        var data = $(this).serialize();
+        var data = form.serialize();
 
         $.ajax({
             type: 'POST',
@@ -117,5 +127,7 @@
                 alert(thrownError);
             }
         });
+
+        form.find('.test-disable-modal').modal('hide');
     });
 });
