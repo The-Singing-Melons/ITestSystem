@@ -9,7 +9,6 @@ namespace ITest.Services.Data.Contracts
 {
     public interface ITestService
     {
-
         TestDto GetTestById(string id);
 
         TestDto GetTestQuestionsWithAnswers(string testId);
@@ -17,8 +16,8 @@ namespace ITest.Services.Data.Contracts
         TestDto GetRandomTest(string categoryName);
 
         void CreateTest(ManageTestDto testToAdd);
-        bool IsTestPassed(string userId, TestRequestDto submitedTest);
 
+        bool IsTestPassed(string userId, TestRequestDto submitedTest, TestDto testWithQuestions);
 
         IEnumerable<TestDashBoardDto> GetTestsDashboardInfo();
 

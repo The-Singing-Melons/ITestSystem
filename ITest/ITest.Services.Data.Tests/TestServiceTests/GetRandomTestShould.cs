@@ -79,13 +79,6 @@ namespace ITest.Services.Data.Tests.TestServiceTests
         }
 
         [TestMethod]
-        public void ReturnsDifferentTestsFromDifferentCalls()
-        {
-            // How to structure this test?
-            Assert.AreEqual(0, 1);
-        }
-
-        [TestMethod]
         public void ThrowWhenNoTestInCategoryFound()
         {
             // Arrange
