@@ -9,6 +9,7 @@ using ITest.Models;
 using ITest.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
 using ITest.DTO;
+using ITest.Infrastructure.Providers;
 
 namespace ITest.Services.Data
 {
@@ -16,16 +17,18 @@ namespace ITest.Services.Data
     {
         private readonly IDataRepository<Test> testRepo;
         private readonly IDataRepository<UserTest> userTestRepo;
+        private readonly TimeProvider time;
         private readonly IDataSaver dataSaver;
         private readonly IMappingProvider mapper;
 
         public UserTestService(
             IDataRepository<Test> testRepo, IDataSaver dataSaver,
             IMappingProvider mapper, IDataRepository<Category> categoryRepo,
-            IDataRepository<UserTest> userTestRepo)
+            IDataRepository<UserTest> userTestRepo, TimeProvider time)
         {
             this.testRepo = testRepo ?? throw new ArgumentNullException(nameof(testRepo));
             this.userTestRepo = userTestRepo ?? throw new ArgumentNullException(nameof(userTestRepo));
+            this.time = time;
             this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
@@ -47,7 +50,7 @@ namespace ITest.Services.Data
                 TestId = Guid.Parse(testId),
                 UserId = userId,
                 IsDeleted = false,
-                StartedOn = DateTime.Now
+                StartedOn = this.time.Now
             };
 
             this.userTestRepo.Add(userToTestObject);
@@ -76,7 +79,7 @@ namespace ITest.Services.Data
             }
 
             var endTime = currentUserTest.StartedOn.AddMinutes(testDuration);
-            var timeRemaining = Math.Round((endTime - DateTime.Now).TotalSeconds);
+            var timeRemaining = Math.Round((endTime - this.time.Now).TotalSeconds);
 
             return timeRemaining;
 
@@ -121,7 +124,7 @@ namespace ITest.Services.Data
 
             currentTest.IsPassed = isPassed;
             currentTest.IsSubmited = true;
-            var testExecutionTime = currentTest.StartedOn - DateTime.Now;
+            var testExecutionTime = currentTest.StartedOn - this.time.Now;
             currentTest.ExecutionTime = Math.Abs(testExecutionTime.TotalMinutes);
 
             this.dataSaver.SaveChanges();
@@ -164,7 +167,7 @@ namespace ITest.Services.Data
             var endTime = result.StartedOn
                   .AddMinutes(result.Test.Duration);
 
-            var timeRemaining = Math.Round((endTime - DateTime.Now).TotalSeconds);
+            var timeRemaining = Math.Round((endTime - this.time.Now).TotalSeconds);
 
             if (timeRemaining == 0)
             {
