@@ -43,16 +43,14 @@ namespace ITest.Web.Areas.User.Controllers
         public IActionResult Index()
         {
             var userId = this.userManager.GetUserId(this.HttpContext.User);
-
-            var x = this.HttpContext.User;
-
+            
             var overdueTestInProgress = this.userTestService
                 .CheckForOverdueTestInProgress(userId);
 
-            if (overdueTestInProgress)
-            {
-                return RedirectToAction("Index");
-            }
+            //if (overdueTestInProgress)
+            //{
+            //    return RedirectToAction("Index");
+            //}
 
             var allCategories = this.categoryService.GetAllCategories(userId);
 

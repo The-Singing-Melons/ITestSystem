@@ -37,7 +37,7 @@ namespace ITest.Services.Data
                 Name = c.Name,
                 HasUserTakenTestForThisCategory = c.Tests
                         .SelectMany(t => t.UserTests)
-                        .Any(ut => ut.UserId == userId)
+                        .Any(ut => ut.UserId == userId && ut.IsSubmited == true)
             });
 
             return categoryIndexDto;

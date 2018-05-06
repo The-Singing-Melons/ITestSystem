@@ -126,7 +126,7 @@ namespace ITest.Services.Data
 
             currentTest.IsPassed = isPassed;
             currentTest.IsSubmited = true;
-            var testExecutionTime = currentTest.StartedOn - this.time.Now;
+            var testExecutionTime = this.time.Now - currentTest.StartedOn;
             currentTest.ExecutionTime = Math.Abs(testExecutionTime.TotalMinutes);
 
             this.dataSaver.SaveChanges();
@@ -178,7 +178,7 @@ namespace ITest.Services.Data
 
             var timeRemaining = Math.Round((endTime - this.time.Now).TotalSeconds);
 
-            if (timeRemaining == 0)
+            if (timeRemaining <= 0)
             {
                 this.SubmitUserTest(result.Test.Id.ToString(), result.UserId, false);
                 return true;
