@@ -20,13 +20,13 @@ namespace ITest.Web.Areas.User.Controllers
         private readonly ITestService testService;
         private readonly IUserAnswerService answerService;
         private readonly IQuestionService questionService;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IUserManagerProvider userManager;
         private readonly ICategoryService categoryService;
         private readonly IUserTestService userTestService;
 
 
         public HomeController(IMappingProvider mapper, ITestService testService,
-            UserManager<ApplicationUser> userManager, IQuestionService questionService,
+            IUserManagerProvider userManager, IQuestionService questionService,
             ICategoryService categoryService, IUserTestService userTestService,
             IUserAnswerService answerService)
         {
