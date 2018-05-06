@@ -25,11 +25,11 @@ namespace ITest.Services.Data.Contracts
 
         void EditTest(ManageTestDto createTestDto);
 
-        void PublishTest(string name, string category);
+        void PublishTest(string id);
 
-        void DeleteTest(string name, string category);
+        void DeleteTest(string id);
 
-        void DisableTest(string testName, string categoryName);
+        void DisableTest(string id);
 
         void ShuffleTest(TestDto testToShuffle);
     }

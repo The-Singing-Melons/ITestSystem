@@ -4,8 +4,7 @@
 
         var form = $(this);
 
-        var testName = form.children('#testName').val();
-        var categoryName = form.children('#categoryName').val();
+        var id = form.children('#id').val();
 
         var isPublishedCol = form.closest('tr').children('.is-published');
         var actionsCol = form.closest('.actions-col');
@@ -43,7 +42,6 @@
             }
         });
 
-        form.find('.test-publish-modal').modal('hide');
     });
 
     var deleteTestSubmitEvent = $('.created-tests-table').on('submit', '.delete-test', function (event) {
@@ -53,8 +51,7 @@
 
         var table = form.closest('.created-tests-table').DataTable();
 
-        var testName = form.children('#testName').val();
-        var categoryName = form.children('#categoryName').val();
+        var id = form.children('#Id').val();
 
         var testRow = form.closest('tr');
 
@@ -79,8 +76,6 @@
                 alert(thrownError);
             }
         });
-
-        form.find('.test-delete-modal').modal('hide');
     });
 
     var disableTestSubmitEvent = $('.created-tests-table').on('submit', '.disable-test', function (event) {
@@ -88,8 +83,7 @@
 
         var form = $(this);
 
-        var testName = form.children('#testName').val();
-        var categoryName = form.children('#categoryName').val();
+        var id = form.children('#Id').val();
 
         var isPublishedCol = form.closest('tr').children('.is-published');
         var actionsCol = form.closest('.actions-col');
@@ -127,7 +121,5 @@
                 alert(thrownError);
             }
         });
-
-        form.find('.test-disable-modal').modal('hide');
     });
 });

@@ -10,6 +10,7 @@ using ITest.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
 using ITest.DTO;
 using ITest.Infrastructure.Providers;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ITest.Services.Data
 {
@@ -18,16 +19,18 @@ namespace ITest.Services.Data
         private readonly IDataRepository<Test> testRepo;
         private readonly IDataRepository<UserTest> userTestRepo;
         private readonly TimeProvider time;
+        private readonly IMemoryCache memoryCache;
         private readonly IDataSaver dataSaver;
         private readonly IMappingProvider mapper;
 
         public UserTestService(
             IDataRepository<Test> testRepo, IDataSaver dataSaver,
-            IMappingProvider mapper, IDataRepository<UserTest> userTestRepo, TimeProvider time)
+            IMappingProvider mapper, IDataRepository<UserTest> userTestRepo, TimeProvider time/*, IMemoryCache memoryCache*/)
         {
             this.testRepo = testRepo ?? throw new ArgumentNullException(nameof(testRepo));
             this.userTestRepo = userTestRepo ?? throw new ArgumentNullException(nameof(userTestRepo));
             this.time = time ?? throw new ArgumentNullException(nameof(time));
+            //this.memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
             this.dataSaver = dataSaver ?? throw new ArgumentNullException(nameof(dataSaver));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
@@ -131,12 +134,19 @@ namespace ITest.Services.Data
 
         public IEnumerable<UserTestResultDto> GetUserTestResults()
         {
+            IEnumerable<UserTestResultDto> dto;
+
+            //if (!this.memoryCache.TryGetValue("Tests", out dto))
+            //{
             var results = this.userTestRepo.All
                 .Include(ut => ut.User)
                 .Include(ut => ut.Test)
                 .ThenInclude(t => t.Category);
 
-            return this.mapper.ProjectTo<UserTestResultDto>(results).ToList();
+            dto = this.mapper.ProjectTo<UserTestResultDto>(results).ToList();
+            //}
+
+            return dto;
         }
 
         public bool CheckForOverdueTestInProgress(string userId)

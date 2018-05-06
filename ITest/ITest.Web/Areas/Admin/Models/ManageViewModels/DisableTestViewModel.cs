@@ -2,8 +2,6 @@
 {
     public class DisableTestViewModel
     {
-        public string TestName { get; set; }
-
-        public string CategoryName { get; set; }
+        public string Id { get; set; }
     }
 }

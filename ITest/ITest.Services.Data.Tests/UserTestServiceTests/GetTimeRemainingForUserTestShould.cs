@@ -39,7 +39,7 @@ namespace ITest.Services.Data.Tests.UserTestServiceTests
             var userTestRepoStub = new Mock<IDataRepository<UserTest>>();
             var timeProviderStub = new Mock<TimeProvider>();
 
-            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mappingProviderStub.Object, categoryRepoStub.Object, userTestRepoStub.Object, timeProviderStub.Object);
+            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mappingProviderStub.Object, userTestRepoStub.Object, timeProviderStub.Object);
 
             userTestRepoStub.SetupGet(utr => utr.All).Returns(fakeUserTests);
             timeProviderStub.SetupGet(tp => tp.Now).Returns(fakeDateTimeNow);
@@ -71,7 +71,7 @@ namespace ITest.Services.Data.Tests.UserTestServiceTests
             var userTestRepoStub = new Mock<IDataRepository<UserTest>>();
             var timeProviderStub = new Mock<TimeProvider>();
 
-            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mappingProviderStub.Object, categoryRepoStub.Object, userTestRepoStub.Object, timeProviderStub.Object);
+            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mappingProviderStub.Object, userTestRepoStub.Object, timeProviderStub.Object);
 
             userTestRepoStub.SetupGet(utr => utr.All).Returns(fakeUserTests);
 
@@ -80,7 +80,7 @@ namespace ITest.Services.Data.Tests.UserTestServiceTests
             // Act & Assert
             Assert.ThrowsException<ArgumentNullException>(executingGetTimeRemainingForUserTest);
         }
-        
+
         [TestMethod]
         public void Throw_ArgumentNullException_WhenUserId_IsNullOrEmpty()
         {
@@ -88,7 +88,7 @@ namespace ITest.Services.Data.Tests.UserTestServiceTests
             var fakeTestId = new Guid();
             string fakeUserId = "";
             double fakeTestDuration = 30d;
-            
+
             var testRepoStub = new Mock<IDataRepository<Test>>();
             var dataSaverStub = new Mock<IDataSaver>();
             var mappingProviderStub = new Mock<IMappingProvider>();
@@ -96,8 +96,8 @@ namespace ITest.Services.Data.Tests.UserTestServiceTests
             var userTestRepoStub = new Mock<IDataRepository<UserTest>>();
             var timeProviderStub = new Mock<TimeProvider>();
 
-            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mappingProviderStub.Object, categoryRepoStub.Object, userTestRepoStub.Object, timeProviderStub.Object);
-            
+            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mappingProviderStub.Object, userTestRepoStub.Object, timeProviderStub.Object);
+
             Action executingGetTimeRemainingForUserTest = () => userTestService.GetTimeRemainingForUserTest(fakeUserId, fakeTestId.ToString(), fakeTestDuration);
 
             // Act & Assert
@@ -119,7 +119,7 @@ namespace ITest.Services.Data.Tests.UserTestServiceTests
             var userTestRepoStub = new Mock<IDataRepository<UserTest>>();
             var timeProviderStub = new Mock<TimeProvider>();
 
-            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mappingProviderStub.Object, categoryRepoStub.Object, userTestRepoStub.Object, timeProviderStub.Object);
+            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mappingProviderStub.Object, userTestRepoStub.Object, timeProviderStub.Object);
 
             Action executingGetTimeRemainingForUserTest = () => userTestService.GetTimeRemainingForUserTest(fakeUserId, fakeTestId, fakeTestDuration);
 

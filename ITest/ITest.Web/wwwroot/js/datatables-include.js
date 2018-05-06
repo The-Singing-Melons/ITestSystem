@@ -19,7 +19,6 @@
             "emptyTable": "No one has taken any tests yet"
         },
         "order": [[3, "desc"]],
-        searching: false,
         "lengthChange": false,
         "info": false,
         "pagingType": "full_numbers",

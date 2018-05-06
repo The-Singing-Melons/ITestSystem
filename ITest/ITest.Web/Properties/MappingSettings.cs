@@ -115,6 +115,7 @@ namespace ITest.Web.Properties
 
             //From Test to Dto
             this.CreateMap<Test, TestDashBoardDto>()
+                .ForMember(t => t.Id, o => o.MapFrom(t => t.Id.ToString()))
                 .ForMember(t => t.CategoryName, o => o.MapFrom(t => t.Category.Name))
                 .ForMember(t => t.TestName, o => o.MapFrom(t => t.Name));
 

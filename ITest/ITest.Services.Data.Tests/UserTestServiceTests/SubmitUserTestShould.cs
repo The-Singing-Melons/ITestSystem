@@ -36,7 +36,7 @@ namespace ITest.Services.Data.Tests.UserTestServiceTests
             var userTestRepoStub = new Mock<IDataRepository<UserTest>>();
             var timeProviderStub = new Mock<TimeProvider>();
 
-            var userTestService = new UserTestService(testRepoStub.Object, mockDataSaver.Object, mappingProviderStub.Object, categoryRepoStub.Object, userTestRepoStub.Object, timeProviderStub.Object);
+            var userTestService = new UserTestService(testRepoStub.Object, mockDataSaver.Object, mappingProviderStub.Object,  userTestRepoStub.Object, timeProviderStub.Object);
 
             userTestRepoStub.SetupGet(utr => utr.All).Returns(fakeUserTests);
 
@@ -76,7 +76,7 @@ namespace ITest.Services.Data.Tests.UserTestServiceTests
             var userTestRepoStub = new Mock<IDataRepository<UserTest>>();
             var timeProviderStub = new Mock<TimeProvider>();
 
-            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mappingProviderStub.Object, categoryRepoStub.Object, userTestRepoStub.Object, timeProviderStub.Object);
+            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mappingProviderStub.Object,  userTestRepoStub.Object, timeProviderStub.Object);
 
             userTestRepoStub.SetupGet(utr => utr.All).Returns(fakeUserTests);
             timeProviderStub.SetupGet(tp => tp.Now).Returns(fakeDateTimeNow);

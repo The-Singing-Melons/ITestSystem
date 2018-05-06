@@ -199,18 +199,16 @@ namespace ITest.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult PublishTest(PublishTestViewModel model)
+        public IActionResult PublishTest(string id)
         {
-            if (model == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return this.Json(new JsonResult(new { isPublished = false }));
             }
-
-            //validate rights
-
+            
             try
             {
-                this.testService.PublishTest(model.TestName, model.CategoryName);
+                this.testService.PublishTest(id);
             }
             catch (Exception)
             {
@@ -222,21 +220,16 @@ namespace ITest.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteTest(string testName, string categoryName)
+        public IActionResult DeleteTest(string id)
         {
-            if (string.IsNullOrEmpty(testName))
-            {
-                return this.Json(false);
-            }
-
-            if (string.IsNullOrEmpty(categoryName))
+            if (string.IsNullOrEmpty(id))
             {
                 return this.Json(false);
             }
 
             try
             {
-                this.testService.DeleteTest(testName, categoryName);
+                this.testService.DeleteTest(id);
             }
             catch (Exception)
             {
@@ -249,16 +242,16 @@ namespace ITest.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DisableTest(DisableTestViewModel model)
+        public IActionResult DisableTest(string id)
         {
-            if (model == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return this.Json(new JsonResult(new { isDisabled = false }));
             }
 
             try
             {
-                this.testService.DisableTest(model.TestName, model.CategoryName);
+                this.testService.DisableTest(id);
             }
             catch (Exception)
             {
@@ -269,23 +262,15 @@ namespace ITest.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetPublishedTestPartial(string testName, string categoryName)
+        public IActionResult GetPublishedTestPartial(string id)
         {
-            return this.PartialView("_PublishTestPartial", new PublishTestViewModel()
-            {
-                TestName = testName,
-                CategoryName = categoryName
-            });
+            return this.PartialView("_PublishTestPartial", new PublishTestViewModel() { Id = id });
         }
 
         [HttpGet]
-        public IActionResult GetDisabledTestPartial(string testName, string categoryName)
+        public IActionResult GetDisabledTestPartial(string id)
         {
-            return this.PartialView("_DisableTestPartial", new DisableTestViewModel()
-            {
-                TestName = testName,
-                CategoryName = categoryName
-            });
+            return this.PartialView("_DisableTestPartial", new DisableTestViewModel() { Id = id });
         }
     }
 }

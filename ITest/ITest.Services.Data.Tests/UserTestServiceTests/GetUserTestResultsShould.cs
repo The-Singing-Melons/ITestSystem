@@ -27,7 +27,7 @@ namespace ITest.Services.Data.Tests.UserTestServiceTests
             var userTestRepoStub = new Mock<IDataRepository<UserTest>>();
             var timeProviderStub = new Mock<TimeProvider>();
 
-            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mockMappingProvider.Object, categoryRepoStub.Object, userTestRepoStub.Object, timeProviderStub.Object);
+            var userTestService = new UserTestService(testRepoStub.Object, dataSaverStub.Object, mockMappingProvider.Object,  userTestRepoStub.Object, timeProviderStub.Object);
 
             userTestRepoStub.Setup(utr => utr.All).Returns(fakeResults);
 
