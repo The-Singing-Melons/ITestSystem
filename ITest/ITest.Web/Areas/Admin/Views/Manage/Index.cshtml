@@ -51,33 +51,12 @@
                                                     </a>
 
                                                     <form asp-area="Admin" asp-controller="Manage" asp-action="DisableTest" method="post" class="disable-test">
-                                                        <input id="testName" name="testName" type="hidden" value="@test.TestName" />
-                                                        <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
+                                                        <input id="Id" name="Id" type="hidden" value="@test.Id" />
 
-                                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target=".test-disable-modal">
+                                                        <button type="submit" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#test-disable-modal">
                                                             <span class="glyphicon glyphicon-ban-circle"></span>
                                                             Disable
                                                         </button>
-
-                                                        <div class="test-disable-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        Are you sure you want to Disable this Test?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
-                                                                        <button type="submit" id="modal-submit-btn" class="btn btn-primary">Yes</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </form>
                                                 </td>
                                             }
@@ -86,33 +65,12 @@
                                                 <td class="is-published">Draft</td>
                                                 <td class="actions-col text-center">
                                                     <form asp-area="Admin" asp-controller="Manage" asp-action="PublishTest" method="post" class="publish-test">
-                                                        <input id="testName" name="testName" type="hidden" value="@test.TestName" />
-                                                        <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
+                                                        <input id="Id" name="Id" type="hidden" value="@test.Id" />
 
-                                                        <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target=".test-publish-modal">
+                                                        <button type="submit" class="btn btn-success btn-xs" data-toggle="modal" data-target="#test-publish-modal">
                                                             <span class="glyphicon glyphicon-ok"></span>
                                                             Publish
                                                         </button>
-
-                                                        <div class="test-publish-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        Are you sure you want to Publish this Test?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
-                                                                        <button type="submit" id="modal-submit-btn" class="btn btn-primary">Yes</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </form>
 
                                                     @if (test.IsDisabled)
@@ -130,8 +88,7 @@
                                                     else
                                                     {
                                                         <form asp-area="Admin" asp-controller="Manage" asp-action="EditTest" method="get">
-                                                            <input id="testName" name="testName" type="hidden" value="@test.TestName" />
-                                                            <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
+                                                            <input id="Id" name="Id" type="hidden" value="@test.Id" />
 
                                                             <button type="submit" class='btn btn-warning btn-xs'>
                                                                 <span class="glyphicon glyphicon-edit"></span>
@@ -140,33 +97,12 @@
                                                         </form>
 
                                                         <form asp-area="Admin" asp-controller="Manage" asp-action="DeleteTest" method="post" class="delete-test">
-                                                            <input id="testName" name="testName" type="hidden" value="@test.TestName" />
-                                                            <input id="categoryName" name="categoryName" type="hidden" value="@test.CategoryName" />
+                                                            <input id="Id" name="Id" type="hidden" value="@test.Id" />
 
-                                                            <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target=".test-delete-modal">
+                                                            <button type="submit" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#test-delete-modal">
                                                                 <span class="glyphicon glyphicon-remove"></span>
                                                                 Delete
                                                             </button>
-
-                                                            <div class="test-delete-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                        </div>
-                                                                        <div class="modal-body">
-                                                                            Are you sure you want to Delete this Test?
-                                                                        </div>
-                                                                        <div class="modal-footer">
-                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
-                                                                            <button type="submit" id="modal-submit-btn" class="btn btn-primary">Yes</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
                                                         </form>
                                                     }
 

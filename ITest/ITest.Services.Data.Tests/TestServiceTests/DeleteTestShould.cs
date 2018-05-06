@@ -79,7 +79,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
 
 
             // Act
-            sut.DeleteTest(testName, category.Name);
+            sut.DeleteTest(testId.ToString());
 
             // Assert
             this.dataSaverMock.Verify(x => x.SaveChanges(), Times.Once);
@@ -94,7 +94,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
              randomMock.Object, shufflerMock.Object);
 
             // Act & Assert
-            Assert.ThrowsException<ArgumentNullException>(() => sut.DeleteTest(null, null));
+            Assert.ThrowsException<ArgumentNullException>(() => sut.DeleteTest(null));
         }
 
         [TestMethod]
@@ -141,7 +141,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
 
 
             // Act
-            sut.DeleteTest(testName, category.Name);
+            sut.DeleteTest(testId.ToString());
 
             // Assert
             this.testRepoMock.Verify(x => x.Delete(testStub), Times.Once);
@@ -191,7 +191,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
 
 
             // Act
-            sut.DeleteTest(testName, category.Name);
+            sut.DeleteTest(testId.ToString());
 
             // Assert
             this.questionRepoMock.Verify(x => x.Delete(testQuestions[0]), Times.Once);
@@ -242,7 +242,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
 
 
             // Act
-            sut.DeleteTest(testName, category.Name);
+            sut.DeleteTest(testId.ToString());
 
             // Assert
             this.answerRepoMock.Verify(x => x.Delete(questionAnswers[0]), Times.Once);

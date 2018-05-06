@@ -12,6 +12,7 @@ using ITest.Services.Data.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using ITest.DTO.TakeTest;
+using System.Threading.Tasks;
 
 namespace ITest.Services.Data
 {
@@ -163,7 +164,7 @@ namespace ITest.Services.Data
 
             this.testRepo.Add(testToAdd);
 
-            this.dataSaver.SaveChanges();
+           this.dataSaver.SaveChanges();
         }
 
         private bool IsTestPassed(int testQuestionsCount, int totalCorrectQuestions)
@@ -365,21 +366,16 @@ namespace ITest.Services.Data
             this.answerRepo.Update(existingAnswer);
         }
 
-        public void PublishTest(string name, string category)
+        public void PublishTest(string id)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(id))
             {
-                throw new ArgumentNullException("Name cannot be null!");
-            }
-
-            if (string.IsNullOrEmpty(category))
-            {
-                throw new ArgumentNullException("Category  cannot be null!");
+                throw new ArgumentNullException("Id cannot be null!");
             }
 
             var test = this.testRepo.All
                 .Include(t => t.Category)
-                .Where(t => t.Name == name && t.Category.Name == category)
+                .Where(t => t.Id.ToString() == id)
                 .FirstOrDefault();
 
             if (!test.IsPublished)
@@ -392,21 +388,16 @@ namespace ITest.Services.Data
             }
         }
 
-        public void DeleteTest(string name, string category)
+        public void DeleteTest(string id)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(id))
             {
-                throw new ArgumentNullException("Name cannot be null!");
-            }
-
-            if (string.IsNullOrEmpty(category))
-            {
-                throw new ArgumentNullException("Category cannot be null!");
+                throw new ArgumentNullException("Id cannot be null!");
             }
 
             var test = this.testRepo.All
                 .Include(t => t.Category)
-                .Where(t => t.Name == name && t.Category.Name == category)
+                .Where(t => t.Id.ToString() == id)
                 .Include(t => t.Questions)
                 .ThenInclude(q => q.Answers)
                 .FirstOrDefault();
@@ -439,21 +430,16 @@ namespace ITest.Services.Data
             }
         }
 
-        public void DisableTest(string name, string category)
+        public void DisableTest(string id)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(id))
             {
-                throw new ArgumentNullException("Name cannot be null!");
-            }
-
-            if (string.IsNullOrEmpty(category))
-            {
-                throw new ArgumentNullException("Category cannot be null!");
+                throw new ArgumentNullException("Id cannot be null!");
             }
 
             var test = this.testRepo.All
                 .Include(t => t.Category)
-                .Where(t => t.Name == name && t.Category.Name == category)
+                .Where(t => t.Id.ToString() == id)
                 .FirstOrDefault();
 
             if (test.IsPublished)
