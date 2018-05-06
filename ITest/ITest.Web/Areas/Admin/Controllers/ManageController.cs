@@ -21,14 +21,14 @@ namespace ITest.Web.Areas.Admin.Controllers
         private readonly IUserTestService userTestService;
         private readonly IUserAnswerService userAnswerService;
         private readonly IMappingProvider mapper;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IUserManagerProvider userManager;
 
         public ManageController(
             ITestService testService,
             ICategoryService categoryService,
             IUserTestService userTestService,
             IUserAnswerService userAnswerService,
-            UserManager<ApplicationUser> userManager,
+            IUserManagerProvider userManager,
             IMappingProvider mapper)
         {
             this.testService = testService ?? throw new ArgumentNullException(nameof(testService));

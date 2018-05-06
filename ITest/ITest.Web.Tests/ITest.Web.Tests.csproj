@@ -8,8 +8,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="Moq" Version="4.8.2" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.1" />
     <PackageReference Include="MSTest.TestFramework" Version="1.2.1" />
+    <PackageReference Include="MSTestExtensions" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ITest.Infrastructure\ITest.Infrastructure.csproj" />
+    <ProjectReference Include="..\ITest.Services.Data\ITest.Services.Data.csproj" />
+    <ProjectReference Include="..\ITest.Web\ITest.Web.csproj" />
   </ItemGroup>
 
 </Project>
