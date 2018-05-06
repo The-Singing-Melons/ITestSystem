@@ -19,5 +19,7 @@ namespace ITest.Services.Data.Contracts
         bool CheckForOverdueTestInProgress(string userId);
 
         bool UserHasCompletedTest(string userId, string testId);
+
+        string CheckForTestInProgressFromCategory(string categoryName, string userId);
     }
 }

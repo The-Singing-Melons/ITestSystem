@@ -42,15 +42,18 @@ namespace ITest.Web.Areas.User.Controllers
 
         public IActionResult Index()
         {
+
             var userId = this.userManager.GetUserId(this.HttpContext.User);
-            
+
             var overdueTestInProgress = this.userTestService
                 .CheckForOverdueTestInProgress(userId);
 
-            //if (overdueTestInProgress)
-            //{
-            //    return RedirectToAction("Index");
-            //}
+            if (overdueTestInProgress)
+            {
+                return RedirectToAction("Index");
+            }
+
+
 
             var allCategories = this.categoryService.GetAllCategories(userId);
 
@@ -64,6 +67,8 @@ namespace ITest.Web.Areas.User.Controllers
         //[HttpGet("[action]/{categoryName}")]
         public IActionResult GetRandomTest(string id)
         {
+            var userId = this.userManager.GetUserId(User);
+            var categoryName = id;
             if (id == null)
             {
                 throw new ArgumentNullException();
@@ -71,10 +76,25 @@ namespace ITest.Web.Areas.User.Controllers
 
             try
             {
-                var randomTest = this.testService.GetRandomTest(id);
-                var randomTestViewModel = this.mapper.MapTo<TestViewModel>(randomTest);
-                this.userTestService.AddUserToTest(randomTest.Id, this.userManager.GetUserId(User));
-                return Json(new { IsSuccessful = true, url = Url.Action("TakeTest/" + randomTestViewModel.Id) });
+                var uncompletedTestInProgressId = this
+                            .userTestService.CheckForTestInProgressFromCategory(categoryName, userId);
+
+                if (uncompletedTestInProgressId != null)
+                {
+                    return Json(new
+                    {
+                        IsSuccessful = true,
+                        url = Url.Action("TakeTest/" +
+                        uncompletedTestInProgressId)
+                    });
+                }
+                else
+                {
+                    var randomTest = this.testService.GetRandomTest(categoryName);
+                    var randomTestViewModel = this.mapper.MapTo<TestViewModel>(randomTest);
+                    this.userTestService.AddUserToTest(randomTest.Id, this.userManager.GetUserId(User));
+                    return Json(new { IsSuccessful = true, url = Url.Action("TakeTest/" + randomTestViewModel.Id) });
+                }
             }
             catch (ArgumentNullException)
             {

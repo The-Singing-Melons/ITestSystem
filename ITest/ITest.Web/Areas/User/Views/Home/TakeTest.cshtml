@@ -22,7 +22,10 @@
                value="@Model.Questions[i].Id"
                type="hidden" />
         <br />
-        <div class="well well-sm">@(nameCounter + 1) @Html.Raw(Model.Questions[i].Body)</div>
+        <div class="well well-sm">
+            <b>Question @(nameCounter + 1)</b>
+            @Html.Raw(Model.Questions[i].Body)
+        </div>
         <div id="timer"></div>
 
         @for (int j = 0; j < Model.Questions[i].Answers.Count; j++)

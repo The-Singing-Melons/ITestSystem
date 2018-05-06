@@ -139,6 +139,7 @@ namespace ITest.Services.Data
             //if (!this.memoryCache.TryGetValue("Tests", out dto))
             //{
             var results = this.userTestRepo.All
+                .Where(ut => ut.IsSubmited != null)
                 .Include(ut => ut.User)
                 .Include(ut => ut.Test)
                 .ThenInclude(t => t.Category);
@@ -185,6 +186,25 @@ namespace ITest.Services.Data
             }
 
             return false;
+        }
+
+        public string CheckForTestInProgressFromCategory(string categoryName, string userId)
+        {
+            string testIdToReturn = null;
+            var result = this.userTestRepo.All
+               .Include(ut => ut.Test)
+               .ThenInclude(t => t.Category)
+               .Where(ut => ut.UserId == userId &&
+                            ut.IsSubmited == null &&
+                            ut.Test.Category.Name == categoryName)
+               .SingleOrDefault();
+
+            if (result != null)
+            {
+                testIdToReturn = result.TestId.ToString();
+            }
+
+            return testIdToReturn;
         }
     }
 }
