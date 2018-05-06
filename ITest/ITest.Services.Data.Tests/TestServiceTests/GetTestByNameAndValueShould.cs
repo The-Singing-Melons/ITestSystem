@@ -43,13 +43,14 @@ namespace ITest.Services.Data.Tests.TestServiceTests
                 testRepoMock.Object, questionRepoMock.Object, answerRepoMock.Object, dataSaverMock.Object,
                 mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object);
 
-            Assert.ThrowsException<ArgumentNullException>(() => sut.GetTestByNameAndCategory(null, null));
+            Assert.ThrowsException<ArgumentNullException>(() => sut.GetTestByNameAndCategory(null));
         }
 
         [TestMethod]
         public void ReturnCorrectData_WhenInvokedWithValidParameters()
         {
             // Arrange
+            var testId = new Guid();
             var testName = "Test";
             var category = new Category() { Name = "JAVA" };
 
@@ -93,7 +94,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
               mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object);
 
             // Act
-            var result = sut.GetTestByNameAndCategory(testName, category.Name);
+            var result = sut.GetTestByNameAndCategory(testId.ToString());
 
             // Assert
             Assert.AreEqual(result, testDtoToReturn);
@@ -103,6 +104,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
         public void CallMapperMapTo_WithCorrectParameter()
         {
             // Arrange
+            var testId = new Guid();
             var testName = "Test";
             var category = new Category() { Name = "JAVA" };
 
@@ -146,7 +148,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
               mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object);
 
             // Act
-            var result = sut.GetTestByNameAndCategory(testName, category.Name);
+            var result = sut.GetTestByNameAndCategory(testId.ToString());
 
             // Assert
             this.mapperMock.Verify(x => x.MapTo<ManageTestDto>(testStub), Times.Once);

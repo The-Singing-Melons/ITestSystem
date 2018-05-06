@@ -143,19 +143,14 @@ namespace ITest.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditTest(string testName, string categoryName)
+        public IActionResult EditTest(string id)
         {
-            if (string.IsNullOrEmpty(testName))
+            if (string.IsNullOrEmpty(id))
             {
                 return this.View();
             }
 
-            if (string.IsNullOrEmpty(categoryName))
-            {
-                return this.View();
-            }
-
-            var testDto = this.testService.GetTestByNameAndCategory(testName, categoryName);
+            var testDto = this.testService.GetTestByNameAndCategory(id);
 
             var testViewModel = this.mapper.MapTo<ManageTestViewModel>(testDto);
             testViewModel.CategoryNames = this.categoryService.GetAllCategoriesNames().ToList();

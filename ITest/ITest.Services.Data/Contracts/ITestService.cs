@@ -21,7 +21,7 @@ namespace ITest.Services.Data.Contracts
 
         IEnumerable<TestDashBoardDto> GetTestsDashboardInfo();
 
-        ManageTestDto GetTestByNameAndCategory(string name, string category);
+        ManageTestDto GetTestByNameAndCategory(string id);
 
         void EditTest(ManageTestDto createTestDto);
 

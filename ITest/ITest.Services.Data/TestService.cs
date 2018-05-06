@@ -164,7 +164,7 @@ namespace ITest.Services.Data
 
             this.testRepo.Add(testToAdd);
 
-           this.dataSaver.SaveChanges();
+            this.dataSaver.SaveChanges();
         }
 
         private bool IsTestPassed(int testQuestionsCount, int totalCorrectQuestions)
@@ -237,20 +237,15 @@ namespace ITest.Services.Data
             return this.mapper.EnumerableProjectTo<Test, TestDashBoardDto>(tests);
         }
 
-        public ManageTestDto GetTestByNameAndCategory(string name, string category)
+        public ManageTestDto GetTestByNameAndCategory(string id)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(id))
             {
-                throw new ArgumentNullException("Name cannot be null!");
-            }
-
-            if (string.IsNullOrEmpty(category))
-            {
-                throw new ArgumentNullException("Category cannot be null!");
+                throw new ArgumentNullException("Id cannot be null!");
             }
 
             var test = this.testRepo.All
-                .Where(t => t.Name == name && t.Category.Name == category)
+                .Where(t => t.Id.ToString() == id)
                 .Include(t => t.Category)
                 .Include(t => t.Questions)
                 .ThenInclude(q => q.Answers)
