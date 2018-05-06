@@ -44,6 +44,8 @@ namespace ITest.Web.Areas.User.Controllers
         {
             var userId = this.userManager.GetUserId(this.HttpContext.User);
 
+            var x = this.HttpContext.User;
+
             var overdueTestInProgress = this.userTestService
                 .CheckForOverdueTestInProgress(userId);
 

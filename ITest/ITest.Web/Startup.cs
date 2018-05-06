@@ -67,6 +67,7 @@ namespace ITest.Web
             services.AddScoped<Random>();
             services.AddScoped<TimeProvider>();
             services.AddScoped<IShuffleProvider, ShuffleProvider>();
+            services.AddScoped<IUserManagerProvider, UserManagerProvider>();
         }
 
         private void RegisterAuthentication(IServiceCollection services)

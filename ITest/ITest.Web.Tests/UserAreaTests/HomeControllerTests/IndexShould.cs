@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using ITest.DTO.UserHome.Index;
@@ -8,6 +10,7 @@ using ITest.Models;
 using ITest.Services.Data.Contracts;
 using ITest.Web.Areas.User.Controllers;
 using ITest.Web.Areas.User.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -49,13 +52,29 @@ namespace ITest.Web.Tests.UserAreaTests.HomeControllerTests
                 new CategoryViewModel()
             };
 
-            this.mapperMock.Setup(x => x.EnumerableProjectTo<CategoryIndexDto, CategoryViewModel>
-                (It.IsAny<List<CategoryIndexDto>>()))
-                .Returns(categories);
+            // http context mock
+            var fakeHttpContext = new Mock<HttpContext>();
+            var fakeIdentity = new GenericIdentity("User");
+            var principal = new GenericPrincipal(fakeIdentity, null);
+            fakeHttpContext.Setup(t => t.User).Returns(principal);
+            // in ASP.Core cannot mock Controller context 
+            //   controllerContext.Setup(t => t.HttpContext).Returns(fakeHttpContext.Object);
+            // because controller context is not virtual
+            var context = new ControllerContext
+            {
+                HttpContext = fakeHttpContext.Object
+            };
+
+
+            this.userManagerMock.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>()))
+                .Returns(new Guid().ToString());
 
             var sut = new HomeController(mapperMock.Object, testServiceMock.Object, userManagerMock.Object,
                 questionServiceMock.Object, categoryServiceMock.Object, userTestServiceMock.Object,
                 userAnswerServiceMock.Object);
+
+            //Set your controller ControllerContext with fake context
+            sut.ControllerContext = context;
 
             // Act
             var result = sut.Index() as ViewResult;
