@@ -8,6 +8,13 @@
 <p>@TempData["NoTestInCategory"]</p>
 <hr class="dashboard-breaker">
 <br>
+@if (((string)(TempData["Success-Message"] ?? "")).Any())
+{
+    <br />
+    <div class="alert alert-success">
+        <strong>Success!</strong> @TempData["Success-Message"]
+    </div>
+}
 <div class="container index">
     <div class="row">
         <div class="col-md-6">

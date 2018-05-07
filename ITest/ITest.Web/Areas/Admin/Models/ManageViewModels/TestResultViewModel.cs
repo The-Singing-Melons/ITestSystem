@@ -1,4 +1,5 @@
-﻿namespace ITest.Web.Areas.Admin.Models.ManageViewModels
+﻿
+namespace ITest.Web.Areas.Admin.Models.ManageViewModels
 {
     public class TestResultViewModel
     {

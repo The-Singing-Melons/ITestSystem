@@ -113,7 +113,7 @@ namespace ITest.Web.Areas.User.Controllers
 
         public IActionResult TakeTest(string id)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(id))
             {
                 throw new ArgumentNullException("Id cannot be null or empty");
             }
@@ -144,7 +144,6 @@ namespace ITest.Web.Areas.User.Controllers
         [HttpPost]
         public IActionResult TakeTest(TestRequestViewModel takeTestRequestViewModel)
         {
-            // refactor TO-DO : Check for null answer in the requestVM and pass valid data to DB
             var userId = this.userManager.GetUserId(this.HttpContext.User);
             var isOverdue = this.userTestService.CheckForOverdueTestInProgress(userId);
 
@@ -167,6 +166,8 @@ namespace ITest.Web.Areas.User.Controllers
 
                 this.userTestService.SubmitUserTest(testId,
                     userId, isPassed);
+
+                TempData["Success-Message"] = "Your test was submited!";
 
                 return RedirectToAction("Index");
             }
