@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using ITest.DTO.UserHome.Index;
 using ITest.Infrastructure.Providers.Contracts;
-using ITest.Models;
 using ITest.Services.Data.Contracts;
 using ITest.Web.Areas.User.Controllers;
 using ITest.Web.Areas.User.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -29,7 +25,6 @@ namespace ITest.Web.Tests.UserAreaTests.HomeControllerTests
         private Mock<IUserTestService> userTestServiceMock;
         private Mock<IQuestionService> questionServiceMock;
 
-
         [TestInitialize]
         public void TestInitialize()
         {
@@ -40,6 +35,47 @@ namespace ITest.Web.Tests.UserAreaTests.HomeControllerTests
             this.categoryServiceMock = new Mock<ICategoryService>();
             this.userTestServiceMock = new Mock<IUserTestService>();
             this.questionServiceMock = new Mock<IQuestionService>();
+        }
+
+        [TestMethod]
+        public void Index_CorrectlyRedirectsWhenTestIsOverdue()
+        {
+            // Arrange
+
+            // http context mock
+            var fakeHttpContext = new Mock<HttpContext>();
+            var fakeIdentity = new GenericIdentity("User");
+            var principal = new GenericPrincipal(fakeIdentity, null);
+            fakeHttpContext.Setup(t => t.User).Returns(principal);
+
+            var context = new ControllerContext
+            {
+                HttpContext = fakeHttpContext.Object
+            };
+
+
+            this.userManagerMock.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>()))
+                .Returns(new Guid().ToString());
+
+            this.userTestServiceMock.Setup(x =>
+                x.CheckForOverdueTestInProgress(It.IsAny<String>()))
+                .Returns(true);
+
+            var sut = new HomeController(mapperMock.Object, testServiceMock.Object, userManagerMock.Object,
+                questionServiceMock.Object, categoryServiceMock.Object, userTestServiceMock.Object,
+                userAnswerServiceMock.Object)
+            {
+
+                //Set your controller ControllerContext with fake context
+                ControllerContext = context
+            };
+
+            // Act
+            var result = sut.Index() as RedirectToActionResult;
+
+            // Assert
+            Assert.AreEqual(result.ActionName, "Index");
+
         }
 
         [TestMethod]
@@ -69,12 +105,19 @@ namespace ITest.Web.Tests.UserAreaTests.HomeControllerTests
             this.userManagerMock.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>()))
                 .Returns(new Guid().ToString());
 
+            this.mapperMock.Setup(x =>
+                x.EnumerableProjectTo<CategoryIndexDto, CategoryViewModel>
+                (It.IsAny<IEnumerable<CategoryIndexDto>>()))
+                .Returns(categories);
+
             var sut = new HomeController(mapperMock.Object, testServiceMock.Object, userManagerMock.Object,
                 questionServiceMock.Object, categoryServiceMock.Object, userTestServiceMock.Object,
-                userAnswerServiceMock.Object);
+                userAnswerServiceMock.Object)
+            {
 
-            //Set your controller ControllerContext with fake context
-            sut.ControllerContext = context;
+                //Set your controller ControllerContext with fake context
+                ControllerContext = context
+            };
 
             // Act
             var result = sut.Index() as ViewResult;

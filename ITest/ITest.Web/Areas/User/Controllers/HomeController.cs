@@ -53,8 +53,6 @@ namespace ITest.Web.Areas.User.Controllers
                 return RedirectToAction("Index");
             }
 
-
-
             var allCategories = this.categoryService.GetAllCategories(userId);
 
             var categoriesViewModel = this.mapper
@@ -69,7 +67,7 @@ namespace ITest.Web.Areas.User.Controllers
         {
             var userId = this.userManager.GetUserId(User);
             var categoryName = id;
-            if (id == null)
+            if (categoryName == null)
             {
                 throw new ArgumentNullException();
             }
@@ -84,16 +82,21 @@ namespace ITest.Web.Areas.User.Controllers
                     return Json(new
                     {
                         IsSuccessful = true,
-                        url = Url.Action("TakeTest/" +
-                        uncompletedTestInProgressId)
+                        url = Url.Action("TakeTest", new { id = uncompletedTestInProgressId })
                     });
                 }
                 else
                 {
                     var randomTest = this.testService.GetRandomTest(categoryName);
                     var randomTestViewModel = this.mapper.MapTo<TestViewModel>(randomTest);
+
                     this.userTestService.AddUserToTest(randomTest.Id, this.userManager.GetUserId(User));
-                    return Json(new { IsSuccessful = true, url = Url.Action("TakeTest/" + randomTestViewModel.Id) });
+
+                    return Json(new
+                    {
+                        IsSuccessful = true,
+                        url = Url.Action("TakeTest", new { id = randomTestViewModel.Id })
+                    });
                 }
             }
             catch (ArgumentNullException)
