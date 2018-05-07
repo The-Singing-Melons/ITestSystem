@@ -200,7 +200,7 @@ namespace ITest.Web.Areas.Admin.Controllers
             {
                 return this.Json(new JsonResult(new { isPublished = false }));
             }
-            
+
             try
             {
                 this.testService.PublishTest(id);
