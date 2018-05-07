@@ -9,6 +9,8 @@ using ITest.Infrastructure.Providers.Contracts;
 using ITest.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Microsoft.Extensions.Caching.Memory;
+
 namespace ITest.Services.Data.Tests.TestServiceTests
 {
     [TestClass]
@@ -22,6 +24,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
         private Mock<IMappingProvider> mapperMock;
         private Mock<IRandomProvider> randomMock;
         private Mock<IShuffleProvider> shufflerMock;
+        private Mock<IMemoryCache> memoryCacheMock;
 
         [TestInitialize]
         public void TestInitialize()
@@ -34,6 +37,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
             this.mapperMock = new Mock<IMappingProvider>();
             this.randomMock = new Mock<IRandomProvider>();
             this.shufflerMock = new Mock<IShuffleProvider>();
+            this.memoryCacheMock = new Mock<IMemoryCache>();
         }
 
         [TestMethod]
@@ -57,7 +61,7 @@ namespace ITest.Services.Data.Tests.TestServiceTests
 
             var sut = new TestService(
                 testRepoMock.Object, questionRepoMock.Object, answerRepoMock.Object, dataSaverMock.Object,
-                mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object);
+                mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object, memoryCacheMock.Object);
 
             var result = sut.GetTestsDashboardInfo();
 

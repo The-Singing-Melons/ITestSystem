@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using ITest.DTO.TakeTest;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ITest.Services.Data
 {
@@ -30,11 +31,12 @@ namespace ITest.Services.Data
         private readonly IMappingProvider mapper;
         private readonly IRandomProvider random;
         private readonly IShuffleProvider shuffler;
+        private readonly IMemoryCache memoryCache;
 
         public TestService(
             IDataRepository<Test> testRepo, IDataRepository<Question> questionRepo, IDataRepository<Answer> answerRepo, IDataSaver dataSaver,
             IMappingProvider mapper, IDataRepository<Category> categoryRepo,
-            IRandomProvider random, IShuffleProvider shuffler)
+            IRandomProvider random, IShuffleProvider shuffler, IMemoryCache memoryCache)
         {
             this.testRepo = testRepo ?? throw new ArgumentNullException(nameof(testRepo));
             this.questionRepo = questionRepo ?? throw new ArgumentNullException(nameof(questionRepo));
@@ -44,6 +46,7 @@ namespace ITest.Services.Data
             this.categoryRepo = categoryRepo ?? throw new ArgumentNullException(nameof(categoryRepo));
             this.random = random;
             this.shuffler = shuffler ?? throw new ArgumentNullException(nameof(shuffler));
+            this.memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
         }
 
         public TestDto GetTestById(string testId)
@@ -165,6 +168,8 @@ namespace ITest.Services.Data
             this.testRepo.Add(testToAdd);
 
             this.dataSaver.SaveChanges();
+
+            this.memoryCache.Remove("Dashboard-Tests");
         }
 
         private bool IsTestPassed(int testQuestionsCount, int totalCorrectQuestions)
@@ -232,9 +237,20 @@ namespace ITest.Services.Data
 
         public IEnumerable<TestDashBoardDto> GetTestsDashboardInfo()
         {
-            var tests = this.testRepo.All;
+            IEnumerable<TestDashBoardDto> testDtos;
 
-            return this.mapper.EnumerableProjectTo<Test, TestDashBoardDto>(tests);
+            if (!this.memoryCache.TryGetValue("Dashboard-Tests", out testDtos))
+            {
+                var tests = this.testRepo.All;
+                testDtos = this.mapper.EnumerableProjectTo<Test, TestDashBoardDto>(tests).ToList();
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(TimeSpan.FromHours(8));
+                
+                this.memoryCache.Set("Dashboard-Tests", testDtos, cacheEntryOptions);
+            }
+
+            return testDtos;
         }
 
         public ManageTestDto GetTestByNameAndCategory(string id)
@@ -281,6 +297,8 @@ namespace ITest.Services.Data
             existingTest.Category = category;
 
             this.dataSaver.SaveChanges();
+
+            this.memoryCache.Remove("Dashboard-Tests");
         }
 
         private void EditTest(ManageTestDto updatedTest, Test existingTest)
@@ -380,6 +398,8 @@ namespace ITest.Services.Data
 
                 this.testRepo.Update(test);
                 this.dataSaver.SaveChanges();
+
+                this.memoryCache.Remove("Dashboard-Tests");
             }
         }
 
@@ -402,6 +422,8 @@ namespace ITest.Services.Data
                 this.DeleteTest(test);
 
                 this.dataSaver.SaveChanges();
+
+                this.memoryCache.Remove("Dashboard-Tests");
             }
         }
 
@@ -444,6 +466,8 @@ namespace ITest.Services.Data
 
                 this.testRepo.Update(test);
                 this.dataSaver.SaveChanges();
+
+                this.memoryCache.Remove("Dashboard-Tests");
             }
         }
     }
