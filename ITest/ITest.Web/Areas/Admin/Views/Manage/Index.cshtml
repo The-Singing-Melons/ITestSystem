@@ -141,26 +141,26 @@
                                 {
                                     foreach (var result in Model.TestResults)
                                     {
-                                <tr>
-                                    <td>@result.TestName</td>
-                                    <td>@result.UserName</td>
-                                    <td>@result.CategoryName</td>
-                                    <td>@result.RequestedTime min</td>
-                                    <td>@(TimeSpan.FromMinutes(result.ExecutionTime)) min</td>
+                                        <tr>
+                                            <td>@result.TestName</td>
+                                            <td>@result.UserName</td>
+                                            <td>@result.CategoryName</td>
+                                            <td>@result.RequestedTime min</td>
+                                            <td>@(TimeSpan.FromMinutes(result.ExecutionTime).ToString(@"hh\:mm\:ss")) min</td>
 
-                                    @if (result.IsPassed)
+                                            @if (result.IsPassed)
                                             {
-                                    <td>
-                                        <a class="btn btn-success" asp-action="TestScore" asp-route-userId="@result.UserId" asp-route-testId="@result.TestId">Passed</a>
-                                    </td>
+                                                <td>
+                                                    <a class="btn btn-success" asp-action="TestScore" asp-route-userId="@result.UserId" asp-route-testId="@result.TestId">Passed</a>
+                                                </td>
                                             }
                                             else
                                             {
-                                    <td>
-                                        <a class="btn btn-danger" asp-action="TestScore" asp-route-userId="@result.UserId" asp-route-testId="@result.TestId">Failed</a>
-                                    </td>
+                                                <td>
+                                                    <a class="btn btn-danger" asp-action="TestScore" asp-route-userId="@result.UserId" asp-route-testId="@result.TestId">Failed</a>
+                                                </td>
                                             }
-                                </tr>
+                                        </tr>
                                     }
                                 }
                             </table>
