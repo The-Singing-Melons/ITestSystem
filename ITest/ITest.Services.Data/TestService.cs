@@ -246,7 +246,7 @@ namespace ITest.Services.Data
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                         .SetAbsoluteExpiration(TimeSpan.FromHours(8));
-                
+
                 this.memoryCache.Set("Dashboard-Tests", testDtos, cacheEntryOptions);
             }
 

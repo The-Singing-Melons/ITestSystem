@@ -59,6 +59,13 @@ namespace ITest.Services.Data.Tests.TestServiceTests
                 .Setup(x => x.EnumerableProjectTo<Test, TestDashBoardDto>(testsStub))
                 .Returns(testDtoStubToReturn);
 
+            var memoryCache = Mock.Of<IMemoryCache>();
+            var cachEntry = Mock.Of<ICacheEntry>();
+
+            memoryCacheMock
+                .Setup(m => m.CreateEntry(It.IsAny<object>()))
+                .Returns(cachEntry);
+
             var sut = new TestService(
                 testRepoMock.Object, questionRepoMock.Object, answerRepoMock.Object, dataSaverMock.Object,
                 mapperMock.Object, categoryRepoMock.Object, randomMock.Object, shufflerMock.Object, memoryCacheMock.Object);

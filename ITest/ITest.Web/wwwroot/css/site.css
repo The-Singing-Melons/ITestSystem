@@ -74,7 +74,7 @@ hr.dashboard-breaker {
     .funkyradio input[type="radio"]:empty ~ label,
     .funkyradio input[type="checkbox"]:empty ~ label {
         position: relative;
-        line-height: 2.5em;
+        line-height: 1.0em;
         text-indent: 3.25em;
         margin-top: 2em;
         cursor: pointer;
@@ -100,6 +100,7 @@ hr.dashboard-breaker {
 .funkyradio input[type="radio"]:hover:not(:checked) ~ label,
 .funkyradio input[type="checkbox"]:hover:not(:checked) ~ label {
     color: #888;
+    padding-top: 20px;
 }
 
     .funkyradio input[type="radio"]:hover:not(:checked) ~ label:before,
@@ -107,6 +108,7 @@ hr.dashboard-breaker {
         content: '\2714';
         text-indent: .9em;
         color: #C2C2C2;
+        padding-top: 20px;
     }
 
 .funkyradio input[type="radio"]:checked ~ label,
@@ -143,6 +145,7 @@ hr.dashboard-breaker {
 .funkyradio-success input[type="checkbox"]:checked ~ label:before {
     color: #fff;
     background-color: #5cb85c;
+    padding-top: 20px;
 }
 
 .funkyradio-danger input[type="radio"]:checked ~ label:before,
