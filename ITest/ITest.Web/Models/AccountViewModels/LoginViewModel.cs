@@ -10,9 +10,11 @@ namespace ITest.Web.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
+        [Display(Name = "Email")]
         public string LoginEmail { get; set; }
 
         [Required]
+        [Display(Name = "Password")]
         [DataType(DataType.Password)]
         public string LoginPassword { get; set; }
 

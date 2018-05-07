@@ -3,7 +3,6 @@
 <form asp-controller="Account" asp-action="Login" method="post">
     <h4>Use a local account to log in.</h4>
     <hr />
-    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="LoginEmail"></label>
         <input asp-for="LoginEmail" class="form-control" />
@@ -24,10 +23,5 @@
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-default">Log in</button>
-    </div>
-    <div class="form-group">
-        <p>
-            <a asp-action="ForgotPassword">Forgot your password?</a>
-        </p>
     </div>
 </form>

@@ -1,11 +1,11 @@
 ﻿$(function () {
     var questionFrame =
         `<div id="question-{{q_id}}" class="question-container panel panel-default">
-            <button class="delete-question btn btn-danger btn-xs pull-right" type="button">
+            <button class="delete-question btn btn-danger pull-right" type="button">
                 <span class="glyphicon glyphicon-remove"></span>
             </button>
             <a href="#collapse-{{q_id}}" data-toggle="collapse" data-parent="#accordion">
-                <div class="panel-heading">
+                <div class="panel-heading bg-primary">
                     <h4 class="panel-title">
                         Question {{q_number}}
                     </h4>
@@ -26,7 +26,7 @@
                                 <div class="col">
                                     <h3>Answer 1</h3>
 
-                                    <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
+                                    <button class="delete-answer btn btn-danger pull-right" type="button">
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </button>
 
@@ -47,7 +47,7 @@
                                 </div>
 
                                 <div class="col">
-                                    <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
+                                    <button class="delete-answer btn btn-danger pull-right" type="button">
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </button>
 
@@ -68,7 +68,7 @@
                                 </div>
 
                                 <div class="col">
-                                    <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
+                                    <button class="delete-answer btn btn-danger pull-right" type="button">
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </button>
 
@@ -98,7 +98,7 @@
                 </div>
 
                 <div class="col">
-                    <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
+                    <button class="delete-answer btn btn-danger pull-right" type="button">
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
 
@@ -253,7 +253,7 @@
                     var answerId = parseInt(answer.id.split('-')[3]);
                     var nextQuestionAnswer = $(answer);
 
-                    nextQuestionAnswer.attr('id', `question-${questionId}-answer-${answerId}`)
+                    nextQuestionAnswer.attr('id', `question-${newQuestionId}-answer-${answerId}`)
 
                     nextQuestionAnswer.find('.answer-is-correct').attr('id', `Questions_${newQuestionId}__Answers_${answerId}__IsCorrect`);
 
@@ -311,7 +311,7 @@
         if ($(`#questions-body #question-${questionId} .answer-container`).length === 0) {
             $(`#questions-body #question-${questionId} .answers-container`).html(noAnswersFrame);
         }
-        else {
+        else {  
             nextAnswers.forEach(function (answer) {
                 var newAnswerNumber = parseInt(answer.id.split('-')[3]) - 1;
 

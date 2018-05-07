@@ -1,20 +1,26 @@
 ﻿@model DisableTestViewModel
 
-<form asp-area="Admin" asp-controller="Manage" asp-action="PublishTest" method="post" class="publish-test">
-    <input id="Id" name="Id" type="hidden" value="@Model.Id" />
+<div class="row">
+    <form asp-area="Admin" asp-controller="Manage" asp-action="PublishTest" method="post" class="col-xs-4 publish-test">
+        <input id="Id" name="Id" type="hidden" value="@Model.Id" />
 
-    <button type="submit" class="btn btn-success btn-xs">
-        <span class="glyphicon glyphicon-ok"></span>
-        Publish
-    </button>
-</form>
+        <button type="submit" class="col-xs-12 btn btn-success btn-xs">
+            <span class="glyphicon glyphicon-ok"></span>
+            Publish
+        </button>
+    </form>
 
-<a class='btn btn-warning btn-xs disabled'>
-    <span class="glyphicon glyphicon-edit"></span>
-    Edit
-</a>
+    <div class="col-xs-4">
+        <a class='col-xs-12 btn btn-warning btn-xs disabled'>
+            <span class="glyphicon glyphicon-edit"></span>
+            Edit
+        </a>
+    </div>
 
-<a class='btn btn-danger btn-xs disabled'>
-    <span class="glyphicon glyphicon-remove"></span>
-    Delete
-</a>
+    <div class="col-xs-4">
+        <a class='col-xs-12 btn btn-danger btn-xs disabled'>
+            <span class="glyphicon glyphicon-remove"></span>
+            Delete
+        </a>
+    </div>
+</div>

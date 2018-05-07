@@ -41,8 +41,8 @@
     <div id="questions-container">
         <div class="row">
             <h4>Add questions to your Test</h4>
-            <button id="add-question" class="btn btn-default pull-right" type="button">Add Question</button>
-            <button id="collapse-questions" class="btn btn-default pull-right" type="button">Collapse All</button>
+            <button id="add-question" class="btn pull-right" type="button">Add Question</button>
+            <button id="collapse-questions" class="btn pull-right" type="button">Collapse All</button>
         </div>
 
         <div class="row">
@@ -53,11 +53,11 @@
                         for (int q = 0; q < Model.Questions.Count; q++)
                         {
                             <div id="question-@q" class="question-container panel panel-default">
-                                <button class="delete-question btn btn-danger btn-xs pull-right" type="button">
+                                <button class="delete-question btn btn-danger pull-right" type="button">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </button>
                                 <a href="#collapse-@q" data-toggle="collapse" data-parent="#accordion">
-                                    <div class="panel-heading">
+                                    <div class="panel-heading bg-primary">
                                         <h4 class="panel-title">Question @string.Format("{0}", q + 1)</h4>
                                     </div>
                                 </a>
@@ -82,7 +82,7 @@
                                                             </div>
 
                                                             <div class="col">
-                                                                <button class="delete-answer btn btn-danger btn-xs pull-right" type="button">
+                                                                <button class="delete-answer btn btn-danger pull-right" type="button">
                                                                     <span class="glyphicon glyphicon-remove"></span>
                                                                 </button>
 
@@ -137,13 +137,13 @@
         </div>
 
         <div class="row">
-            <button id="add-question" class="btn btn-default pull-right" type="button">Add Question</button>
-            <button id="collapse-questions" class="btn btn-default pull-right" type="button">Collapse All</button>
+            <button id="add-question" class="btn pull-right" type="button">Add Question</button>
+            <button id="collapse-questions" class="btn pull-right" type="button">Collapse All</button>
         </div>
     </div>
 </div>
 
 <input asp-for="Id" type="hidden" value="@Model.Id" />
 
-<button name="IsPublished" class="create-test btn btn-default" type="submit" value="false">Save as Draft</button>
-<button name="IsPublished" class="create-test btn btn-default" type="submit" value="true">Publish</button>
+<button name="IsPublished" class="create-test btn btn-primary" type="submit" value="false">Save as Draft</button>
+<button name="IsPublished" class="create-test btn btn-success" type="submit" value="true">Publish</button>

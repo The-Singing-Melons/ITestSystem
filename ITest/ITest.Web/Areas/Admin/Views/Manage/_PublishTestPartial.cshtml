@@ -1,20 +1,26 @@
 ﻿@model PublishTestViewModel
 
-<a class='btn btn-success btn-xs disabled'>
-    <span class="glyphicon glyphicon-ok"></span>
-    Published
-</a>
+<div class="row">
+    <div class="col-xs-4">
+        <a class='col-xs-12 btn btn-success btn-xs disabled'>
+            <span class="glyphicon glyphicon-ok"></span>
+            Published
+        </a>
+    </div>
 
-<a class='btn btn-warning btn-xs disabled'>
-    <span class="glyphicon glyphicon-edit"></span>
-    Edit
-</a>
+    <div class="col-xs-4">
+        <a class='col-xs-12 btn btn-warning btn-xs disabled'>
+            <span class="glyphicon glyphicon-edit"></span>
+            Edit
+        </a>
+    </div>
 
-<form asp-area="Admin" asp-controller="Manage" asp-action="DisableTest" method="post" class="disable-test">
-    <input id="Id" name="Id" type="hidden" value="@Model.Id" />
+    <form asp-area="Admin" asp-controller="Manage" asp-action="DisableTest" method="post" class="col-xs-4 disable-test">
+        <input id="Id" name="Id" type="hidden" value="@Model.Id" />
 
-    <button type="submit" class="btn btn-danger btn-xs trigger-modal-btn">
-        <span class="glyphicon glyphicon-ban-circle"></span>
-        Disable
-    </button>
-</form>
+        <button type="submit" class="col-xs-12 btn btn-danger btn-xs trigger-modal-btn">
+            <span class="glyphicon glyphicon-ban-circle"></span>
+            Disable
+        </button>
+    </form>
+</div>

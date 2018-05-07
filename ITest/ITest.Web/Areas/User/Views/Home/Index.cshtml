@@ -17,8 +17,6 @@
                         @{ var x = 0; }
                         @foreach (var c in Model)
                         {
-
-                            // the first loaded class must be selected..
                             <li class="">
                                 <a href="#tab@(x++)default"
                                    id="#category-tab"
@@ -37,6 +35,10 @@
                         {
                             <div class="tab-pane fade in" id="tab@(x++)default">
                                 <div class="well well-sm clearfix">
+                                    <h3 class="visible-lg-inline">
+                                        Start a @c.Name Test
+                                    </h3>
+
                                     <span class="pull-left"></span>
                                     @if (c.HasUserTakenTestForThisCategory)
                                     {

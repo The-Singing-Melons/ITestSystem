@@ -16,7 +16,7 @@ namespace ITest.Web.Models.AccountViewModels
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "RegisterPassword")]
+        [Display(Name = "Password")]
         public string RegisterPassword { get; set; }
 
         [DataType(DataType.Password)]

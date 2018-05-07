@@ -40,72 +40,84 @@
                                             {
                                                 <td class="is-published">Publlished</td>
                                                 <td class="actions-col text-center">
-                                                    <a class='btn btn-success btn-xs disabled'>
-                                                        <span class="glyphicon glyphicon-ok"></span>
-                                                        Published
-                                                    </a>
+                                                    <div class="row">
+                                                        <div class="col-xs-4">
+                                                            <a class='col-xs-12 btn btn-success btn-xs disabled'>
+                                                                <span class="glyphicon glyphicon-ok"></span>
+                                                                Published
+                                                            </a>
+                                                        </div>
 
-                                                    <a class='btn btn-warning btn-xs disabled'>
-                                                        <span class="glyphicon glyphicon-edit"></span>
-                                                        Edit
-                                                    </a>
+                                                        <div class="col-xs-4">
+                                                            <a class='col-xs-12 btn btn-warning btn-xs disabled'>
+                                                                <span class="glyphicon glyphicon-edit"></span>
+                                                                Edit
+                                                            </a>
+                                                        </div>
 
-                                                    <form asp-area="Admin" asp-controller="Manage" asp-action="DisableTest" method="post" class="disable-test">
-                                                        <input id="Id" name="Id" type="hidden" value="@test.Id" />
+                                                        <form asp-area="Admin" asp-controller="Manage" asp-action="DisableTest" method="post" class="col-xs-4 disable-test">
+                                                            <input id="Id" name="Id" type="hidden" value="@test.Id" />
 
-                                                        <button type="submit" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#test-disable-modal">
-                                                            <span class="glyphicon glyphicon-ban-circle"></span>
-                                                            Disable
-                                                        </button>
-                                                    </form>
+                                                            <button type="submit" class="col-xs-12 btn btn-danger btn-xs" data-toggle="modal" data-target="#test-disable-modal">
+                                                                <span class="glyphicon glyphicon-ban-circle"></span>
+                                                                Disable
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </td>
                                             }
                                             else
                                             {
                                                 <td class="is-published">Draft</td>
                                                 <td class="actions-col text-center">
-                                                    <form asp-area="Admin" asp-controller="Manage" asp-action="PublishTest" method="post" class="publish-test">
-                                                        <input id="Id" name="Id" type="hidden" value="@test.Id" />
-
-                                                        <button type="submit" class="btn btn-success btn-xs" data-toggle="modal" data-target="#test-publish-modal">
-                                                            <span class="glyphicon glyphicon-ok"></span>
-                                                            Publish
-                                                        </button>
-                                                    </form>
-
-                                                    @if (test.IsDisabled)
-                                                    {
-                                                        <a class='btn btn-warning btn-xs disabled'>
-                                                            <span class="glyphicon glyphicon-edit"></span>
-                                                            Edit
-                                                        </a>
-
-                                                        <a class='btn btn-danger btn-xs disabled'>
-                                                            <span class="glyphicon glyphicon-remove"></span>
-                                                            Disabled
-                                                        </a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <form asp-area="Admin" asp-controller="Manage" asp-action="EditTest" method="get">
+                                                    <div class="row">
+                                                        <form asp-area="Admin" asp-controller="Manage" asp-action="PublishTest" method="post" class="col-xs-4 publish-test">
                                                             <input id="Id" name="Id" type="hidden" value="@test.Id" />
 
-                                                            <button type="submit" class='btn btn-warning btn-xs'>
-                                                                <span class="glyphicon glyphicon-edit"></span>
-                                                                Edit
+                                                            <button type="submit" class="col-xs-12 btn btn-success btn-xs" data-toggle="modal" data-target="#test-publish-modal">
+                                                                <span class="glyphicon glyphicon-ok"></span>
+                                                                Publish
                                                             </button>
                                                         </form>
 
-                                                        <form asp-area="Admin" asp-controller="Manage" asp-action="DeleteTest" method="post" class="delete-test">
-                                                            <input id="Id" name="Id" type="hidden" value="@test.Id" />
+                                                        @if (test.IsDisabled)
+                                                        {
+                                                            <div class="col-xs-4">
+                                                                <a class='col-xs-12 btn btn-warning btn-xs disabled'>
+                                                                    <span class="glyphicon glyphicon-edit"></span>
+                                                                    Edit
+                                                                </a>
+                                                            </div>
 
-                                                            <button type="submit" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#test-delete-modal">
-                                                                <span class="glyphicon glyphicon-remove"></span>
-                                                                Delete
-                                                            </button>
-                                                        </form>
-                                                    }
+                                                            <div class="col-xs-4">
 
+                                                                <a class='btn btn-danger btn-xs disabled'>
+                                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                                    Disabled
+                                                                </a>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <form asp-area="Admin" asp-controller="Manage" asp-action="EditTest" class="col-xs-4" method="get">
+                                                                <input id="Id" name="Id" type="hidden" value="@test.Id" />
+
+                                                                <button type="submit" class='col-xs-12 btn btn-warning btn-xs'>
+                                                                    <span class="glyphicon glyphicon-edit"></span>
+                                                                    Edit
+                                                                </button>
+                                                            </form>
+
+                                                            <form asp-area="Admin" asp-controller="Manage" asp-action="DeleteTest" method="post" class="col-xs-4 delete-test">
+                                                                <input id="Id" name="Id" type="hidden" value="@test.Id" />
+
+                                                                <button type="submit" class="col-xs-12 btn btn-danger btn-xs" data-toggle="modal" data-target="#test-delete-modal">
+                                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                                    Delete
+                                                                </button>
+                                                            </form>
+                                                        }
+                                                    </div>
                                                 </td>
                                             }
                                         </tr>

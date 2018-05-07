@@ -165,3 +165,7 @@ hr.dashboard-breaker {
     color: #fff;
     background-color: #5bc0de;
 }
+
+ul {
+    list-style-type: none;
+}
