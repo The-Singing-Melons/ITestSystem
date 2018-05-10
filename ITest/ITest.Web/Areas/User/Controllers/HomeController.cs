@@ -149,7 +149,7 @@ namespace ITest.Web.Areas.User.Controllers
 
             if (isOverdue)
             {
-                RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             if (ModelState.IsValid)
